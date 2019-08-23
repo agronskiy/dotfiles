@@ -59,15 +59,6 @@ workon tf_py3
 PYTHONPATH=$PYTHONPATH:$HOME/repos
 export PYTHONPATH
 
-# DDLN-specific: 
-
-# For Luuk's history
-# Should go in front of setting prompt command
-export PATH=$PATH:$HOME/bin
-if [ -f ~/bin/permanenthistory.sh  ]; then
-    . ~/bin/permanenthistory.sh
-fi
-
 
 # Setting prompt command to branch status
 /usr/local/etc/bash_completion.d/git-prompt.sh
