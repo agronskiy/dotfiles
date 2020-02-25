@@ -53,3 +53,6 @@ set clipboard=unnamedplus
 map ; :
 noremap ;; ;
 
+" Tabstop to 4
+set ts=4 sw=4
+
