@@ -1,6 +1,5 @@
-~/Library/Application Support/Code/User/keybindings.json
-
 // Place your key bindings in this file to override the defaults
+// Place is ~/Library/Application\ Support/Code/User/keybindings.json
 [
     // Keybindings that are complementary
     { "key": "meta+alt+o h",          "command": "org.insertHeadingRespectContent",
