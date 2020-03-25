@@ -50,6 +50,9 @@ if type brew &>/dev/null; then
   fi
 fi
 
+# FZF typically adds it to the .bashrc
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
 # FOR GO:
 export GOROOT=/usr/local/opt/go/libexec
 export GOPATH=$HOME/go
@@ -147,3 +150,4 @@ unset __conda_setup
 # <<< conda initialize <<<
 
 conda activate py36
+
