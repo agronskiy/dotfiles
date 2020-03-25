@@ -1,6 +1,9 @@
 EDITOR='subl -wn' 
 alias slt='subl -w'
 
+if [ -f $HOME/.bashrc ]; then
+        source $HOME/.bashrc
+fi
 
 # Various useful colors
 # 
