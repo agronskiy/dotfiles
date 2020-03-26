@@ -1,0 +1,21 @@
+{
+    "latex-workshop.view.pdf.viewer": "tab",
+    "editor.rulers": [
+        80,
+        120
+    ],
+    "workbench.colorTheme": "Monokai Dimmed",
+    "cSpell.userWords": [
+        "Daedalean",
+        "productionization"
+    ],
+    "latex-workshop.chktex.enabled": true,
+    "window.zoomLevel": 1,
+
+    "[python]": {
+        "editor.formatOnSave": true
+    },
+    "python.linting.pylintArgs": [
+        "[ \"--enable=W0614\" ]"
+    ],
+}
