@@ -4,7 +4,6 @@
         80,
         120
     ],
-    "workbench.colorTheme": "Monokai Dimmed",
     "cSpell.userWords": [
         "Daedalean",
         "productionization"
@@ -24,4 +23,10 @@
     "python.linting.flake8Args": [
         "--max-line-length=119"
     ],
+    "python.formatting.autopep8Args": [
+        "--max-line-length=120"
+    ],
+    "rewrap.wholeComment": false,
+    "rewrap.wrappingColumn": 80,
+    "files.trimTrailingWhitespace": true,
 }
