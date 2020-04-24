@@ -29,4 +29,5 @@
     "rewrap.wholeComment": false,
     "rewrap.wrappingColumn": 80,
     "files.trimTrailingWhitespace": true,
+    "workbench.sideBar.location": "right",
 }
