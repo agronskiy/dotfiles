@@ -19,10 +19,16 @@ shopt -s histappend
 HISTSIZE=1000
 HISTFILESIZE=2000
 
+# Stop sending Ctrl-D
+set -o ignoreeof
+
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 shopt -s globstar
+
+# 256 terminal
+export TERM=xterm-256color
 
 # If set, the pattern "**" used in a pathname expansion context will
 # match all files and zero or more directories and subdirectories.
@@ -90,8 +96,6 @@ LIGHT_GREEN="\[\033[1;32m\]"
  COLOR_NONE="\[\033[0m\]"
 
 # Makes colors in CLI ls output
-export CLICOLOR=1
-alias ls='ls '
 alias ls="ls -pF --color=auto"  # ls output with "/" for folders
 export LSCOLORS="ExGxBxDxCxEgEdxbxgxcxd"  # ls colors
 
@@ -127,37 +131,43 @@ if ! shopt -oq posix; then
   fi
 fi
 
+# For the DDLN python packages
+PYTHONPATH=$PYTHONPATH:$HOME/repos
+export PYTHONPATH
+
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/alex/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+__conda_setup="$('/home/agronskiy/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "/home/alex/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/alex/anaconda3/etc/profile.d/conda.sh"
+    if [ -f "/home/agronskiy/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/agronskiy/miniconda3/etc/profile.d/conda.sh"
     else
-        export PATH="/home/alex/anaconda3/bin:$PATH"
+        export PATH="/home/agronskiy/miniconda3/bin:$PATH"
     fi
 fi
 unset __conda_setup
 # <<< conda initialize <<<
 
 # agronskiy: this is my personal env, created specifically for that
-conda activate tf_py3
+conda activate py36
 
 EDITOR='subl -wn' 
 alias slt='subl -w'
 
+# Set a flag that we're over SSH:
+if [[ -n $SSH_CLIENT ]]; then
+  prompt_user_host_name="@${HOSTNAME}"
+else
+  prompt_user_host_name=""
+fi
 
 # DDLN managing of go, see https://docs.google.com/document/d/1swINFIyFNSaBG1wFGApBrKM0fPEa2x-XgPTiWUnYt4E/edit#
-export GOROOT=/usr/lib/go-1.10
+export GOROOT=/usr/lib/go
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
-
-# For the DDLN python packages
-PYTHONPATH=$PYTHONPATH:$HOME/repos
-export PYTHONPATH
 
 # For Luuk's history
 # Should go in front of setting prompt command
@@ -205,7 +215,7 @@ function get_err_code() {
 
 function middle_part() {
     # echo -e "${BLUE}\u:${WHITE}$(python ~/.short_pwd.py)${COLOR_NONE}"
-    echo -e "${BLUE}\u:${WHITE}\w${COLOR_NONE}"
+    echo -e "${BLUE}\u${prompt_user_host_name}:${WHITE}\w${COLOR_NONE}"
 }
 
 function prompt_symbol() {
@@ -235,5 +245,20 @@ export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/cuda/lib64
 
 export PATH=${PATH}:/usr/local/cuda/bin
 
-# To start syncing the google drive 
-google-drive-ocamlfuse ${HOME}/google-drive
+# For various tools that are built with and require libs.
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${HOME}/bin/lib
+
+# For ArcanistPyLintLinter
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+# Personal scripts under git
+export PATH=${PATH}:$HOME/repos/exp/user/alex/scripts/personal-bin
+
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+# Git log thigns
+alias glog='git log --graph --abbrev-commit --decorate --format=format:"%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)" --all'
+alias glog2='git log --graph --abbrev-commit --decorate --format=format:"%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n""          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)" --all'
+
