@@ -158,7 +158,7 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
-conda activate py36
+conda activate py37
 
 # This allows grepping with colors
 export GREP_OPTIONS='--color=always'
