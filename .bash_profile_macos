@@ -75,7 +75,20 @@ log_bash_persistent_history()
 }
 
 # Finding history
-alias hh='cat ~/.persistent_history | grep --color'
+function hh()
+{
+    cat ~/.persistent_history | grep --color=always $1 | grep $2
+}
+
+function hhh()
+{
+    hh $1 | grep $2
+}
+
+function hhl()
+{
+    cat ~/.persistent_history | tail
+}
 
 # Setting prompt command to branch status
 source /usr/local/etc/bash_completion.d/git-prompt.sh
