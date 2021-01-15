@@ -39,8 +39,7 @@ export LSCOLORS="ExGxBxDxCxEgEdxbxgxcxd"  # ls colors
 
 export TERM=xterm-256color
 
-# Following commented out (see DDLN-specific below)
-# # Line of invitation to type a command
+# # Original line of invitation to type a command
 # export PS1="\u: \W\$ "
 
 export PATH=/usr/local/bin:/usr/local/sbin:$PATH
@@ -62,16 +61,23 @@ fi
 # FZF typically adds it to the .bashrc
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
-# FOR GO:
-export GOROOT=/usr/local/opt/go/libexec
-export GOPATH=$HOME/go
-export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+# Courtesy of Eli Bendersky blog
+log_bash_persistent_history()
+{
+  [[
+    $(history 1) =~ ^\ *[0-9]+\ +([^\ ]+\ [^\ ]+)\ +(.*)$
+  ]]
+  local date_part="${BASH_REMATCH[1]}"
+  local command_part="${BASH_REMATCH[2]}"
+  if [ "$command_part" != "$PERSISTENT_HISTORY_LAST" ]
+  then
+    echo $date_part "|" "$command_part" >> ~/.persistent_history
+    export PERSISTENT_HISTORY_LAST="$command_part"
+  fi
+}
 
-# For tensorflow/models/research: see
-# https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/installation.md
-PYTHONPATH=$PYTHONPATH:$HOME/repos
-export PYTHONPATH
-
+# Finding history
+alias hh='cat ~/.persistent_history|grep --color'
 
 # Setting prompt command to branch status
 source /usr/local/etc/bash_completion.d/git-prompt.sh
@@ -111,9 +117,9 @@ function prompt_symbol() {
 }
 
 function __prompt_command() {
-    # Add last line to history (see Luuk's permanenthistory.sh in git
     __git_ps1 "\n$(get_err_code)$(get_virtualenv)$(middle_part)" "$(prompt_symbol)"
 
+    log_bash_persistent_history
 }
 # export PS1="${WHITE}\u:${COLOR_NONE}\w ${LIGHT_BLUE}\$${COLOR_NONE}"
 PROMPT_COMMAND=__prompt_command

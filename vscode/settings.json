@@ -91,6 +91,7 @@
         "nosuffix",
         "numpy",
         "objs",
+        "osmnx",
         "pechkin",
         "preds",
         "productionization",
@@ -210,7 +211,7 @@
     "files.associations": {
         "*.html": "liquid"
     },
-    "terminal.integrated.shell.windows": "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+    "terminal.integrated.shell.windows": "C:\\Program Files\\Git\\bin\\bash.exe",
     "terminal.external.windowsExec": "%windir%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -ExecutionPolicy ByPass -NoExit -Command \"& 'C:\\ProgramData\\Anaconda3\\shell\\condabin\\conda-hook.ps1' ; conda activate 'C:\\ProgramData\\Anaconda3\\envs\\dev' \"",
     "workbench.editor.enablePreview": false,
     "python.dataScience.useDefaultConfigForJupyter": false,

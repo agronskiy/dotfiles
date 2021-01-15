@@ -81,8 +81,8 @@ esac
 
 # Introduced by agronskiy
 # Various useful colors
-# 
-# Check https://unix.stackexchange.com/questions/124407/what-color-codes-can-i-use-in-my-ps1-prompt 
+#
+# Check https://unix.stackexchange.com/questions/124407/what-color-codes-can-i-use-in-my-ps1-prompt
 # for more colors codes
         RED="\[\033[0;31m\]"
      YELLOW="\[\033[1;33m\]"
@@ -131,11 +131,6 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# For the DDLN python packages
-PYTHONPATH=$PYTHONPATH:$HOME/repos
-export PYTHONPATH
-
-
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 __conda_setup="$('/home/agronskiy/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
@@ -154,7 +149,7 @@ unset __conda_setup
 # agronskiy: this is my personal env, created specifically for that
 conda activate py36
 
-EDITOR='subl -wn' 
+EDITOR='subl -wn'
 alias slt='subl -w'
 
 # Set a flag that we're over SSH:
@@ -164,17 +159,23 @@ else
   prompt_user_host_name=""
 fi
 
-# DDLN managing of go, see https://docs.google.com/document/d/1swINFIyFNSaBG1wFGApBrKM0fPEa2x-XgPTiWUnYt4E/edit#
-export GOROOT=/usr/lib/go
-export GOPATH=$HOME/go
-export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+# Courtesy of Eli Bendersky blog
+log_bash_persistent_history()
+{
+  [[
+    $(history 1) =~ ^\ *[0-9]+\ +([^\ ]+\ [^\ ]+)\ +(.*)$
+  ]]
+  local date_part="${BASH_REMATCH[1]}"
+  local command_part="${BASH_REMATCH[2]}"
+  if [ "$command_part" != "$PERSISTENT_HISTORY_LAST" ]
+  then
+    echo $date_part "|" "$command_part" >> ~/.persistent_history
+    export PERSISTENT_HISTORY_LAST="$command_part"
+  fi
+}
 
-# For Luuk's history
-# Should go in front of setting prompt command
-export PATH=$PATH:$HOME/bin
-if [ -f ~/bin/permanenthistory.sh  ]; then
-    . ~/bin/permanenthistory.sh
-fi
+# Finding history
+alias hh='cat ~/.persistent_history|grep --color'
 
 # Setting prompt command to branch status
 # /usr/local/etc/bash_completion.d/git-prompt.sh
@@ -223,21 +224,20 @@ function prompt_symbol() {
 }
 
 function __prompt_command() {
-    # Add last line to history (see Luuk's permanenthistory.sh in git
     __git_ps1 "\n$(get_err_code)$(get_virtualenv)$(get_conda_env)$(middle_part)" "$(prompt_symbol)"
 
     # Should go after getting error code
-    hl "$(history 1)"
+    log_bash_persistent_history
 }
-# export PS1="${WHITE}\u:${COLOR_NONE}\w ${LIGHT_BLUE}\$${COLOR_NONE}"
+
 PROMPT_COMMAND=__prompt_command
 trap 'tput sgr0' DEBUG
-# End DDLN-specific
+
 
 # Arcanist stuff
 export PATH="$PATH:$HOME/arcanist/arcanist/bin/"
 
-# For compiling DDLN stuff w/ CUDA: see https://docs.google.com/document/d/1BCe9cf0PqtVt9fKZXq-rGEhjT6LU02u1lLwIcNWrghA/edit# 
+# For compiling stuff w/ CUDA
 export TF_NEED_CUDA=1
 export CUDA_TOOLKIT_PATH=/usr/local/cuda
 export CUDNN_INSTALL_PATH=/usr/local/cuda
@@ -251,10 +251,6 @@ export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${HOME}/bin/lib
 # For ArcanistPyLintLinter
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
-
-# Personal scripts under git
-export PATH=${PATH}:$HOME/repos/exp/user/alex/scripts/personal-bin
-
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
