@@ -176,13 +176,13 @@ log_bash_persistent_history()
 function hh()
 {
     if [[ $# -eq 0 ]]; then
-        cat ~/.persistent_history | less +G
+        cat ~/.persistent_history | less -R +G
     elif [[ $# -eq 1 ]]; then
-        cat ~/.persistent_history | grep -i --color=always "$1" | less +G
+        cat ~/.persistent_history | grep -i --color=always "$1" | less -R +G
     elif [[ $# -eq 2 ]]; then
-        cat ~/.persistent_history | grep -i --color=always "$1" | grep -i "$2" | less +G
+        cat ~/.persistent_history | grep -i --color=always "$1" | grep -i "$2" | less -R +G
     elif [[ $# -eq 3 ]]; then
-        cat ~/.persistent_history | grep -i --color=always "$1" | grep -i "$2" | grep -i "$3" | less +G
+        cat ~/.persistent_history | grep -i --color=always "$1" | grep -i "$2" | grep -i "$3" | less -R +G
     fi
 }
 
