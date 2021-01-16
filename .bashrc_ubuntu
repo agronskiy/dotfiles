@@ -164,21 +164,8 @@ log_bash_persistent_history()
 {
   [[ $(history 1) =~ ^[[:space:]]*[0-9]+[[:space:]]+(.+)$ ]]
   local command_part="${BASH_REMATCH[1]}"
-
-  if [ "$command_part" != "$PERSISTENT_HISTORY_LAST" ]
-  then
-    echo "$(date "+%Y-%m-%d.%H:%M:%S")" " | " "$command_part" >> ~/.persistent_history
-    export PERSISTENT_HISTORY_LAST="$command_part"
-  fi
-}
-
-# Courtesy of Eli Bendersky blog + mods
-log_bash_persistent_history()
-{
-  [[ $(history 1) =~ ^[[:space:]]*[0-9]+[[:space:]]+(.+)$ ]]
-  local command_part="${BASH_REMATCH[1]}"
-
-  if [ "$command_part" != "$PERSISTENT_HISTORY_LAST" ]
+  if [ "$command_part" != "$PERSISTENT_HISTORY_LAST" ] \
+    && ! [[ "$command_part " =~ ^hhh{0,1}[[:space:]]+ ]];
   then
     echo "$(date "+%Y-%m-%d.%H:%M:%S")" " | " "$command_part" >> ~/.persistent_history
     export PERSISTENT_HISTORY_LAST="$command_part"
@@ -191,11 +178,11 @@ function hh()
     if [[ $# -eq 0 ]]; then
         cat ~/.persistent_history | less +G
     elif [[ $# -eq 1 ]]; then
-        cat ~/.persistent_history | grep --color=always "$1" | less +G
+        cat ~/.persistent_history | grep -i --color=always "$1" | less +G
     elif [[ $# -eq 2 ]]; then
-        cat ~/.persistent_history | grep --color=always "$1" | grep "$2" | less +G
+        cat ~/.persistent_history | grep -i --color=always "$1" | grep -i "$2" | less +G
     elif [[ $# -eq 3 ]]; then
-        cat ~/.persistent_history | grep --color=always "$1" | grep "$2" | grep "$3" | less +G
+        cat ~/.persistent_history | grep -i --color=always "$1" | grep -i "$2" | grep -i "$3" | less +G
     fi
 }
 
@@ -204,11 +191,11 @@ function hhh()
     if [[ $# -eq 0 ]]; then
         cat ~/.persistent_history
     elif [[ $# -eq 1 ]]; then
-        cat ~/.persistent_history | grep --color=always "$1"
+        cat ~/.persistent_history | grep -i --color=always "$1"
     elif [[ $# -eq 2 ]]; then
-        cat ~/.persistent_history | grep --color=always "$1" | grep "$2"
+        cat ~/.persistent_history | grep -i --color=always "$1" | grep -i "$2"
     elif [[ $# -eq 3 ]]; then
-        cat ~/.persistent_history | grep --color=always "$1" | grep "$2" | grep "$3"
+        cat ~/.persistent_history | grep -i --color=always "$1" | grep -i "$2" | grep -i "$3"
     fi
 }
 
