@@ -75,7 +75,7 @@ log_bash_persistent_history()
 }
 
 # Finding history
-function hh()
+function hhh()
 {
     if [[ $# -eq 0 ]]; then
         cat ~/.persistent_history | less -R +G
@@ -88,16 +88,16 @@ function hh()
     fi
 }
 
-function hhh()
+function hh()
 {
     if [[ $# -eq 0 ]]; then
-        cat ~/.persistent_history
+        cat ~/.persistent_history | tail -n 50
     elif [[ $# -eq 1 ]]; then
-        cat ~/.persistent_history | grep -i --color=always "$1"
+        cat ~/.persistent_history | grep -i --color=always "$1" | tail -n 50
     elif [[ $# -eq 2 ]]; then
-        cat ~/.persistent_history | grep -i --color=always "$1" | grep -i "$2"
+        cat ~/.persistent_history | grep -i --color=always "$1" | grep -i "$2" | tail -n 50
     elif [[ $# -eq 3 ]]; then
-        cat ~/.persistent_history | grep -i --color=always "$1" | grep -i "$2" | grep -i "$3"
+        cat ~/.persistent_history | grep -i --color=always "$1" | grep -i "$2" | grep -i "$3" | tail -n 50
     fi
 }
 
