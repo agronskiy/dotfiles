@@ -77,17 +77,28 @@ log_bash_persistent_history()
 # Finding history
 function hh()
 {
-    cat ~/.persistent_history | grep --color=always $1 | grep $2
+    if [[ $# -eq 0 ]]; then
+        cat ~/.persistent_history | less +G
+    elif [[ $# -eq 1 ]]; then
+        cat ~/.persistent_history | grep --color=always "$1" | less +G
+    elif [[ $# -eq 2 ]]; then
+        cat ~/.persistent_history | grep --color=always "$1" | grep "$2" | less +G
+    elif [[ $# -eq 3 ]]; then
+        cat ~/.persistent_history | grep --color=always "$1" | grep "$2" | grep "$3" | less +G
+    fi
 }
 
 function hhh()
 {
-    hh $1 | grep $2
-}
-
-function hhl()
-{
-    cat ~/.persistent_history | tail
+    if [[ $# -eq 0 ]]; then
+        cat ~/.persistent_history
+    elif [[ $# -eq 1 ]]; then
+        cat ~/.persistent_history | grep --color=always "$1"
+    elif [[ $# -eq 2 ]]; then
+        cat ~/.persistent_history | grep --color=always "$1" | grep "$2"
+    elif [[ $# -eq 3 ]]; then
+        cat ~/.persistent_history | grep --color=always "$1" | grep "$2" | grep "$3"
+    fi
 }
 
 # Setting prompt command to branch status
