@@ -179,7 +179,6 @@
     "cSpell.ignoreRegExpList": [
         "([a-zA-Z]+?)('s\\b)"
     ],
-    "workbench.iconTheme": "vscode-icons",
     "vsicons.dontShowNewVersionMessage": true,
     "files.insertFinalNewline": true,
     "python.formatting.provider": "black",
@@ -215,4 +214,7 @@
     "terminal.external.windowsExec": "%windir%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -ExecutionPolicy ByPass -NoExit -Command \"& 'C:\\ProgramData\\Anaconda3\\shell\\condabin\\conda-hook.ps1' ; conda activate 'C:\\ProgramData\\Anaconda3\\envs\\dev' \"",
     "workbench.editor.enablePreview": false,
     "python.dataScience.useDefaultConfigForJupyter": false,
+    "terminal.integrated.automationShell.windows": "",
+    "workbench.iconTheme": "vscode-icons",
+    "editor.snippetSuggestions": "none",
 }

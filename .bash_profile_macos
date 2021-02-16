@@ -67,11 +67,18 @@ log_bash_persistent_history()
   [[ $(history 1) =~ ^[[:space:]]*[0-9]+[[:space:]]+(.+)$ ]]
   local command_part="${BASH_REMATCH[1]}"
   if [ "$command_part" != "$PERSISTENT_HISTORY_LAST" ] \
-    && ! [[ "$command_part " =~ ^hhh{0,1}[[:space:]]+ ]];
+    && ! [[ "$command_part " =~ ^hhh{0,1}[[:space:]]+ ]] \
+    && ! [[ "$command_part " =~ ^nohist[[:space:]]+ ]];
   then
     echo "$(date "+%Y-%m-%d.%H:%M:%S")" " | " "$command_part" >> ~/.persistent_history
     export PERSISTENT_HISTORY_LAST="$command_part"
   fi
+}
+
+# Skip putting to history. Usage "nohist ls -l"
+function nohist()
+{
+    "$@";
 }
 
 # Finding history
