@@ -67,16 +67,15 @@ log_bash_persistent_history()
   [[ $(history 1) =~ ^[[:space:]]*[0-9]+[[:space:]]+(.+)$ ]]
   local command_part="${BASH_REMATCH[1]}"
   if [ "$command_part" != "$PERSISTENT_HISTORY_LAST" ] \
-    && ! [[ "$command_part " =~ ^hhh{0,1}[[:space:]]+ ]] \
-    && ! [[ "$command_part " =~ ^nohist[[:space:]]+ ]];
+    && ! [[ "$command_part " =~ ^(no)?hhh{0,1}[[:space:]]+ ]];
   then
     echo "$(date "+%Y-%m-%d.%H:%M:%S")" " | " "$command_part" >> ~/.persistent_history
     export PERSISTENT_HISTORY_LAST="$command_part"
   fi
 }
 
-# Skip putting to history. Usage "nohist ls -l"
-function nohist()
+# Skip putting to history. Usage "nohh ls -l"
+function nohh()
 {
     "$@";
 }
@@ -87,11 +86,11 @@ function hhh()
     if [[ $# -eq 0 ]]; then
         cat ~/.persistent_history | less -R +G
     elif [[ $# -eq 1 ]]; then
-        cat ~/.persistent_history | grep -i --color=always "$1" | less -R +G
+        cat ~/.persistent_history | grep -i --color=always -- "$1" | less -R +G
     elif [[ $# -eq 2 ]]; then
-        cat ~/.persistent_history | grep -i --color=always "$1" | grep -i "$2" | less -R +G
+        cat ~/.persistent_history | grep -i --color=always -- "$1" | grep -i -- "$2" | less -R +G
     elif [[ $# -eq 3 ]]; then
-        cat ~/.persistent_history | grep -i --color=always "$1" | grep -i "$2" | grep -i "$3" | less -R +G
+        cat ~/.persistent_history | grep -i --color=always -- "$1" | grep -i -- "$2" | grep -i -- "$3" | less -R +G
     fi
 }
 
@@ -100,11 +99,11 @@ function hh()
     if [[ $# -eq 0 ]]; then
         cat ~/.persistent_history | tail -n 50
     elif [[ $# -eq 1 ]]; then
-        cat ~/.persistent_history | grep -i --color=always "$1" | tail -n 50
+        cat ~/.persistent_history | grep -i --color=always -- "$1" | tail -n 50
     elif [[ $# -eq 2 ]]; then
-        cat ~/.persistent_history | grep -i --color=always "$1" | grep -i "$2" | tail -n 50
+        cat ~/.persistent_history | grep -i --color=always -- "$1" | grep -i -- "$2" | tail -n 50
     elif [[ $# -eq 3 ]]; then
-        cat ~/.persistent_history | grep -i --color=always "$1" | grep -i "$2" | grep -i "$3" | tail -n 50
+        cat ~/.persistent_history | grep -i --color=always -- "$1" | grep -i -- "$2" | grep -i -- "$3" | tail -n 50
     fi
 }
 
