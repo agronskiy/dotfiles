@@ -65,7 +65,9 @@ export ZSH="/Users/agronsky/.oh-my-zsh"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(
+    git
+)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -97,8 +99,13 @@ source $ZSH/oh-my-zsh.sh
 
 # HERE STARTS CUSTOM STUFF
 
-export EDITOR='code'
-alias slt='code -w'
+# https://stackoverflow.com/questions/20357441/zsh-on-10-9-widgets-can-only-be-called-when-zle-is-active
+TRAPWINCH() {
+  zle && { zle reset-prompt; zle -R }
+}
+
+# Added by fzf
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Various useful colors
 #
@@ -115,8 +122,7 @@ LIGHT_GREEN="%{\033[1;32m%}"
  LIGHT_GRAY="%{\033[0;37m%}"
  COLOR_NONE="%{\033[0m%}"
 
-# Newline command
-NEWLINE=$'\n'
+    NEWLINE=$'\n'
 
 # For iPython Notebook issue - need to set the locale, but not all (?)
 export LC_ALL=en_US.UTF-8
@@ -133,24 +139,22 @@ export TERM=xterm-256color
 
 export PATH=/usr/local/bin:/usr/local/sbin:$PATH
 
-# [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-
-# # Sourcing the autocompletion, see https://docs.brew.sh/Shell-Completion
-# HOMEBREW_PREFIX=$(brew --prefix)
-# if type brew &>/dev/null; then
-#   if [[ -r "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh" ]]; then
-#     source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
-#   else
-#     for COMPLETION in "${HOMEBREW_PREFIX}/etc/bash_completion.d/"*; do
-#       [[ -r "$COMPLETION" ]] && source "$COMPLETION"
-#     done
-#   fi
-# fi
-
-# # FZF typically adds it to the .bashrc
-# [ -f ~/.fzf.bash ] && source ~/.fzf.bash
-
 # Courtesy of Eli Bendersky blog + mods
+HISTSIZE=100000              #How many lines of history to keep in memory
+HISTFILE=~/.zsh_history     #Where to save history to disk
+SAVEHIST=100000               #Number of history entries to save to disk
+HISTDUP=erase               #Erase duplicates in the history file
+setopt    appendhistory     #Append history to the history file (no overwriting)
+setopt    sharehistory      #Share history across terminals
+setopt    incappendhistory  #Immediately append to the history file, not just when a term is killed
+setopt EXTENDED_HISTORY
+setopt HIST_EXPIRE_DUPS_FIRST
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_FIND_NO_DUPS
+setopt HIST_SAVE_NO_DUPS
+
 log_persistent_history()
 {
     setopt local_options BASH_REMATCH
@@ -158,11 +162,12 @@ log_persistent_history()
     local LAST_COMMAND=$(fc -l -1)
     [[ $LAST_COMMAND =~ ^[[:space:]]*[0-9]+[[:space:]]+(.+)$ ]]
     local COMMAND_PART="${BASH_REMATCH[2]}"
-    if [ "$COMMAND_PART" != "$PERSISTENT_HISTORY_LAST" ] \
-        && ! [[ "$COMMAND_PART " =~ ^(no)?hhh{0,1}[[:space:]]+ ]];
+    local COMMAND_PART_NONEWLINE=("${COMMAND_PART//'\\n'/}")
+    if [ "$COMMAND_PART_NONEWLINE" != "$PERSISTENT_HISTORY_LAST" ] \
+        && ! [[ "$COMMAND_PART_NONEWLINE " =~ ^(no)?hhh{0,1}[[:space:]]+ ]];
     then
-        echo "$(date "+%Y-%m-%d.%H:%M:%S")" " | " "$COMMAND_PART" >> ~/.persistent_history
-        export PERSISTENT_HISTORY_LAST="$COMMAND_PART"
+        echo "$(date "+%Y-%m-%d %H:%M:%S")" " | " "$COMMAND_PART_NONEWLINE" >> ~/.persistent_history
+        export PERSISTENT_HISTORY_LAST="$COMMAND_PART_NONEWLINE"
     fi
 }
 
@@ -173,19 +178,7 @@ function nohh()
 }
 
 # Finding history
-function hhh()
-{
-    if [[ $# -eq 0 ]]; then
-        cat ~/.persistent_history | less -R +G
-    elif [[ $# -eq 1 ]]; then
-        cat ~/.persistent_history | grep -i --color=always -- "$1" | less -R +G
-    elif [[ $# -eq 2 ]]; then
-        cat ~/.persistent_history | grep -i --color=always -- "$1" | grep -i -- "$2" | less -R +G
-    elif [[ $# -eq 3 ]]; then
-        cat ~/.persistent_history | grep -i --color=always -- "$1" | grep -i -- "$2" | grep -i -- "$3" | less -R +G
-    fi
-}
-
+# Version old - using grep and allowing to see long commands
 function hh()
 {
     if [[ $# -eq 0 ]]; then
@@ -198,6 +191,26 @@ function hh()
         cat ~/.persistent_history | grep -i --color=always -- "$1" | grep -i -- "$2" | grep -i -- "$3" | tail -n 50
     fi
 }
+
+# New version - widget bound to Ctrl-R
+function __hhf()
+{
+    setopt local_options BASH_REMATCH
+
+    local COMMAND_WITH_DATE=$(cat ~/.persistent_history | fzf --tac)
+    echo ${COMMAND_WITH_DATE:24}
+}
+
+function hhf-widget()
+{
+    LBUFFER="${LBUFFER}$(__hhf)"
+    local ret=$?
+    zle reset-prompt
+    return $ret
+}
+zle     -N   hhf-widget
+bindkey '^R' hhf-widget
+
 
 # Conda stuff
 # >>> conda initialize >>>
@@ -216,7 +229,6 @@ unset __conda_setup
 # <<< conda initialize <<<
 conda activate py37
 
-# TODO remove this git stuff
 # Setting prompt command to branch status
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[white]%}("
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$fg[white]%})%{$reset_color%}"
@@ -227,6 +239,7 @@ export GIT_PS1_SHOWDIRTYSTATE=1
 export GIT_PS1_SHOWUPSTREAM="auto"
 export GIT_PS1_SHOWCOLORHINTS=1
 
+# This needs to be downloaded from my github (configs/)
 source  ~/.git-prompt.sh
 
 PROMPT_DIRTRIM=3
@@ -255,7 +268,7 @@ function middle_part() {
 }
 
 function prompt_symbol() {
-    echo -e  "\n${LIGHT_GREEN}➙  "
+    echo -e  "\n${LIGHT_GREEN}➙${COLOR_NONE}  "
 }
 
 function precmd() {
@@ -269,9 +282,11 @@ function preexec () {
 
 # Coloring partial match https://stackoverflow.com/questions/8300687/zsh-color-partial-tab-completions
 zstyle -e ':completion:*:default' list-colors 'reply=("${PREFIX:+=(#bi)($PREFIX:t)(?)*==02=00}:${(s.:.)LS_COLORS}")';
-zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}"
 autoload -Uz compinit
 compinit
+
+# Default highlight color of the input (green)
+export zle_highlight=( default:fg=10 )
 
 # Alias for git log graph
 # alias glog='git log --graph --full-history --all --color --pretty=format:"%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s"'
@@ -279,12 +294,12 @@ alias glog='git log --graph --abbrev-commit --decorate --format=format:"%C(bold 
 alias glog2='git log --graph --abbrev-commit --decorate --format=format:"%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n""          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)" --all'
 export PATH="/usr/local/opt/ruby/bin:$PATH"
 
-# # This allows grepping with colors
-# export GREP_OPTIONS='--color=always'
-# export GREP_COLOR='1;35;40'
+# This allows grepping with colors
+export GREP_OPTIONS='--color=always'
+export GREP_COLOR='1;35;40'
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
 
-
-
+# FZF options
+export FZF_DEFAULT_OPTS='--height 60% --layout=reverse --border'
