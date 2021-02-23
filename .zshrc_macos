@@ -159,6 +159,7 @@ log_persistent_history()
 {
     local COMMAND_PART=$1
     local COMMAND_PART_NONEWLINE=("${COMMAND_PART//'\'$'\n'/}")
+    COMMAND_PART_NONEWLINE=("${COMMAND_PART_NONEWLINE//$'\n'/}")
     if [ "$COMMAND_PART_NONEWLINE" != "$PERSISTENT_HISTORY_LAST" ] \
         && ! [[ "$COMMAND_PART_NONEWLINE " =~ ^(no)?hh[[:space:]]+ ]] \
         && ! [[ $COMMAND_PART_NONEWLINE =~ ^[[:space:]] ]];
@@ -293,4 +294,4 @@ export GREP_COLOR='1;35;40'
 export PATH="$PATH:$HOME/.rvm/bin"
 
 # FZF options
-export FZF_DEFAULT_OPTS='--height 70% --layout=default --border --bind=F2:toggle-preview'
+export FZF_DEFAULT_OPTS='--height 70% --reverse --border --bind=F2:toggle-preview'
