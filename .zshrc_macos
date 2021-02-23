@@ -235,7 +235,7 @@ export GIT_PS1_SHOWCOLORHINTS=1
 source  ~/scripts/git-prompt.sh
 
 # Various scripts for myself
-# source  ~/scripts/git-commands.sh
+source  ~/scripts/git-commands.sh
 
 PROMPT_DIRTRIM=3
 
