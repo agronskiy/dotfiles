@@ -99,10 +99,7 @@ source $ZSH/oh-my-zsh.sh
 
 # HERE STARTS CUSTOM STUFF
 
-# https://stackoverflow.com/questions/20357441/zsh-on-10-9-widgets-can-only-be-called-when-zle-is-active
-TRAPWINCH() {
-  zle && { zle reset-prompt; zle -R }
-}
+autoload -Uz compinit && compinit
 
 # Added by fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -277,8 +274,6 @@ function preexec () {
 
 # Coloring partial match https://stackoverflow.com/questions/8300687/zsh-color-partial-tab-completions
 zstyle -e ':completion:*:default' list-colors 'reply=("${PREFIX:+=(#bi)($PREFIX:t)(?)*==02=00}:${(s.:.)LS_COLORS}")';
-autoload -Uz compinit
-compinit
 
 # Default highlight color of the input (green)
 export zle_highlight=( default:fg=10 )
