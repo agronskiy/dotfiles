@@ -232,7 +232,10 @@ export GIT_PS1_SHOWUPSTREAM="auto"
 export GIT_PS1_SHOWCOLORHINTS=1
 
 # This needs to be downloaded from my github (configs/)
-source  ~/.git-prompt.sh
+source  ~/scripts/git-prompt.sh
+
+# Various scripts for myself
+# source  ~/scripts/git-commands.sh
 
 PROMPT_DIRTRIM=3
 
