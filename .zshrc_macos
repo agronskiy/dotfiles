@@ -293,4 +293,4 @@ export GREP_COLOR='1;35;40'
 export PATH="$PATH:$HOME/.rvm/bin"
 
 # FZF options
-export FZF_DEFAULT_OPTS='--height 70% --layout=reverse --border --bind=F2:toggle-preview'
+export FZF_DEFAULT_OPTS='--height 70% --layout=default --border --bind=F2:toggle-preview'
