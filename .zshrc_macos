@@ -234,8 +234,6 @@ source  ~/scripts/git-prompt.sh
 # Various scripts for myself
 source  ~/scripts/git-commands.sh
 
-PROMPT_DIRTRIM=3
-
 # Determine active Python virtualenv details.
 function get_virtualenv() {
     if ! test -z "$VIRTUAL_ENV" ; then
@@ -248,6 +246,11 @@ function get_virtualenv() {
 
 function get_err_code() {
     local EXIT_CODE=$?
+    echo -e ${EXIT_CODE}
+}
+
+function display_err_code() {
+    local EXIT_CODE=$1
     if [[ $EXIT_CODE -ne 0 ]]; then
         echo "${RED}[✗]${COLOR_NONE} "
     else
@@ -256,15 +259,27 @@ function get_err_code() {
 }
 
 function middle_part() {
-    echo -e "${BLUE}%n:${WHITE}%~${COLOR_NONE}"
+    # For the trick with path shortening, see https://unix.stackexchange.com/questions/273529/shorten-path-in-zsh-prompt
+    # for options.
+    path_truncated='%(5~|%-2~/../%2~|%~)'
+    echo -e "${BLUE}%n:${WHITE}${path_truncated}${COLOR_NONE}"
 }
 
 function prompt_symbol() {
-    echo -e  "\n${LIGHT_GREEN}➙${COLOR_NONE}  "
+    local EXIT_CODE=$1
+
+    if [[ $EXIT_CODE -ne 0 ]]; then
+        local color="${RED}"
+    else
+        local color="${LIGHT_GREEN}"
+    fi
+    echo -e  "\n${color}››${COLOR_NONE}  "
 }
 
 function precmd() {
-    __git_ps1 "${NEWLINE}$(get_err_code)$(get_virtualenv)$(middle_part)" "$(prompt_symbol)"
+    local EXIT_CODE=$(get_err_code)
+    __git_ps1   "${NEWLINE}$(display_err_code ${EXIT_CODE})$(get_virtualenv)$(middle_part)"\
+                "$(prompt_symbol ${EXIT_CODE})"
 }
 
 function preexec () {
