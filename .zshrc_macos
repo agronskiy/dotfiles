@@ -16,7 +16,7 @@ export ZSH="/Users/agronsky/.oh-my-zsh"
 
 # Uncomment the following line to use hyphen-insensitive completion.
 # Case-sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
+HYPHEN_INSENSITIVE="true"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
 # DISABLE_AUTO_UPDATE="true"
@@ -100,6 +100,7 @@ source $ZSH/oh-my-zsh.sh
 # HERE STARTS CUSTOM STUFF
 
 autoload -Uz compinit && compinit
+autoload -U colors && colors
 
 # Added by fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -128,29 +129,45 @@ export LANG=en_US.UTF-8
 # export LC_CTYPE=en_US.UTF-8
 
 # Makes colors in CLI ls output
-alias ls="ls -aGpF"  # ls output with "/" for folders
-alias ll='ls -alG'
+alias ls="ls -aCGpF"  # ls output with "/" for folders and @ for symlinks
+alias ll='ls -alGpF'
 export LSCOLORS="ExGxBxDxCxEgEdxbxgxcxd"  # ls colors
 
 export TERM=xterm-256color
 
-export PATH=/usr/local/bin:/usr/local/sbin:$PATH
-
 # Courtesy of Eli Bendersky blog + mods
-HISTSIZE=100000              #How many lines of history to keep in memory
-HISTFILE=~/.zsh_history     #Where to save history to disk
-SAVEHIST=100000               #Number of history entries to save to disk
-HISTDUP=erase               #Erase duplicates in the history file
-setopt    appendhistory     #Append history to the history file (no overwriting)
-setopt    sharehistory      #Share history across terminals
-setopt    incappendhistory  #Immediately append to the history file, not just when a term is killed
+HISTSIZE=100000              #  How many lines of history to keep in memory
+HISTFILE=~/.zsh_history     # Where to save history to disk
+SAVEHIST=100000               # Number of history entries to save to disk
+HISTDUP=erase               # Erase duplicates in the history file
+setopt    appendhistory     # Append history to the history file (no overwriting)
+setopt    sharehistory      # Share history across terminals
+setopt    incappendhistory  # Immediately append to the history file, not just when a term is killed
 setopt EXTENDED_HISTORY
 setopt HIST_EXPIRE_DUPS_FIRST
-setopt HIST_IGNORE_DUPS
 setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_IGNORE_SPACE
 setopt HIST_FIND_NO_DUPS
 setopt HIST_SAVE_NO_DUPS
+
+# Wanting up-down arrows to be still local, credit of
+# https://superuser.com/questions/446594/separate-up-arrow-lookback-for-local-and-global-zsh-history/691603#691603
+bindkey "${key[Up]}" up-line-or-local-history
+bindkey "${key[Down]}" down-line-or-local-history
+
+up-line-or-local-history() {
+    zle set-local-history 1
+    zle up-line-or-history
+    zle set-local-history 0
+}
+zle -N up-line-or-local-history
+down-line-or-local-history() {
+    zle set-local-history 1
+    zle down-line-or-history
+    zle set-local-history 0
+}
+zle -N down-line-or-local-history
+# End of dividing history
 
 log_persistent_history()
 {
@@ -171,35 +188,36 @@ log_persistent_history()
 function hh()
 {
     if [[ $# -eq 0 ]]; then
-        cat ~/.persistent_history | tail -n 50
+        fc -lin 1 | tail -n 50
     elif [[ $# -eq 1 ]]; then
-        cat ~/.persistent_history | grep -i --color=always -- "$1" | tail -n 50
+        fc -lin 1 | grep -i --color=always -- "$1" | tail -n 50
     elif [[ $# -eq 2 ]]; then
-        cat ~/.persistent_history | grep -i --color=always -- "$1" | grep -i -- "$2" | tail -n 50
+        fc -lin 1 | grep -i --color=always -- "$1" | grep -i --color=always -- "$2" | tail -n 50
     elif [[ $# -eq 3 ]]; then
-        cat ~/.persistent_history | grep -i --color=always -- "$1" | grep -i -- "$2" | grep -i -- "$3" | tail -n 50
+        fc -lin 1 | grep -i --color=always -- "$1" | grep -i --color=always -- "$2" | grep -i --color=always -- "$3" | tail -n 50
     fi
 }
 
 # New version - widget bound to Ctrl-R
-function __hhf()
-{
-    setopt local_options BASH_REMATCH
-
-    local COMMAND_WITH_DATE=$(cat ~/.persistent_history | fzf --tac --preview-window down:4:wrap --preview='print {}')
-    echo ${COMMAND_WITH_DATE:24}
+__fzf-history-widget() {
+  local selected num
+  setopt localoptions noglobsubst noposixbuiltins pipefail 2> /dev/null
+  selected=( $(fc -rli 1 |
+    FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index
+    --preview-window down:6:wrap --preview='printf '\''%s'\'' {}'
+    --bind=ctrl-r:toggle-sort $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} +m" $(__fzfcmd)) )
+  local ret=$?
+  if [ -n "$selected" ]; then
+    num=$selected[1]
+    if [ -n "$num" ]; then
+      zle vi-fetch-history -n $num
+    fi
+  fi
+  zle reset-prompt
+  return $ret
 }
-
-function hhf-widget()
-{
-    LBUFFER="${LBUFFER}$(__hhf)"
-    local ret=$?
-    zle reset-prompt
-    return $ret
-}
-zle     -N   hhf-widget
-bindkey '^R' hhf-widget
-
+zle     -N   __fzf-history-widget
+bindkey '^R' __fzf-history-widget
 
 # Conda stuff
 # >>> conda initialize >>>
@@ -230,7 +248,6 @@ export GIT_PS1_SHOWCOLORHINTS=1
 
 # This needs to be downloaded from my github (configs/)
 source  ~/scripts/git-prompt.sh
-
 # Various scripts for myself
 source  ~/scripts/git-commands.sh
 
@@ -252,7 +269,7 @@ function get_err_code() {
 function display_err_code() {
     local EXIT_CODE=$1
     if [[ $EXIT_CODE -ne 0 ]]; then
-        echo "${RED}[✗]${COLOR_NONE} "
+        echo "${LIGHT_RED}[✗]${COLOR_NONE} "
     else
         echo "${LIGHT_GREEN}[✓]${COLOR_NONE} "
     fi
@@ -269,11 +286,11 @@ function prompt_symbol() {
     local EXIT_CODE=$1
 
     if [[ $EXIT_CODE -ne 0 ]]; then
-        local color="${RED}"
+        local color="${LIGHT_RED}%B"
     else
-        local color="${LIGHT_GREEN}"
+        local color="${LIGHT_GREEN}%B"
     fi
-    echo -e  "\n${color}››${COLOR_NONE}  "
+    echo -e  "\n${color}❯❯${COLOR_NONE}  "
 }
 
 function precmd() {
@@ -284,7 +301,6 @@ function precmd() {
 
 function preexec () {
     echo -ne "\e[0m"
-    log_persistent_history $1
 }
 
 # Coloring partial match https://stackoverflow.com/questions/8300687/zsh-color-partial-tab-completions
@@ -297,10 +313,8 @@ export zle_highlight=( default:fg=10 )
 # alias glog='git log --graph --full-history --all --color --pretty=format:"%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s"'
 alias glog='git log --graph --abbrev-commit --decorate --format=format:"%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)" --all'
 alias glog2='git log --graph --abbrev-commit --decorate --format=format:"%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n""          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)" --all'
-export PATH="/usr/local/opt/ruby/bin:$PATH"
 
 # This allows grepping with colors
-export GREP_OPTIONS='--color=always'
 export GREP_COLOR='1;35;40'
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
