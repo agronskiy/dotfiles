@@ -130,8 +130,17 @@ export LANG=en_US.UTF-8
 # export LC_CTYPE=en_US.UTF-8
 
 # Makes colors in CLI ls output
-alias ls="ls -aCGpF --color=auto"  # ls output with "/" for folders and @ for symlinks
-alias ll="ls -alGpF --color=auto"
+case `uname` in
+  Darwin)
+    alias ls="ls -aCGpF"  # ls output with "/" for folders and @ for symlinks
+    alias ll="ls -alGpF"
+  ;;
+  Linux)
+    alias ls="ls -aCGpF --color=auto"  # ls output with "/" for folders and @ for symlinks
+    alias ll="ls -alGpF --color=auto"
+  ;;
+esac
+
 export LSCOLORS="ExGxBxDxCxEgEdxbxgxcxd"  # ls colors
 
 export TERM=xterm-256color
@@ -235,7 +244,7 @@ else
 fi
 unset __conda_setup
 # <<< conda initialize <<<
-conda activate py37
+conda deactivate
 
 # Setting prompt command to branch status
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[white]%}("
