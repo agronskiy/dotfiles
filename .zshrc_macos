@@ -67,6 +67,7 @@ HYPHEN_INSENSITIVE="true"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
     git
+    zsh-syntax-highlighting
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -110,7 +111,7 @@ autoload -U colors && colors
 # Check https://unix.stackexchange.com/questions/124407/what-color-codes-can-i-use-in-my-ps1-prompt
 # for more colors codes
         RED="%{\033[0;31m%}"
-     YELLOW="%{\033[1;33m%}"
+     YELLOW="%{\033[0;33m%}"
       GREEN="%{\033[0;32m%}"
        BLUE="%{\033[1;34m%}"
   LIGHT_RED="%{\033[1;31m%}"
@@ -254,10 +255,10 @@ source  ~/scripts/git-commands.sh
 # Determine active Python virtualenv details.
 function get_virtualenv() {
     if ! test -z "$VIRTUAL_ENV" ; then
-       echo "${YELLOW}[`basename \"$VIRTUAL_ENV\"`]${COLOR_NONE} "
+       echo "${YELLOW}(`basename \"$VIRTUAL_ENV\"`)${COLOR_NONE} "
     fi
     if ! test -z "$CONDA_DEFAULT_ENV" ; then
-       echo "${YELLOW}[`basename \"$CONDA_DEFAULT_ENV\"`]${COLOR_NONE} "
+       echo "${YELLOW}(`basename \"$CONDA_DEFAULT_ENV\"`)${COLOR_NONE} "
     fi
 }
 
@@ -269,9 +270,9 @@ function get_err_code() {
 function display_err_code() {
     local EXIT_CODE=$1
     if [[ $EXIT_CODE -ne 0 ]]; then
-        echo "${LIGHT_RED}[✗]${COLOR_NONE} "
+        echo "${LIGHT_RED}[✘]${COLOR_NONE} "
     else
-        echo "${LIGHT_GREEN}[✓]${COLOR_NONE} "
+        echo "${LIGHT_GREEN}[✔]${COLOR_NONE} "
     fi
 }
 
@@ -279,7 +280,7 @@ function middle_part() {
     # For the trick with path shortening, see https://unix.stackexchange.com/questions/273529/shorten-path-in-zsh-prompt
     # for options.
     path_truncated='%(5~|%-2~/../%2~|%~)'
-    echo -e "${BLUE}%n:${WHITE}${path_truncated}${COLOR_NONE}"
+    echo -e "${BLUE}%n${COLOR_NONE}@${LIGHT_BLUE}%M${COLOR_NONE}: ${WHITE}${path_truncated}${COLOR_NONE}"
 }
 
 function prompt_symbol() {
@@ -290,7 +291,7 @@ function prompt_symbol() {
     else
         local color="${LIGHT_GREEN}%B"
     fi
-    echo -e  "\n${color}❯❯${COLOR_NONE}  "
+    echo -e  "\n${color}❯❯${COLOR_NONE} "
 }
 
 function precmd() {
@@ -306,8 +307,8 @@ function preexec () {
 # Coloring partial match https://stackoverflow.com/questions/8300687/zsh-color-partial-tab-completions
 zstyle -e ':completion:*:default' list-colors 'reply=("${PREFIX:+=(#bi)($PREFIX:t)(?)*==02=00}:${(s.:.)LS_COLORS}")';
 
-# Default highlight color of the input (green)
-export zle_highlight=( default:fg=10 )
+# Default highlight color of the input
+export zle_highlight=( default:fg=7 )
 
 # Alias for git log graph
 # alias glog='git log --graph --full-history --all --color --pretty=format:"%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s"'
