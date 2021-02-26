@@ -8,11 +8,30 @@ Some bits and pieces of the bashrc used here and there across my machines, e.g. 
 
 # Installation
 
+## dotfiles
 ```
 # Assuming CURR_REPO_PATH
 ln -s $CURR_REPO_PATH/.zshrc_macos ~/.zshrc
 ln -s $CURR_REPO_PATH/scripts ~/scripts
 ```
+
+## plugins
+
+```
+# Install oh-my-zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+# Install highlighting plugin
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+```
+
+## fzf
+
+```
+# Install fzf
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install
+```
+
 
 ## Caveat: Git autocompletion with git homebrew
 
