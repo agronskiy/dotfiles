@@ -210,9 +210,9 @@ export GIT_PS1_SHOWUPSTREAM="auto"
 export GIT_PS1_SHOWCOLORHINTS=1
 
 # This needs to be downloaded from my github (configs/)
-source  ~/scripts/git-prompt.sh
+source  $DOTFILES/scripts/git-prompt.sh
 # Various scripts for myself
-source  ~/scripts/git-commands.sh
+source  $DOTFILES/scripts/git-commands.sh
 
 # Determine active Python virtualenv details.
 function get_virtualenv() {
