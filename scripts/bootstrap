@@ -131,7 +131,7 @@ install_dotfiles () {
 
     local verbose=${DOTFILES_ROOT}/_verbose/
 
-    find -H "$DOTFILES_ROOT" -maxdepth 4 -name "*.symlink" -not -path '*.git*' -print0 | while IFS= read -r -d '' src; do
+    find -H "$DOTFILES_ROOT" -maxdepth 8 -name "*.symlink" -not -path '*.git*' -print0 | while IFS= read -r -d '' src; do
         if [[ "$src" == *'/_verbose/'* ]]; then
             # We assume everything in our '_verbose' dir should actually be linked
             # mirroring the exact directory structure into our home dir.
