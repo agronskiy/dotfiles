@@ -2,6 +2,7 @@
 # This needs insatlling tpm (no big deal, standard procedure)
 # Run:
 #   git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+# UPD(agronskiy): this now is fulfilled by the install script.
 #
 # Then run (first time when installing plugins):
 #   prefix + I (capital i, as in Install) to fetch the plugin.
