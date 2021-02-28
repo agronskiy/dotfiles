@@ -1,0 +1,29 @@
+#!/bin/sh
+
+# Shortcut to this dotfile's path is $DOTFILES.
+# your actual dotfile repo in 'work/dotfiles'?
+if [[ -d "${HOME}/.dotfiles" ]]; then
+  export DOTFILES="${HOME}/.dotfiles"
+else
+  echo "Can't locate .dotfiles!"
+  exit 1
+fi
+
+# Set macOS defaults
+case `uname` in
+    Darwin)
+        $DOTFILES/macos/set-defaults.sh
+    ;;
+esac
+
+
+# Install homebrew
+$DOTFILES/homebrew/install.sh 2>&1
+
+# Upgrade homebrew
+echo "› brew update"
+brew update
+
+# Install software
+echo "› $DOTFILES/script/install"
+$DOTFILES/script/install
