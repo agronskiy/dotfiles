@@ -9,10 +9,13 @@
 ################################################################
 
 
-# Set the prefix to `ctrl + a` instead of `ctrl + b`
-unbind C-b
-set-option -g prefix C-f
-bind-key C-f send-prefix
+# Set the prefix to `ctrl + f` instead of `ctrl + b`
+# This is not done if the "TMUX_INNER" env variable is set
+if-shell '[ -z "$TMUX_INNER" ]' {
+    unbind C-b
+    set-option -g prefix C-f
+    bind-key C-f send-prefix
+}
 
 # Get the colors work
 set -g default-terminal "screen-256color"
@@ -68,7 +71,12 @@ set -g status-left-style 'fg=colour25'
 set -g status-right '#{prefix_highlight} | %a %Y-%m-%d %H:%M'
 
 set -g status-left-length 25
-set -g status-style 'bg=colour248 fg=black'
+if-shell '[ -z "$TMUX_INNER" ]' {
+    set -g status-style 'bg=colour248 fg=black'
+} {
+    set -g status-style 'bg=colour238 fg=black'
+}
+
 
 set -g window-status-separator ' | '
 set -g window-status-format "#I:#W#{?window_flags,#{window_flags}, }"
