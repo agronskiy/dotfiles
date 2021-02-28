@@ -9,7 +9,7 @@ else
   exit 1
 fi
 
-source $DOTFILES/zsh/oh-my-zsh.zsh
+source $DOTFILES/zsh/oh-my-zsh.explicit-load.zsh
 
 
 # HERE STARTS CUSTOM STUFF
@@ -18,17 +18,20 @@ source $DOTFILES/zsh/oh-my-zsh.zsh
 
 # Loading the stuff from topic folders
 
+# Config files are all the files with *.zsh except for those with *.explicit-load.zsh
+# The latter are meant to be loaded somewhere explicitly (for prioritization control)
 declare -U config_files
 config_files=($DOTFILES/**/*.zsh)
+config_files=${config_files:#*/*.explicit-load.zsh}
 
-# Load the path files
-for file in ${(M)config_files:#*/path.zsh}; do
-  source $file
+# Load the *.pre-load.zsh files
+for file in ${(M)config_files:#*/*.pre-load.zsh}; do
+    source $file
 done
 
-# Load everything but the path and completion files
-for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}; do
-  source $file
+# Load everything but the *.pre-load.zsh and *.post-load.zsh
+for file in ${${config_files:#*/*.pre-load.zsh}:#*/*.post-load.zsh}; do
+    source $file
 done
 
 # Initialize autocomplete here, otherwise functions won't be loaded
@@ -42,14 +45,14 @@ bashcompinit
 autoload -U colors && colors
 
 # load every completion after autocomplete loads
-for file in ${(M)config_files:#*/completion.zsh}; do
-  source $file
+for file in ${(M)config_files:#*/*.post-load.zsh}; do
+    source $file
 done
 
 # Stash local environment variables in ~/.localrc. This means they'll stay out
 # of the main dotfiles repository (which is public).
 if [[ -a ~/.localrc ]]; then
-  source ~/.localrc
+    source ~/.localrc
 fi
 
 unset config_files
@@ -81,14 +84,14 @@ export LANG=en_US.UTF-8
 
 # Makes colors in CLI ls output
 case `uname` in
-  Darwin)
-    alias ls="ls -aCGpF"  # ls output with "/" for folders and @ for symlinks
-    alias ll="ls -alGpF"
-  ;;
-  Linux)
-    alias ls="ls -aCGpF --color=auto"  # ls output with "/" for folders and @ for symlinks
-    alias ll="ls -alGpF --color=auto"
-  ;;
+    Darwin)
+        alias ls="ls -aCGpF"  # ls output with "/" for folders and @ for symlinks
+        alias ll="ls -alGpF"
+    ;;
+    Linux)
+        alias ls="ls -aCGpF --color=auto"  # ls output with "/" for folders and @ for symlinks
+        alias ll="ls -alGpF --color=auto"
+    ;;
 esac
 
 export LSCOLORS="ExGxBxDxCxEgEdxbxgxcxd"  # ls colors
@@ -214,10 +217,10 @@ source  ~/scripts/git-commands.sh
 # Determine active Python virtualenv details.
 function get_virtualenv() {
     if ! test -z "$VIRTUAL_ENV" ; then
-       echo "${YELLOW}(`basename \"$VIRTUAL_ENV\"`)${COLOR_NONE} "
+        echo "${YELLOW}(`basename \"$VIRTUAL_ENV\"`)${COLOR_NONE} "
     fi
     if ! test -z "$CONDA_DEFAULT_ENV" ; then
-       echo "${YELLOW}(`basename \"$CONDA_DEFAULT_ENV\"`)${COLOR_NONE} "
+        echo "${YELLOW}(`basename \"$CONDA_DEFAULT_ENV\"`)${COLOR_NONE} "
     fi
 }
 
