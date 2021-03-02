@@ -27,10 +27,7 @@ link_file () {
     then
 
         local currentSrc=$(readlink "$dst")
-        echo "DST $dst "
-        echo "CurrSRC $currentSrc"
-        echo "SRC $src"
-        echo ''
+
         if [ "$currentSrc" == "$src" ]
         then
 

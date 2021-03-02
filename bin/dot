@@ -2,11 +2,12 @@
 #
 # Installing everything needed for correct operation.
 
+source $DOTFILES/zsh/logging.explicit-load.zsh
+
 if [[ -d "${HOME}/.dotfiles" ]]; then
   export DOTFILES="${HOME}/.dotfiles"
 else
-  echo "Can't locate .dotfiles!"
-  exit 1
+  log_fail "Can't locate .dotfiles!"
 fi
 
 # Set macOS defaults
@@ -21,9 +22,10 @@ esac
 $DOTFILES/homebrew/install.explicit-load.sh 2>&1
 
 # Upgrade homebrew
-echo "› brew update"
+log_info "brew update"
 brew update
+log_success "brew updated"
 
 # Install software
-echo "› $DOTFILES/script/install"
-$DOTFILES/script/install
+log_info "Running $DOTFILES/script/install"
+$DOTFILES/scripts/install

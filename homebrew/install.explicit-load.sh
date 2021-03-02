@@ -3,9 +3,9 @@
 # Install Homebrew
 
 # Check for Homebrew.
-if test ! $(which brew)
+if ! [ -x "$(command -v brew)" ]
 then
-    echo "  Installing Homebrew for you."
+    echo "  Installing Homebrew"
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 

@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
+source $DOTFILES/zsh/logging.explicit-load.zsh
+
+log_info "Installing conda"
+
+if [ -x "$(command -v conda)" ]
+then
+    log_success "Skipped installing conda, found already"
+    exit 0
+fi
+
 if [ "$(uname -s)" == "Linux" ]
 then
     (
@@ -17,4 +27,11 @@ then
 elif [ "$(uname -s)" == "Darwin" ]
 then
     brew install miniconda
+fi
+
+return_val=$?
+if [ $return_val -ne 0 ]; then
+    log_fail "Failed to install conda"
+else
+    log_success "Installed conda"
 fi

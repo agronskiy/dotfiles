@@ -4,18 +4,26 @@
 
 Some bits and pieces of the bashrc used here and there across my machines, e.g. for prompt
 
-![prompt](assets/prompt.png)
+
 
 # Installation
 
-## dotfiles
-```
-# Assuming CURR_REPO_PATH
-ln -s $CURR_REPO_PATH/.zshrc_macos ~/.zshrc
-ln -s $CURR_REPO_PATH/scripts ~/scripts
+## Linking dotfiles:
+
+```bash
+./scripts/bootstrap
 ```
 
-## plugins
+## Installing software and plugins:
+
+**This is WIP**: currently there are some installation scripts untested, all should run by
+```bash
+./bin/dot
+```
+
+Otherwise, prefer for now to install stuff manually:
+
+### plugins
 
 ```
 # Install oh-my-zsh
@@ -25,19 +33,13 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 ```
 
-## fzf
+### fzf
 
-```
-# Install fzf
-git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install
-```
+Installs via `./bin/dot`
 
 ## tmux
 
-```
-# tmux plugin manager
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-```
+Installs via `./bin/dot`
 
 ## Caveat: Git autocompletion with git homebrew
 

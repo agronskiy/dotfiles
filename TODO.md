@@ -1,8 +1,12 @@
 ## Installation procedures
 
 - [ ] Installing necessary things in one place
-    - tmux, ohmyzsh, git, conda etc - CROSS PLATFORM
-- [ ]
+    - [x] tmux
+    - [ ] ohmyzsh
+    - [ ] git
+    - [ ] conda
+- [ ] Put installation procedure into `bootstrap`
+- [ ] Test on non-Darwin (Linux) environments
 
 
 ## Zsh
