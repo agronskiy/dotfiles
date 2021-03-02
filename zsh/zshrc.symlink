@@ -2,7 +2,6 @@
 # Shortcut to this dotfile's path is $DOTFILES.
 # your actual dotfile repo in 'work/dotfiles'?
 if [[ -d "${HOME}/.dotfiles" ]]; then
-  # I'm inconsistent on many of my machines. Plz no judge.
   export DOTFILES="${HOME}/.dotfiles"
 else
   echo "Can't locate .dotfiles!"
@@ -14,7 +13,8 @@ source $DOTFILES/zsh/oh-my-zsh.explicit-load.zsh
 
 # HERE STARTS CUSTOM STUFF
 
-
+# Logging
+source $DOTFILES/zsh/logging.explicit-load.zsh
 
 # Loading the stuff from topic folders
 
@@ -22,7 +22,7 @@ source $DOTFILES/zsh/oh-my-zsh.explicit-load.zsh
 # The latter are meant to be loaded somewhere explicitly (for prioritization control)
 declare -U config_files
 config_files=($DOTFILES/**/*.zsh)
-config_files=${config_files:#*/*.explicit-load.zsh}
+config_files=(${config_files:#*/*.explicit-load.zsh})
 
 # Load the *.pre-load.zsh files
 for file in ${(M)config_files:#*/*.pre-load.zsh}; do
@@ -61,126 +61,11 @@ unset config_files
 # Added by fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# Various useful colors
-#
-# Check https://unix.stackexchange.com/questions/124407/what-color-codes-can-i-use-in-my-ps1-prompt
-# for more colors codes
-        RED="%{\033[0;31m%}"
-     YELLOW="%{\033[0;33m%}"
-      GREEN="%{\033[0;32m%}"
-       BLUE="%{\033[1;34m%}"
-  LIGHT_RED="%{\033[1;31m%}"
-LIGHT_GREEN="%{\033[1;32m%}"
- LIGHT_BLUE="%{\033[38;5;81m%}"
-      WHITE="%{\033[1;37m%}"
- LIGHT_GRAY="%{\033[0;37m%}"
- COLOR_NONE="%{\033[0m%}"
-
-    NEWLINE=$'\n'
-
 # For iPython Notebook issue - need to set the locale, but not all (?)
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
-# Makes colors in CLI ls output
-case `uname` in
-    Darwin)
-        alias ls="ls -aCGpF"  # ls output with "/" for folders and @ for symlinks
-        alias ll="ls -alGpF"
-    ;;
-    Linux)
-        alias ls="ls -aCGpF --color=auto"  # ls output with "/" for folders and @ for symlinks
-        alias ll="ls -alGpF --color=auto"
-    ;;
-esac
-
-export LSCOLORS="ExGxBxDxCxEgEdxbxgxcxd"  # ls colors
-
 export TERM=xterm-256color
-
-# Courtesy of Eli Bendersky blog + mods
-HISTSIZE=100000              #  How many lines of history to keep in memory
-HISTFILE=~/.zsh_history     # Where to save history to disk
-SAVEHIST=100000               # Number of history entries to save to disk
-HISTDUP=erase               # Erase duplicates in the history file
-setopt    appendhistory     # Append history to the history file (no overwriting)
-setopt    sharehistory      # Share history across terminals
-setopt    incappendhistory  # Immediately append to the history file, not just when a term is killed
-setopt EXTENDED_HISTORY
-setopt HIST_EXPIRE_DUPS_FIRST
-setopt HIST_IGNORE_ALL_DUPS
-setopt HIST_IGNORE_SPACE
-setopt HIST_FIND_NO_DUPS
-setopt HIST_SAVE_NO_DUPS
-
-# Wanting up-down arrows to be still local, credit of
-# https://superuser.com/questions/446594/separate-up-arrow-lookback-for-local-and-global-zsh-history/691603#691603
-bindkey "${key[Up]}" up-line-or-local-history
-bindkey "${key[Down]}" down-line-or-local-history
-
-up-line-or-local-history() {
-    zle set-local-history 1
-    zle up-line-or-history
-    zle set-local-history 0
-}
-zle -N up-line-or-local-history
-down-line-or-local-history() {
-    zle set-local-history 1
-    zle down-line-or-history
-    zle set-local-history 0
-}
-zle -N down-line-or-local-history
-# End of dividing history
-
-log_persistent_history()
-{
-    local COMMAND_PART=$1
-    local COMMAND_PART_NONEWLINE=("${COMMAND_PART//'\'$'\n'/}")
-    COMMAND_PART_NONEWLINE=("${COMMAND_PART_NONEWLINE//$'\n'/}")
-    if [ "$COMMAND_PART_NONEWLINE" != "$PERSISTENT_HISTORY_LAST" ] \
-        && ! [[ "$COMMAND_PART_NONEWLINE " =~ ^(no)?hh[[:space:]]+ ]] \
-        && ! [[ $COMMAND_PART_NONEWLINE =~ ^[[:space:]] ]];
-    then
-        echo "$(date "+%Y-%m-%d %H:%M:%S")" " | " "$COMMAND_PART_NONEWLINE" >> ~/.persistent_history
-        export PERSISTENT_HISTORY_LAST="$COMMAND_PART_NONEWLINE"
-    fi
-}
-
-# Finding history
-# Version old - using grep and allowing to see long commands
-function hh()
-{
-    if [[ $# -eq 0 ]]; then
-        fc -lin 1 | tail -n 50
-    elif [[ $# -eq 1 ]]; then
-        fc -lin 1 | grep -i --color=always -- "$1" | tail -n 50
-    elif [[ $# -eq 2 ]]; then
-        fc -lin 1 | grep -i --color=always -- "$1" | grep -i --color=always -- "$2" | tail -n 50
-    elif [[ $# -eq 3 ]]; then
-        fc -lin 1 | grep -i --color=always -- "$1" | grep -i --color=always -- "$2" | grep -i --color=always -- "$3" | tail -n 50
-    fi
-}
-
-# New version - widget bound to Ctrl-R
-__fzf-history-widget() {
-  local selected num
-  setopt localoptions noglobsubst noposixbuiltins pipefail 2> /dev/null
-  selected=( $(fc -rli 1 |
-    FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index
-    --preview-window down:6:wrap --preview='printf '\''%s'\'' {}'
-    --bind=ctrl-r:toggle-sort $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} +m" $(__fzfcmd)) )
-  local ret=$?
-  if [ -n "$selected" ]; then
-    num=$selected[1]
-    if [ -n "$num" ]; then
-      zle vi-fetch-history -n $num
-    fi
-  fi
-  zle reset-prompt
-  return $ret
-}
-zle     -N   __fzf-history-widget
-bindkey '^R' __fzf-history-widget
 
 # Conda stuff
 # >>> conda initialize >>>
@@ -199,89 +84,8 @@ unset __conda_setup
 # <<< conda initialize <<<
 conda deactivate
 
-# Setting prompt command to branch status
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[white]%}("
-ZSH_THEME_GIT_PROMPT_SUFFIX="%{$fg[white]%})%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_DIRTY="*"
-ZSH_THEME_GIT_PROMPT_CLEAN=""
-
-export GIT_PS1_SHOWDIRTYSTATE=1
-export GIT_PS1_SHOWUPSTREAM="auto"
-export GIT_PS1_SHOWCOLORHINTS=1
-
-# This needs to be downloaded from my github (configs/)
-source  $DOTFILES/scripts/git-prompt.sh
-# Various scripts for myself
-source  $DOTFILES/scripts/git-commands.sh
-
-# Determine active Python virtualenv details.
-function get_virtualenv() {
-    if ! test -z "$VIRTUAL_ENV" ; then
-        echo "${YELLOW}(`basename \"$VIRTUAL_ENV\"`)${COLOR_NONE} "
-    fi
-    if ! test -z "$CONDA_DEFAULT_ENV" ; then
-        echo "${YELLOW}(`basename \"$CONDA_DEFAULT_ENV\"`)${COLOR_NONE} "
-    fi
-}
-
-function get_err_code() {
-    local EXIT_CODE=$?
-    echo -e ${EXIT_CODE}
-}
-
-function display_err_code() {
-    local EXIT_CODE=$1
-    if [[ $EXIT_CODE -ne 0 ]]; then
-        echo "${LIGHT_RED}[✘]${COLOR_NONE} "
-    else
-        echo "${LIGHT_GREEN}[✔]${COLOR_NONE} "
-    fi
-}
-
-function middle_part() {
-    # For the trick with path shortening, see https://unix.stackexchange.com/questions/273529/shorten-path-in-zsh-prompt
-    # for options.
-    path_truncated='%(5~|%-2~/../%2~|%~)'
-    echo -e "${BLUE}%n${COLOR_NONE}@${LIGHT_BLUE}%M${COLOR_NONE}: ${WHITE}${path_truncated}${COLOR_NONE}"
-}
-
-function prompt_symbol() {
-    local EXIT_CODE=$1
-
-    if [[ $EXIT_CODE -ne 0 ]]; then
-        local color="${LIGHT_RED}%B"
-    else
-        local color="${LIGHT_GREEN}%B"
-    fi
-    echo -e  "\n${color}❯❯${COLOR_NONE} "
-}
-
-function precmd() {
-    local EXIT_CODE=$(get_err_code)
-    __git_ps1   "${NEWLINE}$(display_err_code ${EXIT_CODE})$(get_virtualenv)$(middle_part)"\
-                "$(prompt_symbol ${EXIT_CODE})"
-}
-
-function preexec () {
-    echo -ne "\e[0m"
-}
-
-# Coloring partial match https://stackoverflow.com/questions/8300687/zsh-color-partial-tab-completions
-zstyle -e ':completion:*:default' list-colors 'reply=("${PREFIX:+=(#bi)($PREFIX:t)(?)*==02=00}:${(s.:.)LS_COLORS}")';
-
-# Default highlight color of the input
-export zle_highlight=( default:fg=7 )
-
-# Alias for git log graph
-# alias glog='git log --graph --full-history --all --color --pretty=format:"%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s"'
-alias glog='git log --graph --abbrev-commit --decorate --format=format:"%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)" --all'
-alias glog2='git log --graph --abbrev-commit --decorate --format=format:"%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n""          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)" --all'
-
 # This allows grepping with colors
 export GREP_COLOR='1;35;40'
-
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
 
 # FZF options
 export FZF_DEFAULT_OPTS='--height 70% --reverse --border --bind=F2:toggle-preview'

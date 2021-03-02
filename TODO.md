@@ -1,10 +1,10 @@
 ## Installation procedures
 
 - [ ] Installing necessary things in one place
-    - tmux, ohmyzsh, git, conda etc
-- [ ] Linking files properly
-- [ ] Linux installation
+    - tmux, ohmyzsh, git, conda etc - CROSS PLATFORM
+- [ ]
+
 
 ## Zsh
 
-- [ ] Sourcing aliases/paths etc.
+- [x] Sourcing aliases/paths etc.
