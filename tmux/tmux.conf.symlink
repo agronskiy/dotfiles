@@ -75,7 +75,7 @@ set -g status-left-length 25
 if-shell '[ -z "$TMUX_INNER" ]' {
     set -g status-style 'bg=colour248 fg=black'
 } {
-    set -g status-style 'bg=colour238 fg=black'
+    set -g status-style 'bg=colour153 fg=black'
 }
 
 
