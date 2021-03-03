@@ -12,4 +12,4 @@ tmux set status-bg colour248
 # For some reason this plugin keeps highlighting with the old "^F" sign corresponding to Ctrl-F
 # Workaround is to recreate status bar (see tmux.conf)
 tmux set -g status-right '#{prefix_highlight} | %a %Y-%m-%d %H:%M'
-$HOME/.tmux/plugins/tmux-prefix-highlight/prefix_highlight.tmux
+tmux run -b '~/.tmux/plugins/tpm/tpm'

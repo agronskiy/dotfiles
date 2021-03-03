@@ -10,12 +10,13 @@ Along with many very personal features there are several which might be useful f
 
 ## `tmux-inner` and `tmux-outer` commands
 
-Allow to sightly change the color scheme and bind different `prefix`. Useful when SSH-ing into remote tmux from the
-local tmux, which otherwise results in two nested identical tmux-es with identical prefixes.
+Allow to dynamically change the color scheme and bind different `prefix` key (Ctrl-F for outer and Ctrl-B for inner).
+Useful when SSH-ing into remote (inner) tmux from the local (outer) tmux, which otherwise results in two nested
+identical tmux-es with identical prefixes.
 
-<img src="assets/tmux-inner.png" width="50%">
+<img src="assets/tmux-inner.png" width="75%">
 
-<img src="assets/tmux-outer.png" width="50%">
+<img src="assets/tmux-outer.png" width="75%">
 
 # Installation
 
