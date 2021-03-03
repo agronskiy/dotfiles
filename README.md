@@ -13,10 +13,12 @@ Allow to dynamically switch off the `prefix` for outer tmux when logging in to a
 The status bar is greyed out and the `prefix` is propagated to the inner tmux.
 
 Local machine tmux only:
-<img src="assets/tmux-outer.png" width="75%">
+
+<img src="assets/tmux-outer.png" width="90%">
 
 Local and remote, with local no receiving `prefix`:
-<img src="assets/tmux-outer.png" width="75%">
+
+<img src="assets/tmux-inner.png" width="90%">
 
 # Installation
 
