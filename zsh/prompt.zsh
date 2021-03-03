@@ -43,6 +43,7 @@ function get_err_code() {
     echo -e ${EXIT_CODE}
 }
 
+# Unused
 function display_err_code() {
     local EXIT_CODE=$1
     if [[ $EXIT_CODE -ne 0 ]]; then
@@ -67,12 +68,13 @@ function prompt_symbol() {
     else
         local color="${LIGHT_GREEN}%B"
     fi
-    echo -e  "\n${color}❯❯${COLOR_NONE} "
+    echo -e  "\n${color}》${COLOR_NONE}"
 }
 
 function precmd() {
     local EXIT_CODE=$(get_err_code)
-    __git_ps1   "${NEWLINE}$(display_err_code ${EXIT_CODE})$(get_virtualenv)$(middle_part)"\
+    # Add $(display_err_code ${EXIT_CODE}) if needed more visual
+    __git_ps1   "${NEWLINE}$(get_virtualenv)$(middle_part)"\
                 "$(prompt_symbol ${EXIT_CODE})"
 }
 

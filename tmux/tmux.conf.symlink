@@ -36,9 +36,14 @@ set-option -g detach-on-destroy off
 # Automatically renumber windows
 set-option -g renumber-windows on
 
-# Automatically set window title
-set-window-option -g automatic-rename on
-set-option -g set-titles on
+# Set parent terminal title to reflect current window in tmux session
+set -g set-titles on
+set -g set-titles-string "#I:#W"
+
+# Don't rename windows automatically, prompt to rename window right after it's created
+setw -g allow-rename off
+setw -g automatic-rename off
+set-hook -g after-new-window 'command-prompt -I "#{window_name}" "rename-window '%%'"'
 
 # Start windows and panes at 1, not 0
 set -g base-index 1
