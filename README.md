@@ -4,7 +4,18 @@
 
 Some bits and pieces of the bashrc used here and there across my machines, e.g. for prompt
 
+# Features
 
+Along with many very personal features there are several which might be useful for common use-cases.
+
+## `tmux-inner` and `tmux-outer` commands
+
+Allow to sightly change the color scheme and bind different `prefix`. Useful when SSH-ing into remote tmux from the
+local tmux, which otherwise results in two nested identical tmux-es with identical prefixes.
+
+<img src="assets/tmux-inner.png" width="50%">
+
+<img src="assets/tmux-outer.png" width="50%">
 
 # Installation
 

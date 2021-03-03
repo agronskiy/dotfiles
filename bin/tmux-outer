@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+#
+# Makes tmux have Ctrl-B as prefix and slightly different scheme (e.g. when ssh-ing from)
+# local tmux into remote tmux to make those two different
+
+tmux unbind C-b
+tmux set-option -g prefix C-f
+tmux bind-key C-f send-prefix
+
+tmux set status-bg colour248
+
+# For some reason this plugin keeps highlighting with the old "^F" sign corresponding to Ctrl-F
+# Workaround is to recreate status bar (see tmux.conf)
+tmux set -g status-right '#{prefix_highlight} | %a %Y-%m-%d %H:%M'
+$HOME/.tmux/plugins/tmux-prefix-highlight/prefix_highlight.tmux
