@@ -1,21 +1,21 @@
 # My dotfiles and configs
 
-(tmux, zshrc/bashrc, vim/vscode etc.)
-
-Some bits and pieces of the bashrc used here and there across my machines, e.g. for prompt
+Some bits and pieces of the bashrc used here and there across my machines, e.g. for prompt and commands.
+Heavily adjusted version by @holman, inspiration from @AndreiBarsan.
 
 # Features
 
 Along with many very personal features there are several which might be useful for common use-cases.
 
-## `tmux-inner` and `tmux-outer` commands
+## Nested tmux
 
-Allow to dynamically change the color scheme and bind different `prefix` key (Ctrl-F for outer and Ctrl-B for inner).
-Useful when SSH-ing into remote (inner) tmux from the local (outer) tmux, which otherwise results in two nested
-identical tmux-es with identical prefixes.
+Allow to dynamically switch off the `prefix` for outer tmux when logging in to a remote ssh with another (inner) tmux.
+The status bar is greyed out and the `prefix` is propagated to the inner tmux.
 
-<img src="assets/tmux-inner.png" width="75%">
+Local machine tmux only:
+<img src="assets/tmux-outer.png" width="75%">
 
+Local and remote, with local no receiving `prefix`:
 <img src="assets/tmux-outer.png" width="75%">
 
 # Installation
