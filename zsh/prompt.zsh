@@ -87,3 +87,7 @@ zstyle -e ':completion:*:default' list-colors 'reply=("${PREFIX:+=(#bi)($PREFIX:
 
 # Default highlight color of the input
 export zle_highlight=( default:fg=7 )
+
+# Avoid random percent sign.
+# See https://unix.stackexchange.com/questions/167582/why-zsh-ends-a-line-with-a-highlighted-percent-symbol
+export PROMPT_EOL_MARK=''

@@ -33,7 +33,6 @@ else
 fi
 unset __conda_setup
 # <<< conda initialize <<<
-conda deactivate
 
 # For iPython Notebook issue - need to set the locale, but not all (?)
 export LC_ALL=en_US.UTF-8
@@ -86,3 +85,4 @@ if [[ -a ~/.localrc ]]; then
 fi
 unset config_files
 
+export ALREADY_SOURCED_ZSHRC=1
