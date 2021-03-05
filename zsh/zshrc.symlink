@@ -10,8 +10,8 @@ fi
 
 source $DOTFILES/zsh/oh-my-zsh.explicit-load.zsh
 
-
-# HERE STARTS CUSTOM STUFF
+# Avoid closing terinal on ctrl-d
+set -o ignoreeof
 
 # Added by fzf
 # NOTE(agronskiy): run before any other sourcing because our commands (such as custom history widget) will redefine some
