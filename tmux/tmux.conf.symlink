@@ -57,7 +57,8 @@ bind -r k previous-window # select previous window
 bind -r j next-window     # select next window
 
 # Quick switch to window using fzf:
-bind -n C-g run-shell -b "tmux list-windows -aF \"##S:##I:##W \t##{pane_current_path}\" | fzf-tmux | cut -d \":\" -f 1,2 | xargs tmux switch -t "
+unbind f
+bind -r f run-shell -b "tmux list-windows -aF \"##S:##I:##W \t##{pane_current_path}\" | fzf-tmux | cut -d \":\" -f 1,2 | xargs tmux switch -t "
 
 # Use r to quickly reload tmux settings
 unbind r
