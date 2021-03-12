@@ -10,7 +10,7 @@ then
     exit 0
 fi
 
-if [ "$(uname -s)" == "Linux" ]
+if [ "$(uname -s)" = "Linux" ]
 then
     (
         echo "Installing miniconda (Linux)"
@@ -24,7 +24,7 @@ then
         ./Miniconda3-latest-Linux-x86_64.sh
         rm Miniconda3-latest-Linux-x86_64.sh
     )
-elif [ "$(uname -s)" == "Darwin" ]
+elif [ "$(uname -s)" = "Darwin" ]
 then
     brew install miniconda
 fi

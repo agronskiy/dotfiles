@@ -2,7 +2,7 @@
 
 source $DOTFILES/zsh/logging.explicit-load.zsh
 
-if ! [ "$(uname -s)" == "Darwin" ]; then
+if [ "$(uname -s)" != "Darwin" ]; then
     log_success "Skipped (non-mac)"
     exit 0
 fi
