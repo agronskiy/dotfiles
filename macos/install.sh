@@ -4,6 +4,7 @@ source $DOTFILES/zsh/logging.explicit-load.zsh
 
 if ! [ "$(uname -s)" == "Darwin" ]; then
     log_success "Skipped macos-specific stuff"
+    exit 0
 fi
 
 # Keeping you awake
