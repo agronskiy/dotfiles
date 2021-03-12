@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+source $DOTFILES/zsh/logging.explicit-load.zsh
+
+if ! [ "$(uname -s)" == "Darwin" ]; then
+    log_success "Skipped (non-mac)"
+    exit 0
+fi
+
+log_info "Requires sudo"
+sudo launchctl stop com.apple.audio.coreaudiod && sudo launchctl start com.apple.audio.coreaudiod
+
+if [ $? -eq 0 ]
+then
+    log_success "Done"
+else
+    log_fail "Error"
+fi
