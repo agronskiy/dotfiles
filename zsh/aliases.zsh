@@ -17,7 +17,3 @@ export LSCOLORS="ExGxBxDxCxEgEdxbxgxcxd"  # ls colors
 alias glog='git log --graph --abbrev-commit --decorate --format=format:"%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)" --all'
 alias glog2='git log --graph --abbrev-commit --decorate --format=format:"%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n""          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)" --all'
 
-# fd command on linux requires aliasing because it is called fdfind there
-if [ "$(uname -s)" = "Linux" ]; then
-    alias fd="fdfind"
-fi

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# fd command on linux requires aliasing because it is called fdfind there
+if [ "$(uname -s)" = "Linux" ]; then
+    fdfind "$@"
+else
+    fd "$@"
+fi
