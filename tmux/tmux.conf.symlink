@@ -109,7 +109,7 @@ set -g default-command "${SHELL}"
 # Based on https://github.com/samoshkin/tmux-config/blob/master/tmux/tmux.conf
 # This allows, in case of nested local/remote tmux sessions, to switch off the prefix for the
 # outer Tmux and work remotely as normal.
-bind -T root S-F12  \
+bind -T root F12  \
     set prefix None \;\
     set key-table off \;\
     set status-style "bg=colour238,fg=colour248" \;\
@@ -118,7 +118,7 @@ bind -T root S-F12  \
     set status-right 'OFF | %a %Y-%m-%d %H:%M' \;\
     refresh-client -S
 
-bind -T off S-F12  \
+bind -T off F12  \
     set -u prefix \;\
     set -u key-table \;\
     set -u status-style \;\
