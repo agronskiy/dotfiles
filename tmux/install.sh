@@ -12,7 +12,11 @@ then
 else
     (
         cd $HOME/.tmux/plugins/tpm
-        git pull
-        log_success "Pulled tmux-tpm"
+        git pull &> /dev/null
+        if [ $? -eq 0 ]; then
+            log_success "Pulled tmux-tpm"
+        else
+            log_fail "Error pulling tmux-tpm"
+        fi
     )
 fi
