@@ -41,6 +41,8 @@ set -g set-titles on
 set -g set-titles-string "#I:#W"
 
 # Don't rename windows automatically, prompt to rename window right after it's created
+set -g allow-rename off
+set -g automatic-rename off
 setw -g allow-rename off
 setw -g automatic-rename off
 set-hook -g after-new-window 'command-prompt -I "#{window_name}" "rename-window '%%'"'

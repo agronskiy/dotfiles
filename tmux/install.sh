@@ -20,3 +20,11 @@ else
         fi
     )
 fi
+
+# This needs to be run AFTER the tpm loads scripts for the first time.
+# See the `drop-in-replace-resurrect`
+if [ -d $HOME/.tmux/plugins/tmux-resurrect/scripts ]
+then
+    cp $DOTFILES/tmux/drop-in-replace-resurrect.sh $HOME/.tmux/plugins/tmux-resurrect/scripts/restore.sh
+    log_success "Replaced $HOME/.tmux/plugins/tmux-resurrect/scripts/restore.sh"
+fi
