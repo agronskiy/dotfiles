@@ -139,5 +139,13 @@ mkdir -p "${HOME}/include"
 
 install_dotfiles
 
+log_info "Installing dependencies (./bin/dotfiles-main)"
+if source ./bin/dotfiles-main;
+then
+    log_success "Fependencies installed (./bin/dotfiles-main)"
+else
+    log_fail "Error installing dependencies (./bin/dotfiles-main)"
+fi
+
 echo ''
-echo '  All installed!'
+log_success '  All installed!'
