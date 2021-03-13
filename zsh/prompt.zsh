@@ -57,7 +57,17 @@ function middle_part() {
     # For the trick with path shortening, see https://unix.stackexchange.com/questions/273529/shorten-path-in-zsh-prompt
     # for options.
     path_truncated='%(5~|%-2~/../%2~|%~)'
-    echo -e "${BLUE}%n${COLOR_NONE}@${LIGHT_BLUE}%M${COLOR_NONE}: ${WHITE}${path_truncated}${COLOR_NONE}"
+    local salt="salt"
+    local color_number=$( (echo "${salt}"; hostname) | od | tr ' ' '\n' | awk '{total = total + $1}END{print 31 + (total % 6)}')
+    local color_brightness=$( (echo "${salt}"; hostname) | od | tr ' ' '\n' | awk '{total = total + $1}END{print (total % 2)}')
+    local host_color="%{\033[${color_brightness};${color_number}m%}"
+
+    local is_root=""
+    if [ "$EUID" -eq 0 ]; then
+        is_root="${LIGHT_RED}[root]${COLOR_NONE}@"
+    fi
+
+    echo -e "${is_root}${host_color}%M${COLOR_NONE}: ${WHITE}${path_truncated}${COLOR_NONE}"
 }
 
 function prompt_symbol() {
@@ -68,7 +78,7 @@ function prompt_symbol() {
     else
         local color="${LIGHT_GREEN}%B"
     fi
-    echo -e  "\n${color}》${COLOR_NONE}"
+    echo -e  "\n${color}〉${COLOR_NONE}"
 }
 
 function precmd() {

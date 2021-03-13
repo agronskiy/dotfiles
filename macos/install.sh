@@ -44,3 +44,22 @@ install_fd() {
     fi
 }
 install_fd
+
+# htop
+install_htop() {
+    brew list htop &>/dev/null
+    if [ $? -eq 0 ]
+    then
+        log_success "Skipped htop"
+    else
+        log_info "Installing htop"
+        brew install htop
+        if [ $? -eq 0 ]
+        then
+            log_success "Successfully installed htop"
+        else
+            log_fail "Failed to install htop"
+        fi
+    fi
+}
+install_htop
