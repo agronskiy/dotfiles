@@ -109,7 +109,6 @@ set -g default-command "${SHELL}"
 # Based on https://github.com/samoshkin/tmux-config/blob/master/tmux/tmux.conf
 # This allows, in case of nested local/remote tmux sessions, to switch off the prefix for the
 # local (outer) Tmux and work in the remote (inner) session as normal.
-unbind-key C-F12
 bind-key -T root C-F12  \
     set prefix None \;\
     set key-table off \;\
