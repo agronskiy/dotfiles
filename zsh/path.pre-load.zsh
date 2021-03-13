@@ -4,5 +4,7 @@ if [ ! -z "${ALREADY_SOURCED_ZSHRC+x}" ]; then
 fi
 
 export PATH="$DOTFILES/bin:$PATH"
-export PATH="$PATH:$HOME/.rvm/bin"
 
+# Some Linux distros don't have `~/.local/bin`
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$PATH:$HOME/.rvm/bin"

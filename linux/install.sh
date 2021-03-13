@@ -32,7 +32,10 @@ install_fd() {
     which fdfind &>/dev/null
     if [ $? -eq 0 ]
     then
-        log_success "Skipped fd"
+        # Have fd in the .local/bin directory
+        mkdir -p "$HOME/.local/bin/"
+        ln -s --force $(which fdfind) "$HOME/.local/bin/fd"
+        log_success "Skipped fd, relinked"
     else
         log_info "Installing fd"
         sudo apt-get install fd-find
