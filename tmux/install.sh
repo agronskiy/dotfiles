@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+#
+# NOTE(agronskiy) Nore that tmux-resurrect is custom version with ad-hoc patch.
+
 
 source $DOTFILES/zsh/logging.explicit-load.zsh
 
@@ -8,6 +11,7 @@ if [ ! -d $HOME/.tmux/plugins/tpm/.git ]
 then
     mkdir -p $HOME/.tmux/plugins
     git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
+    TMUX_PLUGIN_MANAGER_PATH=$HOME/.tmux/plugins /$HOME/.tmux/plugins/tpm/bin/install_plugins
     log_success "Cloned tmux-tpm"
 else
     (
@@ -19,12 +23,4 @@ else
             log_fail "Error pulling tmux-tpm"
         fi
     )
-fi
-
-# This needs to be run AFTER the tpm loads scripts for the first time.
-# See the `drop-in-replace-resurrect`
-if [ -d $HOME/.tmux/plugins/tmux-resurrect/scripts ]
-then
-    cp $DOTFILES/tmux/drop-in-replace-resurrect.sh $HOME/.tmux/plugins/tmux-resurrect/scripts/restore.sh
-    log_success "Replaced $HOME/.tmux/plugins/tmux-resurrect/scripts/restore.sh"
 fi
