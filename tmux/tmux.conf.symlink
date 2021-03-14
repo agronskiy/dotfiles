@@ -23,7 +23,7 @@ set -ga terminal-overrides ",xterm-256color:Tc"
 set -g @plugin 'tmux-plugins/tpm'
 set -g @plugin 'tmux-plugins/tmux-sensible'
 
-set -g @plugin 'agronskiy/tmux-resurrect'  # This is slightly corrected version
+set -g @plugin 'tmux-plugins/tmux-resurrect'
 set -g @plugin 'tmux-plugins/tmux-continuum'
 set -g @plugin 'tmux-plugins/tmux-prefix-highlight'
 
@@ -111,7 +111,7 @@ set -g default-command "${SHELL}"
 # Based on https://github.com/samoshkin/tmux-config/blob/master/tmux/tmux.conf
 # This allows, in case of nested local/remote tmux sessions, to switch off the prefix for the
 # local (outer) Tmux and work in the remote (inner) session as normal.
-bind-key -T root C-F12  \
+bind-key -T root F12  \
     set prefix None \;\
     set key-table off \;\
     set status-style "bg=colour238,fg=colour248" \;\
@@ -120,7 +120,7 @@ bind-key -T root C-F12  \
     set status-right 'OFF | %a %Y-%m-%d %H:%M' \;\
     refresh-client -S
 
-bind-key -T off C-F12  \
+bind-key -T off F12  \
     set -u prefix \;\
     set -u key-table \;\
     set -u status-style \;\
