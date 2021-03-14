@@ -68,7 +68,6 @@ autoload -Uz compinit && compinit
 
 # Support bash-style autocompletion, not just zsh-style
 autoload -U +X bashcompinit && bashcompinit
-bashcompinit
 
 # Colors
 autoload -U colors && colors

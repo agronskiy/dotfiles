@@ -66,6 +66,8 @@ HYPHEN_INSENSITIVE="true"
 plugins=(
     git
     zsh-syntax-highlighting
+    zsh-completions
+    conda-zsh-completion
 )
 
 source $ZSH/oh-my-zsh.sh

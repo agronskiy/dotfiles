@@ -100,6 +100,8 @@ function preexec () {
 # Coloring partial match https://stackoverflow.com/questions/8300687/zsh-color-partial-tab-completions
 zstyle -e ':completion:*:default' list-colors 'reply=("${PREFIX:+=(#bi)($PREFIX:t)(?)*==02=00}:${(s.:.)LS_COLORS}")';
 
+unsetopt listambiguous
+
 # Default highlight color of the input
 export zle_highlight=( default:fg=7 )
 
