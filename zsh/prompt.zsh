@@ -12,7 +12,7 @@ LIGHT_GREEN="%{\033[1;32m%}"
       WHITE="%{\033[1;37m%}"
  LIGHT_GRAY="%{\033[0;37m%}"
  COLOR_NONE="%{\033[0m%}"
-
+       BOLD="%{\e[1m%}"
     NEWLINE=$'\n'
 
 
@@ -57,6 +57,8 @@ function middle_part() {
     # For the trick with path shortening, see https://unix.stackexchange.com/questions/273529/shorten-path-in-zsh-prompt
     # for options.
     path_truncated='%(5~|%-2~/../%2~|%~)'
+
+    # NOTE(agronskiy): use below `host_color` if need to highlight different hosts with different colors.
     local salt="salt"
     local color_number=$( (echo "${salt}"; hostname) | od | tr ' ' '\n' | awk '{total = total + $1}END{print 31 + (total % 6)}')
     local color_brightness=$( (echo "${salt}"; hostname) | od | tr ' ' '\n' | awk '{total = total + $1}END{print (total % 2)}')
@@ -67,7 +69,7 @@ function middle_part() {
         is_root="${LIGHT_RED}[root]${COLOR_NONE}@"
     fi
 
-    echo -e "${is_root}${host_color}%M${COLOR_NONE}: ${WHITE}${path_truncated}${COLOR_NONE}"
+    echo -e "${is_root}${BOLD}${LIGHT_BLUE}[%M]${COLOR_NONE} ${WHITE}${path_truncated}${COLOR_NONE}"
 }
 
 function prompt_symbol() {
