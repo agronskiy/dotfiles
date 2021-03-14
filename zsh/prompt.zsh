@@ -8,11 +8,12 @@
        BLUE="%{\033[1;34m%}"
   LIGHT_RED="%{\033[1;31m%}"
 LIGHT_GREEN="%{\033[1;32m%}"
- LIGHT_BLUE="%{\033[38;5;81m%}"
+ LIGHT_BLUE="%{\033[0;38;5;81m%}"
       WHITE="%{\033[1;37m%}"
  LIGHT_GRAY="%{\033[0;37m%}"
- COLOR_NONE="%{\033[0m%}"
-       BOLD="%{\e[1m%}"
+      RESET="%{\033[0m%}"
+       BOLD="%{\033[1m%}"
+
     NEWLINE=$'\n'
 
 
@@ -31,10 +32,10 @@ source $DOTFILES/zsh/git-prompt.explicit-load.zsh
 # Determine active Python virtualenv details.
 function get_virtualenv() {
     if ! test -z "$VIRTUAL_ENV" ; then
-        echo "${YELLOW}(`basename \"$VIRTUAL_ENV\"`)${COLOR_NONE} "
+        echo "${YELLOW}(`basename \"$VIRTUAL_ENV\"`)${RESET} "
     fi
     if ! test -z "$CONDA_DEFAULT_ENV" ; then
-        echo "${YELLOW}(`basename \"$CONDA_DEFAULT_ENV\"`)${COLOR_NONE} "
+        echo "${YELLOW}(`basename \"$CONDA_DEFAULT_ENV\"`)${RESET} "
     fi
 }
 
@@ -47,9 +48,9 @@ function get_err_code() {
 function display_err_code() {
     local EXIT_CODE=$1
     if [[ $EXIT_CODE -ne 0 ]]; then
-        echo "${LIGHT_RED}[✘]${COLOR_NONE} "
+        echo "${LIGHT_RED}[✘]${RESET} "
     else
-        echo "${LIGHT_GREEN}[✔]${COLOR_NONE} "
+        echo "${LIGHT_GREEN}[✔]${RESET} "
     fi
 }
 
@@ -66,10 +67,12 @@ function middle_part() {
 
     local is_root=""
     if [ "$EUID" -eq 0 ]; then
-        is_root="${LIGHT_RED}[root]${COLOR_NONE}@"
+        is_root="${LIGHT_RED}[root]${RESET}@"
     fi
 
-    echo -e "${is_root}${BOLD}${LIGHT_BLUE}[%M]${COLOR_NONE} ${WHITE}${path_truncated}${COLOR_NONE}"
+    local host=""
+
+    echo -e "${is_root}${LIGHT_BLUE}[%M]${RESET} ${WHITE}${path_truncated}${RESET}"
 }
 
 function prompt_symbol() {
@@ -80,7 +83,7 @@ function prompt_symbol() {
     else
         local color="${LIGHT_GREEN}%B"
     fi
-    echo -e  "\n${color}〉${COLOR_NONE}"
+    echo -e  "\n${color}〉${RESET}"
 }
 
 function precmd() {
