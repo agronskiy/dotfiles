@@ -53,7 +53,7 @@ declare -U config_files
 config_files=($DOTFILES/**/*.zsh)
 config_files=(${config_files:#*/*.explicit-load.zsh})
 
-# Load the *.pre-load.zsh files
+# Load the *.pre-load.zsh files. E.g. paths go here.
 for file in ${(M)config_files:#*/*.pre-load.zsh}; do
     source $file
 done
@@ -63,16 +63,18 @@ for file in ${${config_files:#*/*.pre-load.zsh}:#*/*.post-load.zsh}; do
     source $file
 done
 
+
 # Initialize autocomplete here, otherwise functions won't be loaded
 autoload -Uz compinit && compinit
 
 # Support bash-style autocompletion, not just zsh-style
 autoload -U +X bashcompinit && bashcompinit
+bashcompinit
 
 # Colors
 autoload -U colors && colors
 
-# load every completion after autocomplete loads
+# Load things that must go afterwards. E.g. various options for autocomplete go here.
 for file in ${(M)config_files:#*/*.post-load.zsh}; do
     source $file
 done

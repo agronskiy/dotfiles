@@ -1,7 +1,7 @@
 # FZF options
-export FZF_DEFAULT_OPTS='--height 90% --reverse --border --bind=F2:toggle-preview'
+export FZF_DEFAULT_OPTS='--height 70% --reverse --border --bind=F2:toggle-preview'
 
-zstyle ':fzf-tab:*' fzf-flags --height 90% --reverse --border
+zstyle ':fzf-tab:*' fzf-flags --height 90% --reverse --no-border
 
 # Use fd (https://github.com/sharkdp/fd) instead of the default find
 # command for listing path candidates.
