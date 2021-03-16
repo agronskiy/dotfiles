@@ -1,0 +1,112 @@
+" Some random settings, mostly copied over from various nice resources. 
+
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+call plug#begin('~/.vim/bundle')
+Plug 'tomasiser/vim-code-dark'
+Plug 'junegunn/seoul256.vim'
+Plug 'junegunn/goyo.vim'
+Plug 'junegunn/limelight.vim'
+call plug#end()
+
+" TODO(agronskiy): need to understand the below, blindly copied from https://stevelosh.com/blog/2010/09/coming-home-to-vim/#s1-some-background-about-me
+autocmd VimEnter *
+  \  if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+  \|   PlugInstall --sync | q
+  \| endif
+
+filetype plugin indent on
+
+colorscheme codedark
+
+syntax on
+
+set nocompatible
+
+set modelines=0
+
+" Standard stuff a.k.a. common sense
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set expandtab
+
+" TODO(agronskiy): not really gone through all of them
+set encoding=utf-8
+set scrolloff=3
+set autoindent
+set showmode
+set showcmd
+set hidden
+set wildmenu
+set wildmode=list:longest
+set visualbell
+set cursorline
+set ttyfast
+set ruler
+set backspace=indent,eol,start
+set laststatus=2
+set undofile
+
+" This sets hybrid line numbering, see https://jeffkreeftmeijer.com/vim-number/
+set number relativenumber
+augroup numbertoggle
+  autocmd!
+  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+augroup END
+
+let mapleader = "'"
+
+" Make vim use standard regexp when searching
+nnoremap / /\v
+vnoremap / /\v
+
+" Other searching capabilities
+set ignorecase
+set smartcase
+set gdefault
+set incsearch
+set showmatch
+set hlsearch
+nnoremap <leader><space> :noh<cr>
+nnoremap <tab> %
+vnoremap <tab> %
+
+set wrap
+set textwidth=99
+set formatoptions=qrn1
+set colorcolumn=105
+
+" Standard way of navigating wrapped lines.
+nnoremap j gj
+nnoremap k gk
+
+" F1 to escape
+inoremap <F1> <ESC>
+nnoremap <F1> <ESC>
+vnoremap <F1> <ESC>
+
+nnoremap ; :
+
+" Save on losing focus
+au FocusLost * :wa
+
+" Strip trailing spaces
+nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
+
+" Fast exit from the insert mode
+inoremap jk <ESC>
+
+" Create window, navigate windows
+nnoremap <leader>w <C-w>v<C-w>l
+
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+

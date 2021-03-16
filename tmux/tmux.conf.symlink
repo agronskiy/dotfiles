@@ -10,10 +10,10 @@
 ################################################################
 
 
-# Set the prefix to `ctrl + f`
+# Set the prefix to `ctrl + a`
 unbind C-b
-set-option -g prefix C-f
-bind-key C-f send-prefix
+set-option -g prefix C-a
+bind-key C-a send-prefix
 
 # Get the colors work
 set -g default-terminal "screen-256color"

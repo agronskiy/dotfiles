@@ -10,7 +10,7 @@ unsetopt list_ambiguous
 unsetopt list_beep
 
 # This allows to see dotfiles and folders for autocomplete
-# setopt globdots
+# setopt globdots # this would also work, see https://unix.stackexchange.com/questions/308315/how-can-i-configure-zsh-completion-to-show-hidden-files-and-folders
 _comp_options+=(globdots)
 # And avoid suggesting current dir
 zstyle ':completion:*' special-dirs false
