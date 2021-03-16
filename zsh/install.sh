@@ -61,3 +61,24 @@ install_conda_completions() {
     fi
 }
 install_conda_completions
+
+# fzf tab completions
+install_fzf_tab() {
+    if [ ! -d ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/fzf-tab ]
+    then
+        mkdir -p ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/
+        git clone https://github.com/Aloxaf/fzf-tab ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/fzf-tab
+        log_success "Cloned fzf-tab-completions"
+    else
+        (
+            cd ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/fzf-tab
+            git pull &> /dev/null
+            if [ $? -eq 0 ]; then
+                log_success "Pulled fzf-tab-completions"
+            else
+                log_fail "Error pulling fzf-tab-completions"
+            fi
+        )
+    fi
+}
+install_fzf_tab

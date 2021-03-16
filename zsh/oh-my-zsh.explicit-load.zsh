@@ -67,6 +67,7 @@ plugins=(
     git
     zsh-syntax-highlighting
     zsh-completions
+    fzf-tab
     conda-zsh-completion
 )
 

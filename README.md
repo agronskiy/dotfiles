@@ -55,6 +55,8 @@ Installs via `./bin/dot`
 
 Installs via `./bin/dot`
 
+**NOTE** (some strange behavior when restoring tmux sessions)
+
 ## Caveat: Git autocompletion with git homebrew
 
 See [SO thread](https://stackoverflow.com/questions/24513873/git-tab-completion-not-working-in-zsh-on-mac):
