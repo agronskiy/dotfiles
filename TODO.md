@@ -12,3 +12,8 @@
 ## Zsh
 
 - [x] Sourcing aliases/paths etc.
+
+## Vim / Other
+
+- [ ] Install `bat`
+

@@ -1,4 +1,4 @@
-" Some random settings, mostly copied over from various nice resources. 
+" Some random settings, mostly copied over from various nice resources.
 
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
@@ -11,6 +11,18 @@ Plug 'tomasiser/vim-code-dark'
 Plug 'junegunn/seoul256.vim'
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
+Plug 'vim-airline/vim-airline'      " Pretty status line
+Plug 'vim-airline/vim-airline-themes'   " Themes
+Plug 'scrooloose/nerdcommenter'   " Smart en-masse commenter
+Plug 'scrooloose/nerdtree'        " File browser
+
+" Git related
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
+
+" FZF support 
+Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
 call plug#end()
 
 " TODO(agronskiy): need to understand the below, blindly copied from https://stevelosh.com/blog/2010/09/coming-home-to-vim/#s1-some-background-about-me
@@ -22,7 +34,6 @@ autocmd VimEnter *
 filetype plugin indent on
 
 colorscheme codedark
-
 syntax on
 
 set nocompatible
@@ -60,7 +71,10 @@ augroup numbertoggle
   autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
 augroup END
 
-let mapleader = "'"
+" Timeout - wait indefinitely after leader pressed
+set notimeout 
+set ttimeout
+let mapleader = ","
 
 " Make vim use standard regexp when searching
 nnoremap / /\v
@@ -74,13 +88,11 @@ set incsearch
 set showmatch
 set hlsearch
 nnoremap <leader><space> :noh<cr>
-nnoremap <tab> %
-vnoremap <tab> %
 
 set wrap
-set textwidth=99
+set textwidth=119
 set formatoptions=qrn1
-set colorcolumn=105
+set colorcolumn=120
 
 " Standard way of navigating wrapped lines.
 nnoremap j gj
@@ -104,9 +116,73 @@ inoremap jk <ESC>
 
 " Create window, navigate windows
 nnoremap <leader>w <C-w>v<C-w>l
-
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
+
+" When editing a file, always jump to the last known cursor position.
+" Don't do it when the position is invalid or when inside an event handler
+" (happens when dropping a file on gvim).
+" Also don't do it when the mark is in the first line, that is the default
+" position when opening a file.
+autocmd BufReadPost *
+  \ if line("'\"") > 1 && line("'\"") <= line("$") |
+  \   exe "normal! g`\"" |
+  \ endif
+
+" w!! to write a file as sudo
+" stolen from Steve Losh
+cmap w!! w !sudo tee % >/dev/null
+
+" Toggle NERDTree using Ctrl-N.
+nnoremap <C-N> :NERDTreeToggle<CR>
+
+" Automatically quit if the only window left is NERDTree
+" NOTE(agronskiy) commented out because this kills the whole VIM if one accidentally closes the NERDTree buffer 
+"   (i.e. `:bd` when focused in the NERDTree)
+" autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+" Show hidden files in NERDTree
+let NERDTreeShowHidden=1
+
+" Tab navigation
+au TabLeave * let g:lasttab = tabpagenr()
+nnoremap <silent> <leader>lt :exe "tabn ".g:lasttab<cr>
+vnoremap <silent> <leader>lt :exe "tabn ".g:lasttab<cr>
+
+" Tab settings
+let g:airline#extensions#ycm#enabled = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
+let g:airline#extensions#tabline#fnamemod = ':t'
+let g:airline#extensions#tabline#buffer_idx_mode = 1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:airline#extensions#tabline#fnamecollapse = 0
+
+" Don't show summary of git changes
+let g:airline#extensions#hunks#enabled = 0
+
+" Dark theme (this comes from https://github.com/tomasiser/vim-code-dark)
+let g:airline_theme='codedark'
+
+" Update time for gitgutter
+set updatetime=100
+
+" FZF bindings inspired by https://github.com/junegunn/fzf.vim/issues/563#issuecomment-486342795
+nnoremap <leader>ff       :Files<CR>
+nnoremap <leader>bb     :Buffers<CR>
+nnoremap <leader>ll       :Lines<CR>
+nnoremap <leader>ag       :Ag! <C-R><C-W><CR>
+nnoremap <leader>m        :History<CR>
+
+" Buffer closing
+" Close the current buffer and move to the previous one
+" This replicates the idea of closing a tab
+nnoremap <leader>bq :<c-u>bp <bar> bd #<cr>
+" Show all open buffers and their status
+nnoremap <leader>bl :ls<cr>
+" Buffer only - all other bufferc closed
+command BufOnly silent! execute "%bd|e#|bd#"
 
