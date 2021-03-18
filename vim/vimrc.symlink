@@ -11,18 +11,24 @@ Plug 'tomasiser/vim-code-dark'
 Plug 'junegunn/seoul256.vim'
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
-Plug 'vim-airline/vim-airline'      " Pretty status line
-Plug 'vim-airline/vim-airline-themes'   " Themes
+
+Plug 'itchyny/lightline.vim'
 Plug 'scrooloose/nerdcommenter'   " Smart en-masse commenter
+
 Plug 'scrooloose/nerdtree'        " File browser
 
 " Git related
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 
-" FZF support 
+" FZF support
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
+Plug 'chengzeyi/fzf-preview.vim'  " Better preview support 
+
+" Multiple cources 
+Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+
 call plug#end()
 
 " TODO(agronskiy): need to understand the below, blindly copied from https://stevelosh.com/blog/2010/09/coming-home-to-vim/#s1-some-background-about-me
@@ -40,6 +46,16 @@ set nocompatible
 
 set modelines=0
 
+" Undo, backup and co
+if !isdirectory($HOME.'/.vim/.undo')
+    call mkdir( $HOME.'/.vim/.undo', "p")
+endif
+set undodir=~/.vim/.undo/,/tmp//
+set undofile
+
+set noswapfile
+set nobackup
+
 " Standard stuff a.k.a. common sense
 set tabstop=4
 set shiftwidth=4
@@ -48,7 +64,6 @@ set expandtab
 
 " TODO(agronskiy): not really gone through all of them
 set encoding=utf-8
-set scrolloff=3
 set autoindent
 set showmode
 set showcmd
@@ -59,9 +74,27 @@ set visualbell
 set cursorline
 set ttyfast
 set ruler
-set backspace=indent,eol,start
 set laststatus=2
-set undofile
+
+" Make 0 go to the first character rather than the beginning of the line. When
+" than empty space. If you want the traditional beginning of line, use ^.
+nnoremap 0 ^
+nnoremap ^ 0
+
+" Behavior of visual margins to top/bottom when scrolling
+set scrolloff=6         " Start scrolling when we're N lines away from margins
+set sidescroll=1        " Do the same thing for sideways scrolling
+set sidescrolloff=15
+
+" Configure backspace so it acts as it should act
+set backspace=eol,start,indent
+set whichwrap+=<,>,h,l
+
+" Write buffer when losing focus
+augroup AutoWrite
+    autocmd! BufLeave * :update
+augroup END
+set autowrite
 
 " This sets hybrid line numbering, see https://jeffkreeftmeijer.com/vim-number/
 set number relativenumber
@@ -71,10 +104,13 @@ augroup numbertoggle
   autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
 augroup END
 
+" Save on losing focus
+au  FocusLost * silent! wa
+
 " Timeout - wait indefinitely after leader pressed
-set notimeout 
+set notimeout
 set ttimeout
-let mapleader = ","
+let mapleader = " "
 
 " Make vim use standard regexp when searching
 nnoremap / /\v
@@ -105,9 +141,6 @@ vnoremap <F1> <ESC>
 
 nnoremap ; :
 
-" Save on losing focus
-au FocusLost * :wa
-
 " Strip trailing spaces
 nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
 
@@ -135,54 +168,75 @@ autocmd BufReadPost *
 " stolen from Steve Losh
 cmap w!! w !sudo tee % >/dev/null
 
-" Toggle NERDTree using Ctrl-N.
-nnoremap <C-N> :NERDTreeToggle<CR>
+" Toggle NERDTree using Ctrl-T.
+nnoremap <C-T> :NERDTreeToggle<CR>
 
 " Automatically quit if the only window left is NERDTree
-" NOTE(agronskiy) commented out because this kills the whole VIM if one accidentally closes the NERDTree buffer 
+" NOTE(agronskiy) commented out because this kills the whole VIM if one accidentally closes the NERDTree buffer
 "   (i.e. `:bd` when focused in the NERDTree)
+"   
 " autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
-" Show hidden files in NERDTree
+" NerdTree configuration
 let NERDTreeShowHidden=1
+let g:NERDTreeWinPos = "right"
+let NERDTreeIgnore = ['\.pyc$', '__pycache__']
+let g:NERDTreeWinSize=40
 
-" Tab navigation
-au TabLeave * let g:lasttab = tabpagenr()
-nnoremap <silent> <leader>lt :exe "tabn ".g:lasttab<cr>
-vnoremap <silent> <leader>lt :exe "tabn ".g:lasttab<cr>
+" Configure lightline
+let g:lightline = {
+      \ 'colorscheme': 'wombat',
+      \ 'active': {
+      \   'left': [ ['mode', 'paste'],
+      \             ['fugitive', 'readonly', 'filename', 'modified'] ],
+      \   'right': [ [ 'lineinfo' ], ['percent'] ]
+      \ },
+      \ 'component': {
+      \   'readonly': '%{&filetype=="help"?"":&readonly?"🔒":""}',
+      \   'modified': '%{&filetype=="help"?"":&modified?"+":&modifiable?"":"-"}',
+      \   'fugitive': '%{exists("*FugitiveHead")?FugitiveHead():""}'
+      \ },
+      \ 'component_visible_condition': {
+      \   'readonly': '(&filetype!="help"&& &readonly)',
+      \   'modified': '(&filetype!="help"&&(&modified||!&modifiable))',
+      \   'fugitive': '(exists("*FugitiveHead") && ""!=FugitiveHead())'
+      \ },
+      \ 'separator': { 'left': ' ', 'right': ' ' },
+      \ 'subseparator': { 'left': ' ', 'right': ' ' }
+      \ }
 
-" Tab settings
-let g:airline#extensions#ycm#enabled = 1
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
-let g:airline#extensions#tabline#fnamemod = ':t'
-let g:airline#extensions#tabline#buffer_idx_mode = 1
-let g:airline#extensions#tabline#left_sep = ' '
-let g:airline#extensions#tabline#left_alt_sep = '|'
-let g:airline#extensions#tabline#fnamecollapse = 0
-
-" Don't show summary of git changes
-let g:airline#extensions#hunks#enabled = 0
-
-" Dark theme (this comes from https://github.com/tomasiser/vim-code-dark)
-let g:airline_theme='codedark'
 
 " Update time for gitgutter
 set updatetime=100
 
-" FZF bindings inspired by https://github.com/junegunn/fzf.vim/issues/563#issuecomment-486342795
-nnoremap <leader>ff       :Files<CR>
-nnoremap <leader>bb     :Buffers<CR>
-nnoremap <leader>ll       :Lines<CR>
-nnoremap <leader>ag       :Ag! <C-R><C-W><CR>
-nnoremap <leader>m        :History<CR>
+" FZF bindings inspired by
+nnoremap <leader>ff            :FZFFiles<CR>
+nnoremap <leader>bb            :Buffers<CR>
+nnoremap <leader>ll            :FZFBLines<CR>
+nnoremap <leader>LL            :Lines<CR>
+nnoremap <leader>rg            :FZFRg<CR>
+nnoremap <leader>hh            :FZFHistory<CR>
+
+" Other buffer-related bindings
+nnoremap <silent> <leader>bn            :enew<CR>
 
 " Buffer closing
 " Close the current buffer and move to the previous one
 " This replicates the idea of closing a tab
-nnoremap <leader>bq :<c-u>bp <bar> bd #<cr>
-" Show all open buffers and their status
-nnoremap <leader>bl :ls<cr>
-" Buffer only - all other bufferc closed
+nnoremap <leader>bq :<C-U>bp <BAR> bd #<CR>
+" Buffer only - all other buffers will be closed
 command BufOnly silent! execute "%bd|e#|bd#"
+nnoremap <leader>bo :BufOnly<CR>
+
+" Show list and offer to choose by number (alternative to the above FZF)
+nnoremap <leader>BB :ls<CR>:b<Space>
+
+" If you visually select something and hit paste that thing gets yanked into
+" your buffer. This generally is annoying when you're copying one item and
+" repeatedly pasting it. This changes the paste command in visual mode so that
+" it doesn't overwrite whatever is in your paste buffer. Same for using 'x' to
+" delete single characters.
+vnoremap p "_dP
+nnoremap x "_x
+
 

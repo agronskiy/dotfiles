@@ -63,3 +63,23 @@ install_htop() {
     fi
 }
 install_htop
+
+
+# bat  
+install_bat() {
+    brew list bat &>/dev/null
+    if [ $? -eq 0 ]
+    then
+        log_success "Skipped bat" 
+    else
+        log_info "Installing bat" 
+        brew install bat 
+        if [ $? -eq 0 ]
+        then
+            log_success "Successfully installed bat" 
+        else
+            log_fail "Failed to install bat" 
+        fi
+    fi
+}
+install_bat
