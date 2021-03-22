@@ -83,3 +83,23 @@ install_bat() {
     fi
 }
 install_bat
+
+
+# ripgrep  
+install_ripgrep() {
+    brew list ripgrep &>/dev/null
+    if [ $? -eq 0 ]
+    then
+        log_success "Skipped ripgrep" 
+    else
+        log_info "Installing ripgrep" 
+        brew install ripgrep 
+        if [ $? -eq 0 ]
+        then
+            log_success "Successfully installed ripgrep" 
+        else
+            log_fail "Failed to install ripgrep" 
+        fi
+    fi
+}
+install_ripgrep
