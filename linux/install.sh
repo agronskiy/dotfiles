@@ -70,13 +70,15 @@ install_htop
 
 # bat
 install_bat() {
-    which bat &>/dev/null
+    which batcat &>/dev/null
     if [ $? -eq 0 ]
     then
         log_success "Skipped bat"
     else
         log_info "Installing bat"
         sudo apt-get -y install bat
+        # Due to packaage clash they  have renamed bat to batcat, linking back
+        ln -s --force $(which batcat) "$HOME/.local/bin/bat"
         if [ $? -eq 0 ]
         then
             log_success "Successfully installed bat"
@@ -96,7 +98,7 @@ install_ripgrep() {
         log_success "Skipped ripgrep"
     else
         log_info "Installing ripgrep"
-        brew install ripgrep 
+        brew install ripgrep &>/dev/null 
         if [ $? -eq 0 ]
         then
             log_success "Successfully installed ripgrep"

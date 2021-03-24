@@ -12,10 +12,17 @@ Plug 'junegunn/seoul256.vim'
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
 
+" Lightline for buffers etc
 Plug 'itchyny/lightline.vim'
-Plug 'scrooloose/nerdcommenter'   " Smart en-masse commenter
+Plug 'mengelbrecht/lightline-bufferline'
 
-Plug 'scrooloose/nerdtree'        " File browser
+Plug 'tpope/vim-commentary'         " Comments
+
+" File browser
+Plug 'scrooloose/nerdtree'
+
+" Undo tree
+Plug 'mbbill/undotree'
 
 " Git related
 Plug 'tpope/vim-fugitive'
@@ -24,9 +31,9 @@ Plug 'airblade/vim-gitgutter'
 " FZF support
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
-Plug 'chengzeyi/fzf-preview.vim'  " Better preview support 
+Plug 'chengzeyi/fzf-preview.vim'  " Better preview support
 
-" Multiple cources 
+" Multiple cources
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 
 call plug#end()
@@ -83,7 +90,7 @@ nnoremap ^ 0
 
 " Behavior of visual margins to top/bottom when scrolling
 set scrolloff=6         " Start scrolling when we're N lines away from margins
-set sidescroll=1        " Do the same thing for sideways scrolling
+set sidescroll=5        " Do the same thing for sideways scrolling
 set sidescrolloff=15
 
 " Configure backspace so it acts as it should act
@@ -174,7 +181,7 @@ nnoremap <C-T> :NERDTreeToggle<CR>
 " Automatically quit if the only window left is NERDTree
 " NOTE(agronskiy) commented out because this kills the whole VIM if one accidentally closes the NERDTree buffer
 "   (i.e. `:bd` when focused in the NERDTree)
-"   
+"
 " autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " NerdTree configuration
@@ -201,10 +208,21 @@ let g:lightline = {
       \   'modified': '(&filetype!="help"&&(&modified||!&modifiable))',
       \   'fugitive': '(exists("*FugitiveHead") && ""!=FugitiveHead())'
       \ },
-      \ 'separator': { 'left': ' ', 'right': ' ' },
-      \ 'subseparator': { 'left': ' ', 'right': ' ' }
+      \ 'tabline': {
+      \   'left': [ ['buffers'] ],
+      \   'right': [ ['close'] ]
+      \ },
+      \ 'component_expand': {
+      \   'buffers': 'lightline#bufferline#buffers'
+      \ },
+      \ 'component_type': {
+      \   'buffers': 'tabsel'
+      \ }
       \ }
 
+" Configure tabs for lightline
+set showtabline=2
+let g:lightline#bufferline#show_number=1
 
 " Update time for gitgutter
 set updatetime=100
@@ -239,4 +257,21 @@ nnoremap <leader>BB :ls<CR>:b<Space>
 vnoremap p "_dP
 nnoremap x "_x
 
+" UndoTree
+nnoremap <F5> :UndotreeToggle<CR>
+let g:undotree_WindowLayout = 2  " See https://github.com/mbbill/undotree/blob/master/plugin/undotree.vim#L15
+let g:undotree_SplitWidth = 35
+let g:undotree_SetFocusWhenToggle = 1
+let g:undotree_RelativeTimestamp = 1
+
+" GitGutter styling to use · instead of +/-, credit of https://github.com/statico
+let g:gitgutter_sign_added = '▌'
+let g:gitgutter_sign_modified = '▌'
+let g:gitgutter_sign_removed = '▌'
+let g:gitgutter_override_sign_column_highlight = 0
+highlight clear SignColumn
+highlight GitGutterAdd ctermfg=2
+highlight GitGutterChange ctermfg=3
+highlight GitGutterDelete ctermfg=1
+highlight GitGutterChangeDelete ctermfg=4
 
