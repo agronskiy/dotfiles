@@ -217,4 +217,156 @@
     "terminal.integrated.automationShell.windows": "",
     "workbench.iconTheme": "vscode-icons",
     "editor.snippetSuggestions": "none",
+    "vim.easymotion": true,
+    "vim.incsearch": true,
+    "vim.useSystemClipboard": true,
+    "vim.useCtrlKeys": true,
+    "vim.hlsearch": true,
+    "vim.whichwrap": "b,s,h,l",
+    "vim.normalModeKeyBindingsNonRecursive": [
+        {
+            "before": [
+                "<leader>",
+                "<leader>"
+            ],
+            "after": [
+                ":nohl"
+            ]
+        },
+        {
+            "before": [
+                ";"
+            ],
+            "after": [
+                ":"
+            ]
+        },
+        {
+            "before": [
+                "i"
+            ],
+            "after": [
+                "i"
+            ],
+            "commands": [
+                {
+                    "command": "settings.cycle.lineNumber"
+                }
+            ]
+        },
+        {
+            "before": [
+                "I"
+            ],
+            "after": [
+                "I"
+            ],
+            "commands": [
+                {
+                    "command": "settings.cycle.lineNumber"
+                }
+            ]
+        },
+        {
+            "before": [
+                "a"
+            ],
+            "after": [
+                "a"
+            ],
+            "commands": [
+                {
+                    "command": "settings.cycle.lineNumber"
+                }
+            ]
+        },
+        {
+            "before": [
+                "A"
+            ],
+            "after": [
+                "A"
+            ],
+            "commands": [
+                {
+                    "command": "settings.cycle.lineNumber"
+                }
+            ]
+        },
+        {
+            "before": [
+                "o"
+            ],
+            "after": [
+                "o"
+            ],
+            "commands": [
+                {
+                    "command": "settings.cycle.lineNumber"
+                }
+            ]
+        },
+        {
+            "before": [
+                "O"
+            ],
+            "after": [
+                "O"
+            ],
+            "commands": [
+                {
+                    "command": "settings.cycle.lineNumber"
+                }
+            ]
+        }
+    ],
+    "vim.leader": "<space>",
+    "vim.handleKeys": {
+        "<C-c>": false,
+        "<C-v>": false
+    },
+    "editor.lineNumbers": "relative",
+    "settings.cycle": [
+        {
+            "id": "lineNumber",
+            "overrideWorkspaceSettings": false,
+            "values": [
+                {
+                    "editor.lineNumbers": "on"
+                },
+                {
+                    "editor.lineNumbers": "relative"
+                }
+            ]
+        }
+    ],
+    "vim.insertModeKeyBindingsNonRecursive": [
+        {
+            "before": [
+                "j",
+                "k"
+            ],
+            "after": [
+                "<Esc>"
+            ],
+            "commands": [
+                {
+                    "command": "settings.cycle.lineNumber"
+                }
+            ],
+        },
+        {
+            "before": [
+                "<Esc>"
+            ],
+            "after": [
+                "<Esc>"
+            ],
+            "commands": [
+                {
+                    "command": "settings.cycle.lineNumber"
+                }
+            ]
+        }
+    ],
 }

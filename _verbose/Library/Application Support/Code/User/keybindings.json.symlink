@@ -1,0 +1,6 @@
+[
+    {
+        "key": "cmd+r",
+        "command": "settings.cycle.lineNumber",
+    }
+]

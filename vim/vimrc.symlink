@@ -36,6 +36,9 @@ Plug 'chengzeyi/fzf-preview.vim'  " Better preview support
 " Multiple cources
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 
+" Vim start page
+Plug 'mhinz/vim-startify'
+
 call plug#end()
 
 " TODO(agronskiy): need to understand the below, blindly copied from https://stevelosh.com/blog/2010/09/coming-home-to-vim/#s1-some-background-about-me
@@ -227,7 +230,7 @@ let g:lightline#bufferline#show_number=1
 " Update time for gitgutter
 set updatetime=100
 
-" FZF bindings inspired by
+" FZF bindings
 nnoremap <leader>ff            :FZFFiles<CR>
 nnoremap <leader>bb            :Buffers<CR>
 nnoremap <leader>ll            :FZFBLines<CR>

@@ -1,0 +1,6 @@
+# Ripgrep default options
+--hidden
+--smart-case
+--no-ignore
+--follow
+--glob=!.git/*

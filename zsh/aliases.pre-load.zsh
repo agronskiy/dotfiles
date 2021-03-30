@@ -19,3 +19,6 @@ alias glog2='git log --graph --abbrev-commit --decorate --format=format:"%C(bold
 
 # Colorized output
 alias cat="bat"
+
+# For ripgrep default options
+export RIPGREP_CONFIG_PATH="${HOME}/.ripgreprc"

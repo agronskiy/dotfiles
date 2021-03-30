@@ -47,3 +47,9 @@ defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
 defaults write com.googlecode.iterm2.plist PrefsCustomFolder -string "$HOME/.config/iterm2-external-settings"
 # Tell iTerm2 to use the custom preferences in the directory
 defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true
+
+# VsCodeVim
+defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false         # For VS Code
+defaults write com.microsoft.VSCodeInsiders ApplePressAndHoldEnabled -bool false # For VS Code Insider
+defaults write com.visualstudio.code.oss ApplePressAndHoldEnabled -bool false    # For VS Codium
+defaults delete -g ApplePressAndHoldEnabled                                      # If necessary, reset global default

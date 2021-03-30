@@ -22,7 +22,8 @@
                                 "conditions": [
                                     {
                                         "bundle_identifiers": [
-                                            "i[tT]erm"
+                                            "i[tT]erm",
+                                            "VSCode"
                                         ],
                                         "type": "frontmost_application_if"
                                     }
