@@ -227,9 +227,10 @@
         {
             "before": [
                 "<leader>",
-                "<leader>"
+                "<space>"
             ],
-            "after": [
+            "after": [],
+            "commands": [
                 ":nohl"
             ]
         },
@@ -318,6 +319,38 @@
                     "command": "settings.cycle.lineNumber"
                 }
             ]
+        },
+        {
+            "before": [
+                "d"
+            ],
+            "after": [
+                "\"",
+                "_",
+                "d"
+            ]
+        },
+        {
+            "before": [
+                "D"
+            ],
+            "after": [
+                "\"",
+                "_",
+                "D"
+            ]
+        },
+        {
+            "before": [
+                "d",
+                "d"
+            ],
+            "after": [
+                "\"",
+                "_",
+                "d",
+                "d"
+            ]
         }
     ],
     "vim.leader": "<space>",
@@ -369,4 +402,5 @@
             ]
         }
     ],
+    "go.toolsManagement.autoUpdate": true,
 }
