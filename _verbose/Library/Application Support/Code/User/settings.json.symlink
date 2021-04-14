@@ -205,7 +205,10 @@
     "go.buildOnSave": "off",
     "editor.renderControlCharacters": true,
     "vs-kubernetes": {
-        "vs-kubernetes.minikube-path.mac": "/Users/agronsky/.vs-kubernetes/tools/minikube/darwin-amd64/minikube"
+        "vs-kubernetes.minikube-path.mac": "/Users/agronsky/.vs-kubernetes/tools/minikube/darwin-amd64/minikube",
+        "vscode-kubernetes.minikube-path.mac": "/Users/agronskiy/.vs-kubernetes/tools/minikube/darwin-amd64/minikube",
+        "vscode-kubernetes.kubectl-path.mac": "/Users/agronskiy/.vs-kubernetes/tools/kubectl/kubectl",
+        "vscode-kubernetes.helm-path.mac": "/Users/agronskiy/.vs-kubernetes/tools/helm/darwin-amd64/helm"
     },
     "files.associations": {
         "*.html": "liquid"
@@ -222,7 +225,7 @@
     "vim.useSystemClipboard": true,
     "vim.useCtrlKeys": true,
     "vim.hlsearch": true,
-    "vim.whichwrap": "b,s,h,l",
+    "vim.whichwrap": "b,s,h,l,<,>,[,]",
     "vim.normalModeKeyBindingsNonRecursive": [
         {
             "before": [
@@ -351,7 +354,7 @@
                 "d",
                 "d"
             ]
-        }
+        },
     ],
     "vim.leader": "<space>",
     "vim.handleKeys": {
@@ -403,4 +406,10 @@
         }
     ],
     "go.toolsManagement.autoUpdate": true,
+    "workbench.editorAssociations": [
+        {
+            "viewType": "jupyter.notebook.ipynb",
+            "filenamePattern": "*.ipynb"
+        }
+    ],
 }
