@@ -222,7 +222,7 @@
     "vim.useSystemClipboard": true,
     "vim.useCtrlKeys": true,
     "vim.hlsearch": true,
-    "vim.whichwrap": "b,s,h,l",
+    "vim.whichwrap": "b,s,h,l,<,>,[,]",
     "vim.normalModeKeyBindingsNonRecursive": [
         {
             "before": [
@@ -351,7 +351,7 @@
                 "d",
                 "d"
             ]
-        }
+        },
     ],
     "vim.leader": "<space>",
     "vim.handleKeys": {
@@ -403,4 +403,10 @@
         }
     ],
     "go.toolsManagement.autoUpdate": true,
+    "workbench.editorAssociations": [
+        {
+            "viewType": "jupyter.notebook.ipynb",
+            "filenamePattern": "*.ipynb"
+        }
+    ],
 }
