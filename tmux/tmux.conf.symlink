@@ -90,8 +90,8 @@ set -g window-status-current-style "fg=colour231 bg=colour25"
 set -g @prefix_highlight_bg 'colour25'
 
 # Moving windows
-bind-key -r < swap-window -t -
-bind-key -r > swap-window -t +
+bind-key -r < swap-window -d -t -1
+bind-key -r > swap-window -d -t +1
 
 # Repeated time between keys
 set -g repeat-time 750
