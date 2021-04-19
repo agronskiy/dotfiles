@@ -82,3 +82,25 @@ install_fzf_tab() {
     fi
 }
 install_fzf_tab
+
+
+# zsh_syntax_highlight
+install_zsh_syntax_highlight() {
+    if [ ! -d ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/zsh-syntax-highlighting ]
+    then
+        mkdir -p ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/
+        git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/zsh-syntax-highlighting
+        log_success "Cloned zsh-syntax-highlighting"
+    else
+        (
+            cd ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/zsh-syntax-highlighting
+            git pull &> /dev/null
+            if [ $? -eq 0 ]; then
+                log_success "Pulled zsh-syntax-highlighting"
+            else
+                log_fail "Error pulling zsh-syntax-highlighting"
+            fi
+        )
+    fi
+}
+install_zsh_syntax_highlight
