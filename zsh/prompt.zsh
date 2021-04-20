@@ -69,10 +69,11 @@ function middle_part() {
     if [ "$EUID" -eq 0 ]; then
         is_root="${LIGHT_RED}[root]${RESET}@"
     fi
+    
+    # NOTE(agronskiy): set THIS_HOST_PROMPT_COLOR in .localrc of your host to override the default LIGHT_BLUE
+    local host_or_default=${THIS_HOST_PROMPT_COLOR:=${LIGHT_BLUE}}
 
-    local host=""
-
-    echo -e "${is_root}${LIGHT_BLUE}[%M]${RESET} ${WHITE}${path_truncated}${RESET}"
+    echo -e "${is_root}${host_or_default}[%M]${RESET} ${WHITE}${path_truncated}${RESET}"
 }
 
 function prompt_symbol() {
