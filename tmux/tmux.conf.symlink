@@ -130,5 +130,8 @@ bind-key -T off F12  \
     set -u status-right \;\
     refresh-client -S
 
+# This is to keep SSH agent forwarding socket inside tmux, credit of https://werat.dev/blog/happy-ssh-agent-forwarding/
+set-environment -g 'SSH_AUTH_SOCK' ~/.ssh/ssh_auth_sock
+
 # Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
 run -b '~/.tmux/plugins/tpm/tpm'

@@ -22,3 +22,8 @@ alias cat="bat"
 
 # For ripgrep default options
 export RIPGREP_CONFIG_PATH="${HOME}/.ripgreprc"
+
+# Keeping socket for SSH agent forwarding correct, credit of https://werat.dev/blog/happy-ssh-agent-forwarding/
+if [ ! -S ~/.ssh/ssh_auth_sock ] && [ -S "$SSH_AUTH_SOCK" ]; then
+    ln -sf $SSH_AUTH_SOCK ~/.ssh/ssh_auth_sock
+fi
