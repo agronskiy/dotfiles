@@ -76,9 +76,9 @@ setw -g history-limit 50000000
 bind C-c new-session
 
 # Status lines
-set -g status-left '[#S]  '
+set -g status-left ' [#S]  '
 set -g status-left-style 'fg=colour25'
-set -g status-right '#{prefix_highlight} | %a %Y-%m-%d %H:%M'
+set -g status-right '#{prefix_highlight} | %a %Y-%m-%d %H:%M '
 
 set -g status-left-length 25
 set -g status-style 'bg=colour248 fg=black'
