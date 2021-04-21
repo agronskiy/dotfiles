@@ -24,6 +24,14 @@ alias cat="bat"
 export RIPGREP_CONFIG_PATH="${HOME}/.ripgreprc"
 
 # Keeping socket for SSH agent forwarding correct, credit of https://werat.dev/blog/happy-ssh-agent-forwarding/
-if [ ! -S ~/.ssh/ssh_auth_sock ] && [ -S "$SSH_AUTH_SOCK" ]; then
-    ln -sf $SSH_AUTH_SOCK ~/.ssh/ssh_auth_sock
+# Outside of TMUX, it links special file to the actual SSH socket. Inside of tmux session, it rebinds 
+# SSH_AUTH_SOCK to it. This was, via symlink, inside TMUX th socket is always the actual one.
+if [ -z ${TMUX+x} ]; then
+    # Not in a TMUX session
+    if [ ! -S ~/.ssh/ssh_auth_sock ] && [ -S "$SSH_AUTH_SOCK" ]; then
+        ln -sf $SSH_AUTH_SOCK ${HOME}/.ssh/ssh_auth_sock
+    fi
+else
+    # In TMUX
+    export SSH_AUTH_SOCK=${HOME}/.ssh/ssh_auth_sock
 fi
