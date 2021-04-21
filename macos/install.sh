@@ -84,7 +84,6 @@ install_bat() {
 }
 install_bat
 
-
 # ripgrep  
 install_ripgrep() {
     brew list ripgrep &>/dev/null
@@ -103,3 +102,23 @@ install_ripgrep() {
     fi
 }
 install_ripgrep
+
+# coreutils  
+install_coreutils() {
+    brew list coreutils &>/dev/null
+    if [ $? -eq 0 ]
+    then
+        log_success "Skipped coreutils" 
+    else
+        log_info "Installing coreutils" 
+        brew install coreutils 
+        if [ $? -eq 0 ]
+        then
+            log_success "Successfully installed coreutils" 
+        else
+            log_fail "Failed to install coreutils" 
+        fi
+    fi
+}
+install_coreutils
+

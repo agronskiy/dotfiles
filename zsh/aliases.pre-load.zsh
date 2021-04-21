@@ -28,10 +28,10 @@ export RIPGREP_CONFIG_PATH="${HOME}/.ripgreprc"
 # SSH_AUTH_SOCK to it. This was, via symlink, inside TMUX th socket is always the actual one.
 if [ -z ${TMUX+x} ]; then
     # Not in a TMUX session
-    if [ ! -S ~/.ssh/ssh_auth_sock ] && [ -S "$SSH_AUTH_SOCK" ]; then
-        ln -sf $SSH_AUTH_SOCK ${HOME}/.ssh/ssh_auth_sock
+    if [ ! -S ~/.ssh_auth_sock ] && [ -S "$SSH_AUTH_SOCK" ]; then
+        ln -sf $SSH_AUTH_SOCK ${HOME}/.ssh_auth_sock
     fi
 else
     # In TMUX
-    export SSH_AUTH_SOCK=${HOME}/.ssh/ssh_auth_sock
+    export SSH_AUTH_SOCK=${HOME}/.ssh_auth_sock
 fi
