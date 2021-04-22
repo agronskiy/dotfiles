@@ -59,6 +59,23 @@ unbind p
 bind -r k previous-window # select previous window
 bind -r j next-window     # select next window
 
+# Pane navigation 
+unbind o
+bind -r o select-pane -t :.+  # Just redefined o to allow cycling
+unbind ;
+unbind \"
+unbind \%
+
+bind -r C-h select-pane -L  # move left
+bind -r C-j  select-pane -D  # move down
+bind -r C-k select-pane -U  # move up
+bind -r C-l select-pane -R  # move right
+
+# Split horizontally
+bind - split-window -v
+# split current window vertically
+bind | split-window -h
+
 # Quick switch to window using fzf:
 unbind f
 bind -r f run-shell -b "tmux list-windows -aF \"##S:##I:##W \t##{pane_current_path}\" | fzf-tmux | cut -d \":\" -f 1,2 | xargs tmux switch -t "
