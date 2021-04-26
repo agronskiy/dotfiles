@@ -74,7 +74,11 @@ bind -r C-l select-pane -R  # move right
 # Split horizontally
 bind - split-window -v
 # split current window vertically
-bind | split-window -h
+bind \/ split-window -h
+
+# For better visibility of the active pane
+set -g window-style 'bg=colour236'
+set -g window-active-style 'bg=black'
 
 # Quick switch to window using fzf:
 unbind f
