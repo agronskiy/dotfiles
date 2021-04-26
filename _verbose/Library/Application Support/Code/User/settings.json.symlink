@@ -167,7 +167,6 @@
     "cSpell.logLevel": "Information",
     "python.testing.autoTestDiscoverOnSaveEnabled": false,
     "gitlens.codeLens.enabled": false,
-    "editor.detectIndentation": false,
     "markdown.preview.fontSize": 12,
     "sync.gist": "4bf568ce99dd5976367e82b039b28797",
     "sync.forceUpload": false,
@@ -360,7 +359,7 @@
         "<C-c>": false,
         "<C-v>": false
     },
-    "editor.lineNumbers": "on",
+    "editor.lineNumbers": "relative",
     "settings.cycle": [
         {
             "id": "lineNumber",
@@ -413,4 +412,5 @@
     ],
     "workbench.editor.enablePreviewFromQuickOpen": true,
     "workbench.editor.enablePreviewFromCodeNavigation": true,
+    "python.languageServer": "Pylance",
 }
