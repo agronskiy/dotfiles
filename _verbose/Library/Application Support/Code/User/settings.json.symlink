@@ -215,7 +215,6 @@
     },
     "terminal.integrated.shell.windows": "C:\\Program Files\\Git\\bin\\bash.exe",
     "terminal.external.windowsExec": "%windir%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -ExecutionPolicy ByPass -NoExit -Command \"& 'C:\\ProgramData\\Anaconda3\\shell\\condabin\\conda-hook.ps1' ; conda activate 'C:\\ProgramData\\Anaconda3\\envs\\dev' \"",
-    "workbench.editor.enablePreview": false,
     "python.dataScience.useDefaultConfigForJupyter": false,
     "terminal.integrated.automationShell.windows": "",
     "workbench.iconTheme": "vscode-icons",
@@ -361,7 +360,7 @@
         "<C-c>": false,
         "<C-v>": false
     },
-    "editor.lineNumbers": "relative",
+    "editor.lineNumbers": "on",
     "settings.cycle": [
         {
             "id": "lineNumber",
@@ -412,4 +411,6 @@
             "filenamePattern": "*.ipynb"
         }
     ],
+    "workbench.editor.enablePreviewFromQuickOpen": true,
+    "workbench.editor.enablePreviewFromCodeNavigation": true,
 }
