@@ -74,9 +74,9 @@ bind -r C-k select-pane -U  # move up
 bind -r C-l select-pane -R  # move right
 
 # Split horizontally
-bind - split-window -v
+bind - split-window -v -c "#{pane_current_path}"
 # split current window vertically
-bind \/ split-window -h
+bind \/ split-window -h -c "#{pane_current_path}"
 
 # For better visibility of the active pane
 set -g window-style 'bg=colour236'
@@ -97,6 +97,9 @@ setw -g history-limit 50000000
 
 # Create session
 bind C-c new-session
+
+# Create new window
+bind c new-window -c "#{pane_current_path}"
 
 # Status lines
 set -g status-left ' [#S]  '
