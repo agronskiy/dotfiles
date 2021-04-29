@@ -1,8 +1,8 @@
 # Makes colors in CLI ls output
 case `uname` in
     Darwin)
-        alias ls="ls -aCGpF"  # ls output with "/" for folders and @ for symlinks
-        alias ll="ls -alGpF"
+        alias ls="ls -aCGpF --color=auto"  # ls output with "/" for folders and @ for symlinks
+        alias ll="ls -alGpF --color=auto"
     ;;
     Linux)
         alias ls="ls -aCGpF --color=auto"  # ls output with "/" for folders and @ for symlinks
