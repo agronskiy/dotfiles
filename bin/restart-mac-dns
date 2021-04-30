@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# This allows to quickly restart the DNS responder e.g. when SSH host is not recognized.
+
+source $DOTFILES/zsh/logging.explicit-load.zsh
+
+if [ "$(uname -s)" != "Darwin" ]; then
+    log_success "Skipped (non-mac)"
+    exit 0
+fi
+
+log_info "Requires sudo"
+sudo killall -HUP mDNSResponder
+
+if [ $? -eq 0 ]
+then
+    log_success "Done"
+else
+    log_fail "Error"
+fi
