@@ -354,6 +354,28 @@
             ]
         },
     ],
+    "vim.visualModeKeyBindingsNonRecursive": [
+        {
+            "before": [
+                "d"
+            ],
+            "after": [
+                "\"",
+                "_",
+                "d"
+            ]
+        },
+        {
+            "before": [
+                "D"
+            ],
+            "after": [
+                "\"",
+                "_",
+                "D"
+            ]
+        },
+    ],
     "vim.leader": "<space>",
     "vim.handleKeys": {
         "<C-c>": false,
