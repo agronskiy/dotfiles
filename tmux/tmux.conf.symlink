@@ -63,7 +63,7 @@ bind -r j next-window     # select next window
 unbind o
 bind -r o select-pane -t :.+  # Just redefined o to allow cycling
 unbind \;
-bind -r \; select-pane -t :.-  # Just redefined o to allow cycling
+bind -r \; last-pane 
 
 unbind \"
 unbind \%
