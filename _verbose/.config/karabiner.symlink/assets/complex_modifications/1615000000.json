@@ -17,12 +17,10 @@
                     "from": {
                         "key_code": "right_command"
                     },
-                    "to": [
-                        {
-                            "key_code": "left_control",
-                            "repeat": true
-                        }
-                    ],
+                    "to": {
+                        "key_code": "left_control",
+                        "repeat": true
+                    },
                     "type": "basic"
                 }
             ]
