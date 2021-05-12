@@ -31,6 +31,20 @@ set -g @plugin 'tmux-plugins/tmux-continuum'
 set -g @continuum-restore 'on'
 set -g @continuum-save-interval '5'
 
+# Renew environment, creadit of github.com/samoshkin
+set -g update-environment \
+  "DISPLAY\
+  SSH_ASKPASS\
+  SSH_AUTH_SOCK\
+  SSH_AGENT_PID\
+  SSH_CONNECTION\
+  SSH_TTY\
+  WINDOWID\
+  XAUTHORITY"
+
+unbind R
+bind R run "$DOTFILES/tmux/renew-tmux-env.sh"
+
 # Not detach when exiting session
 set-option -g detach-on-destroy off
 
@@ -97,7 +111,6 @@ setw -g history-limit 50000000
 
 # Create session
 bind C-c new-session
-
 # Create new window
 bind c new-window -c "#{pane_current_path}"
 
@@ -107,7 +120,8 @@ set -g status-left-style 'fg=colour25'
 # Sometimes I want a special name of the host, which is accomplished by exporting it from `~/.localrc`
 optional_host="#{?THIS_HOST_PROMPT_NAME,$THIS_HOST_PROMPT_NAME,#H}"
 is_zoomed="#[fg=colour25]#{?window_zoomed_flag, [Z] , }#[default]"
-set -g status-right "#{prefix_highlight}$is_zoomed| #[fg=colour25]$optional_host#[default] | %a %Y-%m-%d %H:%M "
+date_time="#{?SSH_CONNECTION, | [SSH], | %a %Y-%m-%d %H:%M}"
+set -g status-right "#{prefix_highlight}$is_zoomed| #[fg=colour25]$optional_host#[default]$date_time "
 
 set -g status-left-length 25
 set -g status-right-length 100
@@ -147,7 +161,7 @@ bind-key -T root F12  \
     set key-table off \;\
     set status-style "bg=colour238,fg=colour248" \;\
     set status-left-style "fg=colour248" \;\
-    set status-right "#[bg=colour52] OFF #[default] | #[fg=colour248]$optional_host#[default] | %a %Y-%m-%d %H:%M " \;\
+    set status-right "OFF | #[fg=colour248]$optional_host#[default]$date_time " \;\
     set window-status-current-style "fg=colour248 bg=colour241" \;\
     refresh-client -S
 
