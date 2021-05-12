@@ -71,9 +71,12 @@ function middle_part() {
     fi
     
     # NOTE(agronskiy): set THIS_HOST_PROMPT_COLOR in .localrc of your host to override the default LIGHT_BLUE
-    local host_or_default=${THIS_HOST_PROMPT_COLOR:=${LIGHT_BLUE}}
-    local host_name=${THIS_HOST_PROMPT_NAME:=%M}
-    echo -e "${is_root}${host_or_default}[${host_name}]${RESET} ${WHITE}${path_truncated}${RESET}"
+    if [ ! -z ${TMUX+x} ]; then
+        local host_name=""
+    else
+        local host_name="${THIS_HOST_PROMPT_COLOR:=${LIGHT_BLUE}}[${THIS_HOST_PROMPT_NAME:=%M}] "
+    fi
+    echo -e "${is_root}${host_name}${RESET}${WHITE}${path_truncated}${RESET}"
 }
 
 function prompt_symbol() {
