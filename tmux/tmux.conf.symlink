@@ -106,7 +106,8 @@ set -g status-left ' [#S]  '
 set -g status-left-style 'fg=colour25'
 # Sometimes I want a special name of the host, which is accomplished by exporting it from `~/.localrc`
 optional_host="#{?THIS_HOST_PROMPT_NAME,$THIS_HOST_PROMPT_NAME,#H}"
-set -g status-right "#{prefix_highlight} | #[fg=colour25]$optional_host#[default] | %a %Y-%m-%d %H:%M "
+is_zoomed="#[fg=colour25]#{?window_zoomed_flag, [Z] , }#[default]"
+set -g status-right "#{prefix_highlight}$is_zoomed| #[fg=colour25]$optional_host#[default] | %a %Y-%m-%d %H:%M "
 
 set -g status-left-length 25
 set -g status-right-length 100
