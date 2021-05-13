@@ -79,18 +79,16 @@ bind -r o select-pane -t :.+  # Just redefined o to allow cycling
 unbind \;
 bind -r \; select-pane -t :.-  # Same, just allow cycling 
 
-unbind \"
-unbind \%
-
 bind -r C-h select-pane -L  # move left
 bind -r C-j  select-pane -D  # move down
 bind -r C-k select-pane -U  # move up
 bind -r C-l select-pane -R  # move right
 
-# Split horizontally
-bind - split-window -v -c "#{pane_current_path}"
-# split current window vertically
-bind \/ split-window -h -c "#{pane_current_path}"
+# Pane creation
+unbind \"
+unbind \%
+bind - split-window -v -c "#{pane_current_path}" # Split horizontally
+bind \/ split-window -h -c "#{pane_current_path}" # Split vertically
 
 # For better visibility of the active pane
 set -g window-style 'bg=colour236'
@@ -109,17 +107,20 @@ bind r \
 # Set the history limit so we get lots of scrollback.
 setw -g history-limit 50000000
 
-# Create session
+# Window/session management
 bind C-c new-session
-# Create new window
 bind c new-window -c "#{pane_current_path}"
+bind x kill-pane
+bind X kill-window
+bind Q confirm-before -p "kill-session #S? (y/n)" kill-session
 
+# Visual stuff
 # Status lines
 set -g status-left ' [#S]  '
 set -g status-left-style 'fg=colour25'
 # Sometimes I want a special name of the host, which is accomplished by exporting it from `~/.localrc`
 optional_host="#{?THIS_HOST_PROMPT_NAME,$THIS_HOST_PROMPT_NAME,#H}"
-is_zoomed="#[fg=colour25]#{?window_zoomed_flag, [Z] , }#[default]"
+is_zoomed="#{?window_zoomed_flag, #[bg=colour25#{l:,}fg=colour231] [Z] #[default] , }"
 date_time="#{?SSH_CONNECTION, | [SSH], | %a %Y-%m-%d %H:%M}"
 set -g status-right "#{prefix_highlight}$is_zoomed| #[fg=colour25]$optional_host#[default]$date_time "
 
@@ -161,7 +162,7 @@ bind-key -T root F12  \
     set key-table off \;\
     set status-style "bg=colour238,fg=colour248" \;\
     set status-left-style "fg=colour248" \;\
-    set status-right "#[bg=colour52] [OFF] #[default] | #[fg=colour248]$optional_host#[default]$date_time " \;\
+    set status-right "#[bg=colour52] [OFF] #[default] | #[fg=colour248]$optional_host#[default]#[fg=colour231]$date_time#[default] " \;\
     set window-status-current-style "fg=colour248 bg=colour241" \;\
     refresh-client -S
 
