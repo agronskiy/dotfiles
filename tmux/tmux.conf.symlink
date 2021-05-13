@@ -121,8 +121,7 @@ set -g status-left-style 'fg=colour25'
 # Sometimes I want a special name of the host, which is accomplished by exporting it from `~/.localrc`
 optional_host="#{?THIS_HOST_PROMPT_NAME,$THIS_HOST_PROMPT_NAME,#H}"
 is_zoomed="#{?window_zoomed_flag, #[bg=colour25#{l:,}fg=colour231] [Z] #[default] , }"
-date_time="#{?SSH_CONNECTION, | [SSH], | %a %Y-%m-%d %H:%M}"
-set -g status-right "#{prefix_highlight}$is_zoomed| #[fg=colour25]$optional_host#[default]$date_time "
+set -g status-right "#{prefix_highlight}$is_zoomed| #[fg=colour25]$optional_host#[default]#{?SSH_CONNECTION, | [SSH], | %a %Y-%m-%d %H:%M} "
 
 set -g status-left-length 25
 set -g status-right-length 100
@@ -162,7 +161,7 @@ bind-key -T root F12  \
     set key-table off \;\
     set status-style "bg=colour238,fg=colour248" \;\
     set status-left-style "fg=colour248" \;\
-    set status-right "#[bg=colour52] [OFF] #[default] | #[fg=colour248]$optional_host#[default]#[fg=colour231]$date_time#[default] " \;\
+    set status-right "#[bg=colour52,fg=colour231] [OFF] #[default] | #[fg=colour248]$optional_host#[default]#{?SSH_CONNECTION, | [SSH], | #[fg=colour231]%a %Y-%m-%d %H:%M}#[default] " \;\
     set window-status-current-style "fg=colour248 bg=colour241" \;\
     refresh-client -S
 
