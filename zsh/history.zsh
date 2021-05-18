@@ -16,6 +16,8 @@ setopt HIST_SAVE_NO_DUPS
 # https://superuser.com/questions/446594/separate-up-arrow-lookback-for-local-and-global-zsh-history/691603#691603
 bindkey "${key[Up]}" up-line-or-local-history
 bindkey "${key[Down]}" down-line-or-local-history
+bindkey "^P" up-line-or-local-history
+bindkey "^N" down-line-or-local-history
 
 up-line-or-local-history() {
     zle set-local-history 1
