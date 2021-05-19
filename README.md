@@ -1,7 +1,9 @@
 # My dotfiles and configs
 
+<img src="assets/overall.png" width="90%">
+
 Some bits and pieces of the bashrc used here and there across my machines, e.g. for prompt and commands.
-Heavily adjusted version by @holman, inspiration from @AndreiBarsan.
+Heavily adjusted version by @holman, inspiration from @AndreiBarsan and @samoshkin
 
 # Features
 
@@ -9,7 +11,7 @@ Along with many very personal features there are several which might be useful f
 
 ## Nested tmux
 
-Allow to dynamically switch off the `prefix` for outer tmux when logging in to a remote ssh with another (inner) tmux.
+Pressing `F12` allows to dynamically switch off the `prefix` for outer tmux when logging in to a remote ssh with another (inner) tmux.
 The status bar is greyed out and the `prefix` is propagated to the inner tmux.
 
 Local machine tmux only:
@@ -30,34 +32,37 @@ Local and remote, with local no receiving `prefix`:
 
 ## Installing software and plugins:
 
-**This is WIP**: currently there are some installation scripts untested, all should run by
+Before you go, make sure you install zsh and oh-my-zsh (sections below), and restart terminal.
+
+**This is WIP**: currently all be should run by
 ```bash
-./bin/dot
+./scripts/install
 ```
 
-Otherwise, prefer for now to install stuff manually:
+This would 90% smoothly install everything in a "Darwin" <-> "Ubuntu" cross-platform manner.
 
-### plugins
+### zsh plugins
 
 ```
 # Install oh-my-zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
-# Install highlighting plugin
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 ```
 
 ### fzf
 
-Installs via `./bin/dot`
+Installs via `./scripts/install`
 
 ## tmux
 
-Installs via `./bin/dot`
+Installs via `./scripts/install`
 
-**NOTE** (some strange behavior when restoring tmux sessions)
+Make sure that after installing tmux, you restart terminal and run it with `Prefix + Shift-I` to install 
+its own pluging.
 
-## Caveat: Git autocompletion with git homebrew
+
+## Trivia
+
+### Caveat: Git autocompletion with git homebrew
 
 See [SO thread](https://stackoverflow.com/questions/24513873/git-tab-completion-not-working-in-zsh-on-mac):
 
