@@ -95,7 +95,7 @@ set -g window-style 'bg=colour236'
 set -g window-active-style 'bg=black'
 
 set-window-option -g pane-border-style fg=colour7,bg=colour236
-set-window-option -g pane-active-border-style fg=colour118,bg=black
+set-window-option -g pane-active-border-style fg=colour214,bg=black
 
 # Quick switch to window using fzf:
 unbind f
