@@ -90,6 +90,10 @@ unbind \%
 bind - split-window -v -c "#{pane_current_path}" # Split horizontally
 bind \/ split-window -h -c "#{pane_current_path}" # Split vertically
 
+# Pane rotation - make it repeatable
+unbind C-o
+bind -r C-o rotate-window -D
+
 # For better visibility of the active pane
 set -g window-style 'bg=colour236'
 set -g window-active-style 'bg=black'
