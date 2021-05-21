@@ -150,7 +150,7 @@ bind-key -r < swap-window -d -t -1
 bind-key -r > swap-window -d -t +1
 
 # Repeated time between keys
-set -g repeat-time 825
+set -g repeat-time 750
 
 # Tmux seems to spawn login shell every time, which makes it source ~/.profile, which
 # in turn makes python2 the default.
