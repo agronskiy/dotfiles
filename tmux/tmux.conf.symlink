@@ -76,8 +76,6 @@ bind -r C-l next-window     # select next window
 # Pane navigation 
 unbind o
 bind -r o select-pane -t :.+  # Just redefined o to allow cycling
-unbind \;
-bind -r \; select-pane -t :.-  # Same, just allow cycling 
 
 bind -r h select-pane -L  # move left
 bind -r j  select-pane -D  # move down
@@ -93,6 +91,13 @@ bind \/ split-window -h -c "#{pane_current_path}" # Split vertically
 # Pane rotation - make it repeatable
 unbind C-o
 bind -r C-o rotate-window -D
+
+# (credit github.com/samoshkin) Swap panes back and forth with 1st pane
+# When in main-(horizontal|vertical) layouts, the biggest/widest panel is always @1
+unbind \;
+bind -r \; if '[ #{pane_index} -eq 1 ]' \
+     'swap-pane -s "!"' \
+     'select-pane -t:.1 ; swap-pane -d -t 1 -s "!"'
 
 # Zoom pane
 unbind z
@@ -150,7 +155,7 @@ bind-key -r < swap-window -d -t -1
 bind-key -r > swap-window -d -t +1
 
 # Repeated time between keys
-set -g repeat-time 750
+set -g repeat-time 500
 
 # Tmux seems to spawn login shell every time, which makes it source ~/.profile, which
 # in turn makes python2 the default.
