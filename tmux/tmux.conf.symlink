@@ -92,6 +92,12 @@ bind \/ split-window -h -c "#{pane_current_path}" # Split vertically
 unbind C-o
 bind -r C-o rotate-window -D
 
+unbind \{
+unbind \}
+
+bind -r \{ swap-pane -U
+bind -r \} swap-pane -D
+
 # (credit github.com/samoshkin) Swap panes back and forth with 1st pane
 # When in main-(horizontal|vertical) layouts, the biggest/widest panel is always @1
 unbind \;
