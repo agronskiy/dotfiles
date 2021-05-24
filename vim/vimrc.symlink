@@ -7,7 +7,7 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 
 call plug#begin('~/.vim/bundle')
-Plug 'tomasiser/vim-code-dark'
+Plug 'agronskiy/vim-code-dark'      " Slightly modified from 'tomasiser/vim-code-dark'
 Plug 'junegunn/seoul256.vim'
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
