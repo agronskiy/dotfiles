@@ -279,4 +279,4 @@ highlight GitGutterDelete ctermfg=1
 highlight GitGutterChangeDelete ctermfg=4
 
 " Switch line numbers on and off
-nnoremap <leader>tl         :set relativenumber! nu!<CR>
+nnoremap <leader>tl         :set relativenumber! nu!<CR> :GitGutterToggle<CR>
