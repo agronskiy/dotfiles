@@ -113,7 +113,7 @@ bind C-f resize-pane -Z
 set -g window-style 'bg=colour235'
 set -g window-active-style 'bg=colour233'
 
-set-window-option -g pane-border-style fg=colour240,bg=colour235
+set-window-option -g pane-border-style fg=colour245,bg=colour235
 set-window-option -g pane-active-border-style fg=colour172,bg=colour233
 
 # Quick switch to window using fzf:
