@@ -32,10 +32,10 @@ set -g @continuum-restore 'on'
 set -g @continuum-save-interval '5'
 
 # Renew environment, creadit of github.com/samoshkin
+# We do not update SSH_AUTH_SOCK because we handle it ourselves, see aliases.pre-load.zsh 
 set -g update-environment \
   "DISPLAY\
   SSH_ASKPASS\
-  SSH_AUTH_SOCK\
   SSH_AGENT_PID\
   SSH_CONNECTION\
   SSH_TTY\
