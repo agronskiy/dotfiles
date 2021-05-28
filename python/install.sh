@@ -21,7 +21,7 @@ install_conda() {
                 rm Miniconda3-latest-Linux-x86_64.sh
             fi
             wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-            chmod +x Miniconda3-latest-Linux-x86_64.shi
+            chmod +x Miniconda3-latest-Linux-x86_64.sh
             # `yes` will answer to the licnese agreement.
             yes | ./Miniconda3-latest-Linux-x86_64.sh -b
             rm Miniconda3-latest-Linux-x86_64.sh
