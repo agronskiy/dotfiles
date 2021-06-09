@@ -9,6 +9,15 @@
 #
 # Run ./set-defaults.sh and you'll be good to go.
 
+source $DOTFILES/zsh/logging.explicit-load.zsh
+
+if [ "$(uname -s)" != "Darwin" ]; then
+    log_success "Skipped macos-specific stuff"
+    exit 0
+fi
+
+log_info "Setting macOS defaults..."
+
 # Disable press-and-hold for keys in favor of key repeat.
 defaults write -g ApplePressAndHoldEnabled -bool false
 
@@ -53,3 +62,12 @@ defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false        
 defaults write com.microsoft.VSCodeInsiders ApplePressAndHoldEnabled -bool false # For VS Code Insider
 defaults write com.visualstudio.code.oss ApplePressAndHoldEnabled -bool false    # For VS Codium
 defaults delete -g ApplePressAndHoldEnabled                                      # If necessary, reset global default
+
+# Rectangle
+defaults write com.knollsoft.Rectangle sizeOffset -float 75             # Modify offset 75px
+defaults write com.knollsoft.Rectangle snapEdgeMarginTop -int 40        # Snap margins
+defaults write com.knollsoft.Rectangle snapEdgeMarginBottom -int 40     # Snap margins
+defaults write com.knollsoft.Rectangle snapEdgeMarginLeft -int 40       # Snap margins
+defaults write com.knollsoft.Rectangle snapEdgeMarginRight -int 40      # Snap margins
+
+log_success "..Done setting macOS defaults."
