@@ -9,3 +9,5 @@ export PATH="$DOTFILES/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$PATH:$HOME/.rvm/bin"
 
+# This will account for standard Go installation path.
+export PATH="$PATH:$HOME/go/bin"
