@@ -73,12 +73,12 @@ install_bat() {
     which batcat &>/dev/null
     if [ $? -eq 0 ]
     then
-        log_success "Skipped bat"
+        # Due to packaage clash they  have renamed bat to batcat, linking back
+        ln -s --force $(which batcat) "$HOME/.local/bin/bat"
+        log_success "Skipped bat, relinked"
     else
         log_info "Installing bat"
         sudo apt-get -y install bat
-        # Due to packaage clash they  have renamed bat to batcat, linking back
-        ln -s --force $(which batcat) "$HOME/.local/bin/bat"
         if [ $? -eq 0 ]
         then
             log_success "Successfully installed bat"
@@ -98,7 +98,9 @@ install_ripgrep() {
         log_success "Skipped ripgrep"
     else
         log_info "Installing ripgrep"
-        brew install ripgrep &>/dev/null 
+        curl -LO https://github.com/BurntSushi/ripgrep/releases/download/12.1.1/ripgrep_12.1.1_amd64.deb
+        sudo dpkg -i ripgrep_12.1.1_amd64.deb
+        rm ripgrep_12.1.1_amd64.deb
         if [ $? -eq 0 ]
         then
             log_success "Successfully installed ripgrep"
