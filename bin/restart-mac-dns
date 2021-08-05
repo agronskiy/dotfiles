@@ -9,8 +9,14 @@ if [ "$(uname -s)" != "Darwin" ]; then
     exit 0
 fi
 
-log_info "Requires sudo"
-sudo killall -HUP mDNSResponder
+which cli-pass &>/dev/null
+if [ $? -eq 0 ]
+then
+    cli-pass | sudo -S killall -HUP mDNSResponder 
+else 
+    log_info "Requires sudo"
+    sudo killall -HUP mDNSResponder
+fi
 
 if [ $? -eq 0 ]
 then

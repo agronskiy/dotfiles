@@ -7,8 +7,15 @@ if [ "$(uname -s)" != "Darwin" ]; then
     exit 0
 fi
 
-log_info "Requires sudo"
-sudo launchctl stop com.apple.audio.coreaudiod && sudo launchctl start com.apple.audio.coreaudiod
+
+which cli-pass &>/dev/null
+if [ $? -eq 0 ]
+then
+    cli-pass | sudo -S launchctl stop com.apple.audio.coreaudiod && sudo launchctl start com.apple.audio.coreaudiod
+else 
+    log_info "Requires sudo"
+    sudo launchctl stop com.apple.audio.coreaudiod && sudo launchctl start com.apple.audio.coreaudiod
+fi
 
 if [ $? -eq 0 ]
 then
