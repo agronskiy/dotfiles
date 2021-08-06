@@ -443,7 +443,7 @@
     ],
     "go.toolsManagement.autoUpdate": true,
     "workbench.editorAssociations": {
-        "*.ipynb": "jupyter.notebook.ipynb"
+        "*.ipynb": "jupyter-notebook"
     },
     "workbench.editor.enablePreviewFromQuickOpen": true,
     "workbench.editor.enablePreviewFromCodeNavigation": true,
@@ -452,7 +452,6 @@
         "editor.defaultFormatter": "xaver.clang-format"
     },
     "editor.cursorStyle": "line",
-    "editor.insertSpaces": false,
     "editor.wordSeparators": "/\\()\"':,.;<>~!@#$%^&*|+=[]{}`?-",
     "editor.wordWrap": "off",
     "[go]": {
@@ -471,4 +470,10 @@
     "c-cpp-flylint.lizard.enable": false,
     "deepcode.yesWelcomeNotification": false,
     "window.zoomLevel": 1,
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "C/C++ Include Guard.Macro Type": "Filepath",
+    "C/C++ Include Guard.Auto Update Include Guard": false,
+    "C/C++ Include Guard.Remove Extension": false,
+    "C/C++ Include Guard.Suffix": "_",
 }
