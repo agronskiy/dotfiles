@@ -110,3 +110,22 @@ install_ripgrep() {
     fi
 }
 install_ripgrep
+
+# tree
+install_tree() {
+    which tree &>/dev/null
+    if [ $? -eq 0 ]
+    then
+        log_success "Skipped tree"
+    else
+        log_info "Installing tree"
+        sudo apt-get install tree
+        if [ $? -eq 0 ]
+        then
+            log_success "Successfully installed tree"
+        else
+            log_fail "Failed to install tree"
+        fi
+    fi
+}
+install_tree

@@ -122,3 +122,22 @@ install_coreutils() {
 }
 install_coreutils
 
+# tree 
+install_tree() {
+    brew list tree &>/dev/null
+    if [ $? -eq 0 ]
+    then
+        log_success "Skipped tree" 
+    else
+        log_info "Installing tree" 
+        brew install tree
+        if [ $? -eq 0 ]
+        then
+            log_success "Successfully installed tree" 
+        else
+            log_fail "Failed to install tree" 
+        fi
+    fi
+}
+install_tree
+

@@ -36,3 +36,6 @@ else
     # In TMUX
     export SSH_AUTH_SOCK=${HOME}/.ssh_auth_sock
 fi
+
+# Tree colorized output
+alias tree="tree -C -F -L 2"
