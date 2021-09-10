@@ -70,4 +70,7 @@ defaults write com.knollsoft.Rectangle snapEdgeMarginBottom -int 40     # Snap m
 defaults write com.knollsoft.Rectangle snapEdgeMarginLeft -int 40       # Snap margins
 defaults write com.knollsoft.Rectangle snapEdgeMarginRight -int 40      # Snap margins
 
+# Disables period on double-space.
+defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false
+
 log_success "..Done setting macOS defaults."
