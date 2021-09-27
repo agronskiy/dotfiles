@@ -39,3 +39,7 @@ fi
 
 # Tree colorized output
 alias tree="tree -C -F -L 2"
+# For the "less" version of "tree", we need a function - it passes arguments inside
+function trel() {
+    tree "$@" | less
+}
