@@ -129,3 +129,22 @@ install_tree() {
     fi
 }
 install_tree
+
+# tig
+install_tig() {
+    which tig &>/dev/null
+    if [ $? -eq 0 ]
+    then
+        log_success "Skipped tig"
+    else
+        log_info "Installing tig"
+        sudo apt-get install tig
+        if [ $? -eq 0 ]
+        then
+            log_success "Successfully installed tig"
+        else
+            log_fail "Failed to install tig"
+        fi
+    fi
+}
+install_tig
