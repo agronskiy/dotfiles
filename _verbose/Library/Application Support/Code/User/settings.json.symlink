@@ -163,7 +163,10 @@
     ],
     "latex-workshop.chktex.enabled": true,
     "[python]": {
-        "editor.formatOnSave": true
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+        }
     },
     "python.linting.pylintArgs": [
         "--enable=W0614",
@@ -203,9 +206,6 @@
     "vsicons.dontShowNewVersionMessage": true,
     "files.insertFinalNewline": true,
     "python.formatting.provider": "black",
-    "python.formatting.blackArgs": [
-        "--line-length=119"
-    ],
     "python.linting.mypyArgs": [
         "--ignore-missing-imports",
         "--allow-redefinition",
@@ -403,7 +403,7 @@
         "<C-c>": false,
         "<C-v>": false
     },
-    "editor.lineNumbers": "on",
+    "editor.lineNumbers": "relative",
     "settings.cycle": [
         {
             "id": "lineNumber",
@@ -488,7 +488,6 @@
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "indentRainbow.colors": [
-
         "rgba(255,255,64,0.07)",
         "rgba(127,255,127,0.07)",
         "rgba(255,127,255,0.07)",
@@ -500,4 +499,8 @@
     "[jsonc]": {
         "editor.defaultFormatter": "vscode.json-language-features"
     },
+    "python.sortImports.args": [
+        "--profile",
+        "black"
+    ],
 }
