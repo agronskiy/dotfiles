@@ -148,3 +148,22 @@ install_tig() {
     fi
 }
 install_tig
+
+# exa
+install_exa() {
+    which exa &>/dev/null
+    if [ $? -eq 0 ]
+    then
+        log_success "Skipped exa"
+    else
+        log_info "Installing exa"
+        brew install exa
+        if [ $? -eq 0 ]
+        then
+            log_success "Successfully installed exa"
+        else
+            log_fail "Failed to install exa"
+        fi
+    fi
+}
+install_exa
