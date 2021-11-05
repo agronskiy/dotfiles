@@ -25,9 +25,12 @@ fi
 
 
 # ls business, anything related.
-# Exa is a tool which is allegedly cooler than ls
+# We keep original ls untouched bia exa
 
-alias ls="exa -alFG --no-user --no-permissions --no-time --color=always"
+alias ls="ls -aCGpF --color=auto"
+export LSCOLORS="ExGxBxDxCxEgEdxbxgxcxd"  # ls colors
+
+# Exa is a tool which is allegedly cooler than ls
 alias la="exa -alF --color=always"
 function __ll() {
     la "$@" | less -FX
