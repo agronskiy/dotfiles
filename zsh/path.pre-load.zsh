@@ -11,3 +11,6 @@ export PATH="$PATH:$HOME/.rvm/bin"
 
 # This will account for standard Go installation path.
 export PATH="$PATH:$HOME/go/bin"
+
+# Rust if installed
+export PATH="$PATH:$HOME/.cargo/bin"
