@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# For security reasons, put the `export CLI_PASS_ACCOUNT=<...>` into `~/.localrc`
+# which is sourced by this dotfiles framework.
+account="'$CLI_PASS_ACCOUNT'"
+command="security find-generic-password -w -s $account -a $account"
+eval "$(echo "$command")"
