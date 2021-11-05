@@ -165,6 +165,7 @@ install_exa() {
         then
             curl https://sh.rustup.rs -sSf | sh -s -- -y
         fi
+        sudo apt-get install -y build-essential
         $HOME/.cargo/bin/cargo install exa
         cp $HOME/.cargo/bin/exa $HOME/.local/bin
 
