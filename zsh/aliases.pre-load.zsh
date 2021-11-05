@@ -34,10 +34,10 @@ function __ll() {
 }
 alias ll="__ll"
 
-alias tree="exa -alTF -L 2 --color=always"
-function trel() {
-    tree "$@" | less -FX
+function __tree() {
+    exa -alTF -L 2 --color=always "$@" | less -FX
 }
+alias tree="__tree"
 
 export EXA_COLORS="xa=37:su=37:sf=37:ur=37:uw=37:ux=37:ue=37:gr=37:gw=37:gx=37:tr=37:tw=37:tx=37:uu=33:un=33:da=36"
 
