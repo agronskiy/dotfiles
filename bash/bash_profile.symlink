@@ -197,3 +197,4 @@ conda activate py37
 # This allows grepping with colors
 export GREP_OPTIONS='--color=always'
 export GREP_COLOR='1;35;40'
+. "$HOME/.cargo/env"

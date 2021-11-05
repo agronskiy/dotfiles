@@ -157,7 +157,20 @@ install_exa() {
         log_success "Skipped exa"
     else
         log_info "Installing exa"
-        brew install exa
+        
+        mkdir /tmp/exa-install
+        cd /tmp/exa-install
+        
+        if ! command -v rustc &> /dev/null
+        then
+            curl https://sh.rustup.rs -sSf | sh -s -- -y
+        fi
+        $HOME/.cargo/bin/cargo install exa
+        cp $HOME/.cargo/bin/exa $HOME/.local/bin
+
+        cd ~
+        rm -rf /tmp/exa-install
+
         if [ $? -eq 0 ]
         then
             log_success "Successfully installed exa"
