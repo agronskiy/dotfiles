@@ -36,6 +36,7 @@ function __ll() {
     la "$@" | less -FX
 }
 alias ll="__ll"
+alias llf="ll | fzf --ansi"
 
 function __tree() {
     exa -alTF -L 2 --color=always "$@" | less -FX
