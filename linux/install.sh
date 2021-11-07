@@ -92,7 +92,7 @@ install_bat
 
 # ripgrep
 install_ripgrep() {
-    which ripgrep &>/dev/null
+    which rg &>/dev/null
     if [ $? -eq 0 ]
     then
         log_success "Skipped ripgrep"
@@ -157,10 +157,10 @@ install_exa() {
         log_success "Skipped exa"
     else
         log_info "Installing exa"
-        
+
         mkdir /tmp/exa-install
         cd /tmp/exa-install
-        
+
         if ! command -v rustc &> /dev/null
         then
             curl https://sh.rustup.rs -sSf | sh -s -- -y
