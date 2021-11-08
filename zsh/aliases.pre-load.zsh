@@ -23,6 +23,8 @@ else
     export SSH_AUTH_SOCK=${HOME}/.ssh_auth_sock
 fi
 
+# FZF with --ansi
+alias gref="fzf --filter"
 
 # ls business, anything related.
 # We keep original ls untouched bia exa
@@ -36,12 +38,12 @@ function __ll() {
     la "$@" | less -FX
 }
 alias ll="__ll"
-alias llf="ll | fzf --ansi"
+alias lf="la | fzf -m --ansi"
 
 function __tree() {
     exa -alTF -L 2 --color=always "$@" | less -FX
 }
-alias tree="__tree"
+alias trel="__tree"
 
 export EXA_COLORS="xa=37:su=37:sf=37:ur=37:uw=37:ux=37:ue=37:gr=37:gw=37:gx=37:tr=37:tw=37:tx=37:uu=33:un=33:da=36"
 
