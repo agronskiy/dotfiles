@@ -31,7 +31,7 @@ export FZF_CTRL_T_COMMAND='fd --hidden --follow --no-ignore --exclude .git'
 # - The first argument to the function ($1) is the base path to start traversal
 # - See the source code (completion.{bash,zsh}) for the details.
 _fzf_compgen_path() {
-  fd --type f --hidden --follow --no-ignore --exclude ".git" . "$1"
+  fd --hidden --follow --no-ignore --exclude ".git" . "$1"
 }
 
 # Use fd to generate the list for directory completion
@@ -51,4 +51,16 @@ _fzf_comprun() {
     cat|bat)      fzf "$@" --preview 'bat --color=always --plain {}' ;;
     *)            fzf "$@" ;;
   esac
+}
+
+_fzf_complete_cat() {
+  _fzf_complete -- "$@" < <(
+    fd --type f --hidden --follow --no-ignore --exclude .git .
+  )
+}
+
+_fzf_complete_bat() {
+  _fzf_complete -- "$@" < <(
+    fd --type f --hidden --follow --no-ignore --exclude .git .
+  )
 }
