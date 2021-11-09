@@ -403,7 +403,7 @@
         "<C-c>": false,
         "<C-v>": false
     },
-    "editor.lineNumbers": "relative",
+    "editor.lineNumbers": "on",
     "settings.cycle": [
         {
             "id": "lineNumber",
