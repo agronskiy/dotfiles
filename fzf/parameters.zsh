@@ -1,5 +1,8 @@
 # FZF options
-export FZF_DEFAULT_OPTS='--height 70% --reverse --border --bind=F2:toggle-preview,ctrl-u:preview-up,ctrl-d:preview-down'
+export FZF_DEFAULT_OPTS='--height 70% --reverse --border '\
+'--bind=F2:toggle-preview,'\
+'page-up:preview-half-page-up,'\
+'page-down:preview-half-page-down'
 
 #
 # FZF-Tab options
