@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -e
+set -u
+set -o pipefail
+
+git fetch -p > /dev/null 
+for branch in $(git branch -vv | grep ': gone]' | awk '{print $1}'); do 
+    echo $branch; 
+done
+
