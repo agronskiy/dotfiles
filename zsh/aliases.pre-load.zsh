@@ -35,14 +35,14 @@ export LSCOLORS="ExGxBxDxCxEgEdxbxgxcxd"  # ls colors
 # Exa is a tool which is allegedly cooler than ls
 alias la="exa -alF --color=always"
 function __ll() {
-    la "$@" | less -FX
+    la "$@" | less -FXi
 }
 alias ll="__ll"
 alias lf="la | fzf -m --ansi"
 
 alias tree="tree -C -F -L 2"
 function __tree() {
-    exa -alTF -L 2 --color=always "$@" | less -FX
+    exa -alTF -L 2 --color=always "$@" | less -FXi
 }
 alias trel="__tree"
 
