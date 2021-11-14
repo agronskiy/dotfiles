@@ -267,84 +267,6 @@
         },
         {
             "before": [
-                "i"
-            ],
-            "after": [
-                "i"
-            ],
-            "commands": [
-                {
-                    "command": "settings.cycle.lineNumber"
-                }
-            ]
-        },
-        {
-            "before": [
-                "I"
-            ],
-            "after": [
-                "I"
-            ],
-            "commands": [
-                {
-                    "command": "settings.cycle.lineNumber"
-                }
-            ]
-        },
-        {
-            "before": [
-                "a"
-            ],
-            "after": [
-                "a"
-            ],
-            "commands": [
-                {
-                    "command": "settings.cycle.lineNumber"
-                }
-            ]
-        },
-        {
-            "before": [
-                "A"
-            ],
-            "after": [
-                "A"
-            ],
-            "commands": [
-                {
-                    "command": "settings.cycle.lineNumber"
-                }
-            ]
-        },
-        {
-            "before": [
-                "o"
-            ],
-            "after": [
-                "o"
-            ],
-            "commands": [
-                {
-                    "command": "settings.cycle.lineNumber"
-                }
-            ]
-        },
-        {
-            "before": [
-                "O"
-            ],
-            "after": [
-                "O"
-            ],
-            "commands": [
-                {
-                    "command": "settings.cycle.lineNumber"
-                }
-            ]
-        },
-        {
-            "before": [
                 "d"
             ],
             "after": [
@@ -403,7 +325,7 @@
         "<C-c>": false,
         "<C-v>": false
     },
-    "editor.lineNumbers": "relative",
+    "editor.lineNumbers": "on",
     "settings.cycle": [
         {
             "id": "lineNumber",
@@ -427,11 +349,6 @@
             "after": [
                 "<Esc>"
             ],
-            "commands": [
-                {
-                    "command": "settings.cycle.lineNumber"
-                }
-            ],
         },
         {
             "before": [
@@ -440,11 +357,6 @@
             "after": [
                 "<Esc>"
             ],
-            "commands": [
-                {
-                    "command": "settings.cycle.lineNumber"
-                }
-            ]
         }
     ],
     "go.toolsManagement.autoUpdate": true,
@@ -482,7 +394,7 @@
     "C/C++ Include Guard.Remove Extension": false,
     "C/C++ Include Guard.Suffix": "_",
     "[javascript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.defaultFormatter": "vscode.typescript-language-features"
     },
     "[vue]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -503,4 +415,6 @@
         "--profile",
         "black"
     ],
+    "windowColors.🌈 BaseColor": "black",
+    "C_Cpp.intelliSenseEngine": "Disabled",
 }
