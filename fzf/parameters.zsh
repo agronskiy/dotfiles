@@ -11,8 +11,19 @@ export FZF_TMUX_OPTS="-p 75%,75%"
 # FZF-Tab options
 #
 
+__fzf_tab_autocompletion_command() {
+  [ -n "$TMUX_PANE" ] && { [ "${FZF_TMUX:-0}" != 0 ] || [ -n "$FZF_TMUX_OPTS" ]; } &&
+    echo "fzf-tmux" || echo "fzf"
+}
+
+__fzf_tab_autocompletion_flags() {
+  [ -n "$TMUX_PANE" ] && { [ "${FZF_TMUX:-0}" != 0 ] || [ -n "$FZF_TMUX_OPTS" ]; } &&
+    echo "${FZF_TMUX_OPTS:--d${FZF_TMUX_HEIGHT:-40%}} " || echo "--height 90% --reverse --no-border"
+}
+
 # This makes `fzf-tab` completion more lightweight in general.
-zstyle ':fzf-tab:*' fzf-flags --height 90% --reverse --no-border
+zstyle ':fzf-tab:*' fzf-command $(__fzf_tab_autocompletion_command)
+zstyle ':fzf-tab:*' fzf-flags $(__fzf_tab_autocompletion_flags)
 # Git completion with preview on the right
 zstyle ':fzf-tab:complete:git-checkout:*' fzf-preview \
   'git log --graph --color=always --abbrev-commit --decorate \
@@ -51,11 +62,11 @@ _fzf_comprun() {
   shift
 
   case "$command" in
-    cd)           fzf-tmux "$@" --preview 'exa -TF -L=2 --color=always {} | head -200' ;;
-    export|unset) fzf-tmux "$@" --preview "eval 'echo \$'{}" ;;
-    ssh)          fzf-tmux "$@" --preview 'dig {}' ;;
-    cat|bat)      fzf-tmux "$@" --preview 'bat --color=always --plain {}' ;;
-    *)            fzf-tmux "$@" ;;
+    cd)           $(__fzfcmd) "$@" --preview 'exa -TF -L=2 --color=always {} | head -200' ;;
+    export|unset) $(__fzfcmd) "$@" --preview "eval 'echo \$'{}" ;;
+    ssh)          $(__fzfcmd) "$@" --preview 'dig {}' ;;
+    cat|bat)      $(__fzfcmd) "$@" --preview 'bat --color=always --plain {}' ;;
+    *)            $(__fzfcmd) "$@" ;;
   esac
 }
 
