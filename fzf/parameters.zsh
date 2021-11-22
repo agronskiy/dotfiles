@@ -4,6 +4,9 @@ export FZF_DEFAULT_OPTS='--height 70% --reverse '\
 'page-up:preview-half-page-up,'\
 'page-down:preview-half-page-down'
 
+export FZF_TMUX=1
+export FZF_TMUX_OPTS="-p 75%,75%"
+
 #
 # FZF-Tab options
 #
@@ -48,11 +51,11 @@ _fzf_comprun() {
   shift
 
   case "$command" in
-    cd)           fzf "$@" --preview 'exa -TF -L=2 --color=always {} | head -200' ;;
-    export|unset) fzf "$@" --preview "eval 'echo \$'{}" ;;
-    ssh)          fzf "$@" --preview 'dig {}' ;;
-    cat|bat)      fzf "$@" --preview 'bat --color=always --plain {}' ;;
-    *)            fzf "$@" ;;
+    cd)           fzf-tmux "$@" --preview 'exa -TF -L=2 --color=always {} | head -200' ;;
+    export|unset) fzf-tmux "$@" --preview "eval 'echo \$'{}" ;;
+    ssh)          fzf-tmux "$@" --preview 'dig {}' ;;
+    cat|bat)      fzf-tmux "$@" --preview 'bat --color=always --plain {}' ;;
+    *)            fzf-tmux "$@" ;;
   esac
 }
 
