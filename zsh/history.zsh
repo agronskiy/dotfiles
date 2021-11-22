@@ -53,16 +53,16 @@ __fzf-history-widget() {
   local selected num
   setopt localoptions noglobsubst noposixbuiltins pipefail 2> /dev/null
   # Sed's below strip date information such as `123 2021-11-01 09:48` and then replace `\n` with
-  # newlines. Bat below highlights the command with bash syntax.
+  # newlines.
+  sed_preview='s#^[[:space:]]\{1,\}\([^[:space:]]\{1,\}[[:space:]]\{1,\}\)\{3\}#  #;s#\\n#\n  #g'
 
-  sed_preview='s/^[[:space:]]+[0-9]+[[:space:]]+[0-9\\-]+[[:space:]]+[0-9:]+[[:space:]]+/  /g;s/\\n/\n  /g'
-
+  # Bat below highlights the command with bash syntax.
   selected=( $(fc -rli 1 |
     FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index
-    --preview-window down:50%:wrap --preview='printf '\''%s'\'' {} |
-    sed -r '\''$sed_preview'\'' |
+    --preview-window down:15:wrap --preview='printf '\''%s'\'' {} |
+    sed '\''$sed_preview'\'' |
     bat --color=always --plain -l '\''Bourne Again Shell (bash)'\'' '
-    --bind=ctrl-r:toggle-sort $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} +m" $(__fzfcmd)) )
+    $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} +m" $(__fzfcmd)) )
   local ret=$?
   if [ -n "$selected" ]; then
     num=$selected[1]
