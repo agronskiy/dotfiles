@@ -33,18 +33,18 @@ alias ls="ls -aCGpF --color=auto"
 export LSCOLORS="ExGxBxDxCxEgEdxbxgxcxd"  # ls colors
 
 # Exa is a tool which is allegedly cooler than ls
-alias la="exa -alF"
 function __ll() {
     # Check if that's for terminal. If not, don't add `color=always` to prevent ansi escapes in
     # piping.
     if [ -t 1 ]
     then
-        la --color=always "$@" | less
+        exa -lF --color=always "$@" | less
     else
-        la "$@"
+        exa -lF "$@"
     fi
 }
 alias ll="__ll"
+alias la="ll -a"
 alias lf="la | fzf -m --ansi"
 
 alias tree="tree -C -F -L 2"
