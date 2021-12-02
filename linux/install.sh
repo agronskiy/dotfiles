@@ -7,6 +7,12 @@ if ! [ "$(uname -s)" == "Linux" ]; then
     exit 0
 fi
 
+if [ "$EUID" -ne 0 ]; then
+  SUDO_CMD=sudo
+else
+  SUDO_CMD=
+fi
+
 # Add here linux-specific installations
 
 # # TEMPLATE
@@ -38,7 +44,7 @@ install_fd() {
         log_success "Skipped fd, relinked"
     else
         log_info "Installing fd"
-        sudo apt-get install fd-find
+        $SUDO_CMD apt-get install fd-find
         if [ $? -eq 0 ]
         then
             log_success "Successfully installed fd"
@@ -57,7 +63,7 @@ install_htop() {
         log_success "Skipped htop"
     else
         log_info "Installing htop"
-        sudo apt-get install htop
+        $SUDO_CMD apt-get install htop
         if [ $? -eq 0 ]
         then
             log_success "Successfully installed htop"
@@ -78,7 +84,7 @@ install_bat() {
         log_success "Skipped bat, relinked"
     else
         log_info "Installing bat"
-        sudo apt-get -y install bat
+        $SUDO_CMD apt-get -y install bat
         if [ $? -eq 0 ]
         then
             log_success "Successfully installed bat"
@@ -99,7 +105,7 @@ install_ripgrep() {
     else
         log_info "Installing ripgrep"
         curl -LO https://github.com/BurntSushi/ripgrep/releases/download/12.1.1/ripgrep_12.1.1_amd64.deb
-        sudo dpkg -i ripgrep_12.1.1_amd64.deb
+        $SUDO_CMD dpkg -i ripgrep_12.1.1_amd64.deb
         rm ripgrep_12.1.1_amd64.deb
         if [ $? -eq 0 ]
         then
@@ -119,7 +125,7 @@ install_tree() {
         log_success "Skipped tree"
     else
         log_info "Installing tree"
-        sudo apt-get install tree
+        $SUDO_CMD apt-get -y install tree
         if [ $? -eq 0 ]
         then
             log_success "Successfully installed tree"
@@ -138,7 +144,7 @@ install_tig() {
         log_success "Skipped tig"
     else
         log_info "Installing tig"
-        sudo apt-get install tig
+        $SUDO_CMD apt-get -y install tig
         if [ $? -eq 0 ]
         then
             log_success "Successfully installed tig"
@@ -165,7 +171,7 @@ install_exa() {
         then
             curl https://sh.rustup.rs -sSf | sh -s -- -y
         fi
-        sudo apt-get install -y build-essential
+        $SUDO_CMD apt-get install -y build-essential
         $HOME/.cargo/bin/cargo install exa
         cp $HOME/.cargo/bin/exa $HOME/.local/bin
 
