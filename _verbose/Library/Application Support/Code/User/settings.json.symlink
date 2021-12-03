@@ -415,6 +415,16 @@
         "--profile",
         "black"
     ],
-    "windowColors.🌈 BaseColor": "black",
     "C_Cpp.intelliSenseEngine": "Disabled",
+    "editor.codeLens": false,
+    "ccls.codeLens.enabled": false,
+    "ccls.highlight.type.face": [
+        "enabled"
+    ],
+    "ccls.highlight.namespace.colors": [
+        "#4EC9B0",
+    ],
+    "ccls.highlight.type.colors": [
+        "#4EC9B0"
+    ],
 }
