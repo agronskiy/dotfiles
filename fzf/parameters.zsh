@@ -74,21 +74,3 @@ _fzf_comprun() {
     *)            $(__fzfcmd) "$@" ;;
   esac
 }
-
-_fzf_complete_cat() {
-  _fzf_complete -- "$@" < <(
-    fd --type f --hidden --follow --no-ignore --exclude .git .
-  )
-}
-
-_fzf_complete_bat() {
-  _fzf_complete -- "$@" < <(
-    fd --type f --hidden --follow --no-ignore --exclude .git .
-  )
-}
-
-_fzf_complete_vim() {
-  _fzf_complete -- "$@" < <(
-    fd --type f --hidden --follow --no-ignore --exclude .git .
-  )
-}
