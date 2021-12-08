@@ -74,3 +74,13 @@ _fzf_comprun() {
     *)            $(__fzfcmd) "$@" ;;
   esac
 }
+
+# See `completion-utils.zsh`
+_fzf_complete_cat() {
+  __custom_fzf_file_path_completion "$prefix" "$1"
+}
+
+# See `completion-utils.zsh`
+_fzf_complete_bat() {
+  __custom_fzf_file_path_completion "$prefix" "$1"
+}
