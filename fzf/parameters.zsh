@@ -5,7 +5,7 @@ export FZF_DEFAULT_OPTS='--height 70% --reverse '\
 'page-down:preview-half-page-down'
 
 export FZF_TMUX=1
-export FZF_TMUX_OPTS="-p 75%,75%"
+export FZF_TMUX_OPTS="-p 80%,80%"
 
 #
 # FZF-Tab options
