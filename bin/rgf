@@ -5,9 +5,36 @@
 # 1. Search for text in files using Ripgrep
 # 2. Interactively restart Ripgrep with reload action
 #    * Press alt-enter to switch to fzf-only filtering
-# 3. Open the file in Vim
-RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case "
+# 3. Open the file in Vim or print path
+
+# -m : multiline ripgrep
+# -p : don't open editor, only print path
+while getopts mp opt; do
+  case $opt in
+    m) MULTILINE_OPT_ARG="SET"
+    ;;
+    p) PATH_OPT_ARG="SET"
+    ;;
+  esac
+done
+
+while :; do
+  if [ ! $# -eq 0 ] && [[ "$1" =~ ^\-.* ]] ; then
+    shift
+  else
+    break
+  fi
+done
+
+if [ ! -z ${MULTILINE_OPT_ARG+x} ] ; then
+  RG_PREFIX="rg --multiline --multiline-dotall "
+else
+  RG_PREFIX="rg "
+fi
+
+RG_PREFIX="$RG_PREFIX --column --line-number --no-heading --color=always --smart-case "
 INITIAL_QUERY="${*:-}"
+
 IFS=: read -ra selected < <(
   FZF_DEFAULT_COMMAND="$RG_PREFIX $(printf %q "$INITIAL_QUERY")" \
   fzf-tmux --ansi \
@@ -20,4 +47,9 @@ IFS=: read -ra selected < <(
       --preview 'bat --style=numbers,header --color=always {1} --highlight-line {2}' \
       --preview-window 'up,60%,border,+{2}+3/3,~3'
 )
-[ -n "${selected[0]}" ] && vim "${selected[0]}" "+${selected[1]}"
+
+if [ ! -z ${PATH_OPT_ARG+x} ] ; then
+  [ -n "${selected[0]}" ] && echo "${selected[0]}"
+else
+  [ -n "${selected[0]}" ] && vim "${selected[0]}" "+${selected[1]}"
+fi

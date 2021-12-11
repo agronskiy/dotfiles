@@ -66,6 +66,9 @@ export EXA_COLORS="xa=37:su=37:sf=37:ur=37:uw=37:ux=37:ue=37:gr=37:gw=37:gx=37:t
 # LESS pager
 export LESS="-F -R -X -i"
 
+# multiline ripgrep
+alias rgm="rg --multiline"
+
 # If one does not want to use `exa`
 # # Makes colors in CLI ls output
 # case `uname` in
