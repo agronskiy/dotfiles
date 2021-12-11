@@ -3,4 +3,8 @@
 --smart-case
 --no-ignore
 --follow
+# To disable, put `(?-m)` in the query.
+--multiline
+# To disable, put `(?-s)` in the query.
+--multiline-dotall
 --glob=!.git/*
