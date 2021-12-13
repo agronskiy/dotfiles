@@ -104,3 +104,24 @@ install_zsh_syntax_highlight() {
     fi
 }
 install_zsh_syntax_highlight
+
+# zsh_autosuggestions
+install_zsh_autosuggestions() {
+    if [ ! -d ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/zsh-autosuggestions ]
+    then
+        mkdir -p ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/
+        git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+        log_success "Cloned zsh-autosuggestions"
+    else
+        (
+            cd ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/zsh-autosuggestions
+            git pull &> /dev/null
+            if [ $? -eq 0 ]; then
+                log_success "Pulled zsh-autosuggestions"
+            else
+                log_fail "Error pulling zsh-autosuggestions"
+            fi
+        )
+    fi
+}
+install_zsh_autosuggestions

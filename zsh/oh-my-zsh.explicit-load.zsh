@@ -69,6 +69,7 @@ plugins=(
     zsh-completions
     conda-zsh-completion
     fzf-tab
+    zsh-autosuggestions
 )
 
 source $ZSH/oh-my-zsh.sh
