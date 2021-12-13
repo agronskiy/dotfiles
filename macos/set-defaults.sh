@@ -73,4 +73,63 @@ defaults write com.knollsoft.Rectangle snapEdgeMarginRight -int 40      # Snap m
 # Disables period on double-space.
 defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false
 
+# Disable Ctrl-left/right in the mission control
+# Trick to understand how this was done: https://apple.stackexchange.com/questions/344494/how-to-disable-default-mission-control-shortcuts-in-terminal/344504
+defaults -currentHost write com.apple.symbolichotkeys.plist AppleSymbolicHotKeys -dict-add 79 "
+  <dict>
+    <key>enabled</key><false/>
+    <key>value</key><dict>
+      <key>type</key><string>standard</string>
+      <key>parameters</key>
+      <array>
+        <integer>65535</integer>
+        <integer>123</integer>
+        <integer>8650752</integer>
+      </array>
+    </dict>
+  </dict>
+"
+defaults -currentHost write com.apple.symbolichotkeys.plist AppleSymbolicHotKeys -dict-add 80 "
+  <dict>
+    <key>enabled</key><false/>
+    <key>value</key><dict>
+      <key>type</key><string>standard</string>
+      <key>parameters</key>
+      <array>
+        <integer>65535</integer>
+        <integer>123</integer>
+        <integer>8781824</integer>
+      </array>
+    </dict>
+  </dict>
+"
+defaults -currentHost write com.apple.symbolichotkeys.plist AppleSymbolicHotKeys -dict-add 81 "
+  <dict>
+    <key>enabled</key><false/>
+    <key>value</key><dict>
+      <key>type</key><string>standard</string>
+      <key>parameters</key>
+      <array>
+        <integer>65535</integer>
+        <integer>124</integer>
+        <integer>8650752</integer>
+      </array>
+    </dict>
+  </dict>
+"
+defaults -currentHost write com.apple.symbolichotkeys.plist AppleSymbolicHotKeys -dict-add 82 "
+  <dict>
+    <key>enabled</key><false/>
+    <key>value</key><dict>
+      <key>type</key><string>standard</string>
+      <key>parameters</key>
+      <array>
+        <integer>65535</integer>
+        <integer>124</integer>
+        <integer>8781824</integer>
+      </array>
+    </dict>
+  </dict>
+"
+
 log_success "..Done setting macOS defaults."
