@@ -6,11 +6,13 @@ is_in_git_repo() {
 
 _git-files-fuzzy() {
   is_in_git_repo || return
+  delta_command='delta --color-only'
+  preview_command='git diff {-1} | '"$delta_command"
+  # some comment
   git -c color.status=always status --short |
   $(__fzfcmd) -m --ansi --nth 2..,.. \
-    --preview-window right:85% \
-    --preview 'git diff {-1} \
-    | delta --dark -n --file-decoration-style=none --hunk-header-style=omit --hunk-header-decoration-style=none' |
+    --preview-window wrap:right:70% \
+    --preview "$preview_command" |
   cut -c4- | sed 's/.* -> //'
 }
 alias gss=_git-files-fuzzy
