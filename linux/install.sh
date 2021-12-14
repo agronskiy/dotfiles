@@ -200,16 +200,9 @@ install_delta() {
         mkdir /tmp/delta-install
         cd /tmp/delta-install
 
-        if ! command -v rustc &> /dev/null
-        then
-            curl https://sh.rustup.rs -sSf | sh -s -- -y
-        fi
-        $SUDO_CMD apt-get install -y build-essential
-        $HOME/.cargo/bin/cargo install git-delta
-        cp $HOME/.cargo/bin/delta $HOME/.local/bin
-
-        cd ~
-        rm -rf /tmp/delta-install
+        curl -LO https://github.com/dandavison/delta/releases/download/0.11.2/git-delta_0.11.2_amd64.deb
+        $SUDO_CMD dpkg -i git-delta_0.11.2_amd64.deb
+        rm git-delta_0.11.2_amd64.deb
 
         if [ $? -eq 0 ]
         then
