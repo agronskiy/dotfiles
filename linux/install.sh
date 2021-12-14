@@ -187,3 +187,36 @@ install_exa() {
     fi
 }
 install_exa
+
+# delta
+install_delta() {
+    which delta &>/dev/null
+    if [ $? -eq 0 ]
+    then
+        log_success "Skipped delta"
+    else
+        log_info "Installing delta"
+
+        mkdir /tmp/delta-install
+        cd /tmp/delta-install
+
+        if ! command -v rustc &> /dev/null
+        then
+            curl https://sh.rustup.rs -sSf | sh -s -- -y
+        fi
+        $SUDO_CMD apt-get install -y build-essential
+        $HOME/.cargo/bin/cargo install git-delta
+        cp $HOME/.cargo/bin/delta $HOME/.local/bin
+
+        cd ~
+        rm -rf /tmp/delta-install
+
+        if [ $? -eq 0 ]
+        then
+            log_success "Successfully installed delta"
+        else
+            log_fail "Failed to install delta"
+        fi
+    fi
+}
+install_delta

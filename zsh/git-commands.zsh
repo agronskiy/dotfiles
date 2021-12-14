@@ -7,40 +7,46 @@ is_in_git_repo() {
 _git-files-fuzzy() {
   is_in_git_repo || return
   git -c color.status=always status --short |
-  fzf-tmux -m --ansi --nth 2..,.. \
-    --preview '(git diff --color=always -- {-1} | sed 1,4d; cat {-1})' |
+  $(__fzfcmd) -m --ansi --nth 2..,.. \
+    --preview-window right:85% \
+    --preview 'git diff {-1} \
+    | delta --dark -n --file-decoration-style=none --hunk-header-style=omit --hunk-header-decoration-style=none' |
   cut -c4- | sed 's/.* -> //'
 }
 alias gss=_git-files-fuzzy
 
 _git-checkout-local-branches-fuzzy() {
   is_in_git_repo || return
-  git branch --color=always | grep -v '/HEAD\s' | sort |
-  fzf-tmux --ansi --multi --tac --preview-window right:70% \
+  chosen_branch=$(git branch --color=always | grep -v '/HEAD\s' | sort |
+  $(__fzfcmd) --ansi --multi --tac --preview-window right:70% \
     --preview 'git log --graph --color=always --abbrev-commit --decorate \
 --format=format:\
 "%C(bold blue)%h%C(reset) - \
 %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset) %C(dim white)- %an%C(reset)%n\
           %C(white)%s%C(reset) " $(sed s/^..// <<< {} | cut -d" " -f1)' |
   sed 's/^..//' | cut -d' ' -f1 |
-  sed 's#^remotes/##' |
-  git checkout
-}
-alias gcol="_git-checkout-local-branches-fuzzy"
+  sed 's#^remotes/##')
 
+  if [ ! -z "$chosen_branch" ] ; then
+    curr_cmd="git checkout $chosen_branch"
+    print -z -- $curr_cmd
+  fi
+}
+alias gcol=_git-checkout-local-branches-fuzzy
 
 _git-tag-fuzzy() {
   is_in_git_repo || return
   git tag --sort -version:refname |
-  fzf-tmux --multi --preview-window right:70% \
+  $(__fzfcmd) --multi --preview-window right:70% \
     --preview 'git show --color=always {}'
 }
 
 _git-history-fuzzy() {
   is_in_git_repo || return
   git log --date=short --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --graph --color=always |
-  fzf-tmux --ansi --no-sort --reverse --multi --bind 'ctrl-s:toggle-sort' \
+  $(__fzfcmd) --ansi --no-sort --reverse --multi --bind 'ctrl-s:toggle-sort' \
     --header 'Press CTRL-S to toggle sort' \
+    --preview-window right:70% \
     --preview 'grep -o "[a-f0-9]\{7,\}" <<< {} | xargs git show --color=always' |
   grep -o "[a-f0-9]\{7,\}"
 }
@@ -48,6 +54,7 @@ alias gdiff="_git-history-fuzzy"
 
 _git-stash-fuzzy() {
   is_in_git_repo || return
-  git stash list | fzf-tmux --reverse -d: --preview 'git show --color=always {1}' |
+  git stash list | $(__fzfcmd) --reverse -d: --preview 'git show --color=always {1}' |
   cut -d: -f1
 }
+

@@ -178,3 +178,22 @@ install_exa() {
     fi
 }
 install_exa
+
+# delta
+install_delta() {
+    brew list git-delta &>/dev/null
+    if [ $? -eq 0 ]
+    then
+        log_success "Skipped delta"
+    else
+        log_info "Installing delta"
+        brew install git-delta
+        if [ $? -eq 0 ]
+        then
+            log_success "Successfully installed delta"
+        else
+            log_fail "Failed to install delta"
+        fi
+    fi
+}
+install_delta
