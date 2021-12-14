@@ -25,7 +25,7 @@ _git-checkout-local-branches-fuzzy() {
 %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset) %C(dim white)- %an%C(reset)%n\
           %C(white)%s%C(reset) " $(sed s/^..// <<< {} | cut -d" " -f1)' |
   sed 's/^..//' | cut -d' ' -f1 |
-  sed 's#^remotes/##')
+  sed 's#^remotes/##' | tr '\n' ' ' )
 
   if [ ! -z "$chosen_branch" ] ; then
     curr_cmd="git checkout $chosen_branch"
