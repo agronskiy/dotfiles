@@ -6,9 +6,10 @@ is_in_git_repo() {
 
 _git-files-fuzzy() {
   is_in_git_repo || return
-  delta_command='delta --color-only'
+  # some test
+  delta_command='delta --color-only --diff-so-fancy'
   preview_command='git diff {-1} | '"$delta_command"
-  # some comment
+  # some commffent
   git -c color.status=always status --short |
   $(__fzfcmd) -m --ansi --nth 2..,.. \
     --preview-window wrap:right:70% \
