@@ -6,11 +6,18 @@ is_in_git_repo() {
 
 _git-files-fuzzy() {
   is_in_git_repo || return
-  # some test
-  delta_command='delta --color-only --diff-so-fancy'
-  preview_command='git diff {-1} | '"$delta_command"
-  # some commffent
-  git -c color.status=always status --short |
+  if [ -z "$1" ]; then
+    commit_minus=""
+    commit_plus=""
+    status_command=(git -c color.status=always status --short )
+  else
+    commit_minus="$1"
+    commit_plus="$2"
+    status_command=(git -c color.status=always diff --name-status $commit_minus $commit_plus )
+  fi
+  delta_command='delta --diff-highlight '
+  preview_command="git diff $commit_minus $commit_plus "'{-1} | '"$delta_command"
+  ${status_command[@]} |
   $(__fzfcmd) -m --ansi --nth 2..,.. \
     --preview-window wrap:right:70% \
     --preview "$preview_command" |
@@ -51,7 +58,8 @@ _git-history-fuzzy() {
     --header 'Press CTRL-S to toggle sort' \
     --preview-window right:70% \
     --preview 'grep -o "[a-f0-9]\{7,\}" <<< {} | xargs git show --color=always' |
-  grep -o "[a-f0-9]\{7,\}"
+  grep -o "[a-f0-9]\{7,\}" |
+  tr '\n' ' '
 }
 alias gdiff="_git-history-fuzzy"
 
