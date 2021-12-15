@@ -10,20 +10,36 @@ _git-files-fuzzy() {
     commit_minus=""
     commit_plus=""
     status_command=(git -c color.status=always status --short )
+    filter_command=cat
   else
     commit_minus="$1"
-    commit_plus="$2"
-    status_command=(git -c color.status=always diff --name-status $commit_minus $commit_plus )
+    if [ -z "$2" ]; then
+      commit_plus="HEAD"
+    else
+      commit_plus="$2"
+    fi
+    status_command=(git diff --name-status $commit_minus $commit_plus )
+    filter_command=(tr '\t' ' ')
   fi
-  delta_command='delta --diff-highlight '
+  delta_command='delta --keep-plus-minus-markers \
+      --minus-style '\''red'\'' --minus-emph-style '\''red 52'\'' \
+      --zero-style '\''normal'\'' \
+      --plus-style '\''green'\'' --plus-emph-style '\''green 22'\'' \
+      --hunk-header-line-number-style '\''magenta underline'\'' \
+      --hunk-header-style '\''bold underline line-number syntax'\'' --hunk-header-decoration-style '\''omit'\'' \
+      --file-style '\''omit'\'' --file-decoration-style '\''omit'\'' \
+      --commit-style '\''bold yellow'\'' '
   preview_command="git diff $commit_minus $commit_plus "'{-1} | '"$delta_command"
-  ${status_command[@]} |
-  $(__fzfcmd) -m --ansi --nth 2..,.. \
+
+  ${status_command[@]} | $filter_command |
+  $(__fzfcmd) -m --ansi --nth 2.. \
     --preview-window wrap:right:70% \
     --preview "$preview_command" |
-  cut -c4- | sed 's/.* -> //'
+  awk '{print $2}' | sed 's/.* -> //'
+
 }
 alias gss=_git-files-fuzzy
+compdef _git _git-files-fuzzy=git-diff
 
 _git-checkout-local-branches-fuzzy() {
   is_in_git_repo || return
