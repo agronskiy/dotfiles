@@ -32,7 +32,7 @@ _git-files-fuzzy() {
   preview_command="git diff $commit_minus $commit_plus "'{-1} | '"$delta_command"
 
   ${status_command[@]} | $filter_command |
-  $(__fzfcmd) -m --ansi --nth 2.. \
+  fzf-tmux $FZF_TMUX_OPTS -m --ansi --nth 2.. \
     --preview-window wrap:right:70% \
     --preview "$preview_command" |
   awk '{print $2}' | sed 's/.* -> //'
@@ -44,7 +44,7 @@ compdef _git _git-files-fuzzy=git-diff
 _git-checkout-local-branches-fuzzy() {
   is_in_git_repo || return
   chosen_branch=$(git branch --color=always | grep -v '/HEAD\s' | sort |
-  $(__fzfcmd) --ansi --multi --tac --preview-window right:70% \
+  fzf-tmux $FZF_TMUX_OPTS --ansi --multi --tac --preview-window right:70% \
     --preview 'git log --graph --color=always --abbrev-commit --decorate \
 --format=format:\
 "%C(bold blue)%h%C(reset) - \
@@ -63,14 +63,14 @@ alias gcol=_git-checkout-local-branches-fuzzy
 _git-tag-fuzzy() {
   is_in_git_repo || return
   git tag --sort -version:refname |
-  $(__fzfcmd) --multi --preview-window right:70% \
+  fzf-tmux $FZF_TMUX_OPTS --multi --preview-window right:70% \
     --preview 'git show --color=always {}'
 }
 
 _git-history-fuzzy() {
   is_in_git_repo || return
   git log --date=short --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --graph --color=always |
-  $(__fzfcmd) --ansi --no-sort --reverse --multi --bind 'ctrl-s:toggle-sort' \
+  fzf-tmux $FZF_TMUX_OPTS --ansi --no-sort --reverse --multi --bind 'ctrl-s:toggle-sort' \
     --header 'Press CTRL-S to toggle sort' \
     --preview-window right:70% \
     --preview 'grep -o "[a-f0-9]\{7,\}" <<< {} | xargs git show --color=always' |
@@ -81,7 +81,7 @@ alias gdiff="_git-history-fuzzy"
 
 _git-stash-fuzzy() {
   is_in_git_repo || return
-  git stash list | $(__fzfcmd) --reverse -d: --preview 'git show --color=always {1}' |
+  git stash list | fzf-tmux $FZF_TMUX_OPTS --reverse -d: --preview 'git show --color=always {1}' |
   cut -d: -f1
 }
 
