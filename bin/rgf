@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
 # Two-phase filtering with Ripgrep and fzf
 #
@@ -8,12 +8,9 @@
 # 3. Open the file in Vim or print path
 
 # -m : multiline ripgrep
-# -p : don't open editor, only print path
-while getopts mp opt; do
+while getopts m opt; do
   case $opt in
     m) MULTILINE_OPT_ARG="SET"
-    ;;
-    p) PATH_OPT_ARG="SET"
     ;;
   esac
 done
@@ -35,7 +32,7 @@ fi
 RG_PREFIX="$RG_PREFIX --column --line-number --no-heading --color=always --smart-case "
 INITIAL_QUERY="${*:-}"
 
-IFS=: read -ra selected < <(
+output=$(
   FZF_DEFAULT_COMMAND="$RG_PREFIX $(printf %q "$INITIAL_QUERY")" \
   fzf-tmux $FZF_TMUX_OPTS --ansi \
       --color "hl:-1:underline,hl+:-1:underline:reverse" \
@@ -47,9 +44,7 @@ IFS=: read -ra selected < <(
       --preview 'bat --style=numbers,header --color=always {1} --highlight-line {2}' \
       --preview-window 'up,60%,border,+{2}+3/3,~3'
 )
+# output is `file_path:line:col:text_of_line`
+selected=(${(s/:/)output})
 
-if [ ! -z ${PATH_OPT_ARG+x} ] ; then
-  [ -n "${selected[0]}" ] && echo "${selected[0]}"
-else
-  [ -n "${selected[0]}" ] && vim "${selected[0]}" "+${selected[1]}"
-fi
+[ -n "${selected[1]}" ] && vim "${selected[1]}" "+${selected[2]}"
