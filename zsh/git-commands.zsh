@@ -4,14 +4,18 @@ is_in_git_repo() {
   git rev-parse HEAD > /dev/null 2>&1
 }
 
-export CURR_DELTA_COMMAND='delta --line-numbers \
-    --minus-style '\''red'\'' --minus-emph-style '\''red 52'\'' \
-    --zero-style '\''normal'\'' \
-    --plus-style '\''green'\'' --plus-emph-style '\''green 22'\'' \
-    --hunk-header-line-number-style '\''magenta'\'' \
-    --hunk-header-style '\''bold file line-number syntax'\'' --hunk-header-decoration-style '\''ul ol'\'' \
-    --file-style '\''omit'\'' --file-decoration-style '\''omit'\'' \
-    --commit-style '\''bold yellow'\'' '
+__delta() {
+    local cmd=(delta --line-numbers \
+        --minus-style red --minus-emph-style 'red 52' \
+        --zero-style normal \
+        --plus-style green --plus-emph-style 'green 22' \
+        --hunk-header-line-number-style magenta \
+        --hunk-header-style 'bold file line-number syntax' --hunk-header-decoration-style 'ul ol' \
+        --file-style omit --file-decoration-style omit \
+        --commit-style 'bold yellow' )
+    $cmd "$@"
+}
+alias delta=__delta 
 
 _git-files-fuzzy() {
   is_in_git_repo || return
@@ -31,7 +35,7 @@ _git-files-fuzzy() {
     filter_command=(tr '\t' ' ')
   fi
   delta_command=
-  preview_command="git diff $commit_minus $commit_plus "'{-1} | '"$CURR_DELTA_COMMAND"
+  preview_command="git diff $commit_minus $commit_plus "'{-1} | __delta '
 
 
   ${status_command[@]} |
@@ -82,7 +86,7 @@ _git-history-fuzzy() {
   fzf-tmux $FZF_TMUX_OPTS --ansi --no-sort --reverse --multi --bind 'ctrl-s:toggle-sort' \
     --header 'Press CTRL-S to toggle sort, CTRL-/ for diff preview ' \
     --preview-window hidden:wrap:right:80% \
-    --preview 'grep -o "[a-f0-9]\{7,\}" <<< {} | (xargs git show | '$CURR_DELTA_COMMAND') ' |
+    --preview 'grep -o "[a-f0-9]\{7,\}" <<< {} | (xargs git show | delta) ' |
   grep -o "[a-f0-9]\{7,\}" |
   tr '\n' ' '
 }
