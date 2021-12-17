@@ -69,6 +69,18 @@ export LESS="-F -R -X -i"
 # multiline ripgrep
 alias rgm="rg --multiline"
 
+# git-delta defaul options
+export DELTA_DEFAULT_OPTS=\
+"--minus-style red --minus-emph-style 'red 52' "\
+"--zero-style normal "\
+"--plus-style green --plus-emph-style 'green 22' "\
+"--hunk-header-line-number-style magenta "\
+"--hunk-header-style 'bold file line-number syntax' --hunk-header-decoration-style 'ul ol' "\
+"--file-style omit --file-decoration-style omit "\
+"--commit-style 'bold yellow' "
+
+alias delta="delta $DELTA_DEFAULT_OPTS "
+
 # If one does not want to use `exa`
 # # Makes colors in CLI ls output
 # case `uname` in

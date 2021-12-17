@@ -21,7 +21,7 @@ _git-files-fuzzy() {
     status_command=(git diff --name-status $commit_minus $commit_plus )
     filter_command=(tr '\t' ' ')
   fi
-  preview_command="git diff $commit_minus $commit_plus "'{-1} | ddiff '
+  preview_command="git diff $commit_minus $commit_plus "'{-1} | delta -n '"${DELTA_DEFAULT_OPTS:-}"
 
   ${status_command[@]} |
   $filter_command |
@@ -71,7 +71,7 @@ _git-history-fuzzy() {
   fzf-tmux $FZF_TMUX_OPTS --ansi --no-sort --reverse --multi --bind 'ctrl-s:toggle-sort' \
     --header 'Press CTRL-S to toggle sort, CTRL-/ for diff preview ' \
     --preview-window hidden:wrap:right:80% \
-    --preview 'grep -o "[a-f0-9]\{7,\}" <<< {} | (xargs git show | ddiff) ' |
+    --preview 'grep -o "[a-f0-9]\{7,\}" <<< {} | (xargs git show | delta -n '"${DELTA_DEFAULT_OPTS:-}"' ) ' |
   grep -o "[a-f0-9]\{7,\}" |
   tr '\n' ' '
 }
