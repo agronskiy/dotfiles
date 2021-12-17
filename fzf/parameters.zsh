@@ -1,6 +1,6 @@
 # FZF options
 export FZF_DEFAULT_OPTS='--height 70% --reverse '\
-'--bind=ctrl-/:toggle-preview,'\
+'--bind=f2:toggle-preview,'\
 'page-up:preview-half-page-up,'\
 'page-down:preview-half-page-down'
 

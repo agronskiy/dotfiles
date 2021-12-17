@@ -4,6 +4,15 @@ is_in_git_repo() {
   git rev-parse HEAD > /dev/null 2>&1
 }
 
+export CURR_DELTA_COMMAND='delta --line-numbers \
+    --minus-style '\''red'\'' --minus-emph-style '\''red 52'\'' \
+    --zero-style '\''normal'\'' \
+    --plus-style '\''green'\'' --plus-emph-style '\''green 22'\'' \
+    --hunk-header-line-number-style '\''magenta'\'' \
+    --hunk-header-style '\''bold file line-number syntax'\'' --hunk-header-decoration-style '\''ul ol'\'' \
+    --file-style '\''omit'\'' --file-decoration-style '\''omit'\'' \
+    --commit-style '\''bold yellow'\'' '
+
 _git-files-fuzzy() {
   is_in_git_repo || return
   if [ -z "$1" ]; then
@@ -21,19 +30,16 @@ _git-files-fuzzy() {
     status_command=(git diff --name-status $commit_minus $commit_plus )
     filter_command=(tr '\t' ' ')
   fi
-  delta_command='delta --keep-plus-minus-markers \
-      --minus-style '\''red'\'' --minus-emph-style '\''red 52'\'' \
-      --zero-style '\''normal'\'' \
-      --plus-style '\''green'\'' --plus-emph-style '\''green 22'\'' \
-      --hunk-header-line-number-style '\''magenta underline'\'' \
-      --hunk-header-style '\''bold underline line-number syntax'\'' --hunk-header-decoration-style '\''omit'\'' \
-      --file-style '\''omit'\'' --file-decoration-style '\''omit'\'' \
-      --commit-style '\''bold yellow'\'' '
-  preview_command="git diff $commit_minus $commit_plus "'{-1} | '"$delta_command"
+  delta_command=
+  preview_command="git diff $commit_minus $commit_plus "'{-1} | '"$CURR_DELTA_COMMAND"
 
-  ${status_command[@]} | $filter_command |
+
+  ${status_command[@]} |
+  $filter_command |
+    FZF_TMUX_OPTS="$FZF_TMUX_OPTS -p 95%,95%" \
+    FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --height 90%" \
   fzf-tmux $FZF_TMUX_OPTS -m --ansi --nth 2.. \
-    --preview-window wrap:right:70% \
+    --preview-window wrap:right:80% \
     --preview "$preview_command" |
   awk '{print $2}' | sed 's/.* -> //'
 
@@ -69,15 +75,18 @@ _git-tag-fuzzy() {
 
 _git-history-fuzzy() {
   is_in_git_repo || return
-  git log --date=short --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --graph --color=always |
+
+  glog --color=always |
+    FZF_TMUX_OPTS="$FZF_TMUX_OPTS -p 95%,95%" \
+    FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --height 90%" \
   fzf-tmux $FZF_TMUX_OPTS --ansi --no-sort --reverse --multi --bind 'ctrl-s:toggle-sort' \
-    --header 'Press CTRL-S to toggle sort' \
-    --preview-window right:70% \
-    --preview 'grep -o "[a-f0-9]\{7,\}" <<< {} | xargs git show --color=always' |
+    --header 'Press CTRL-S to toggle sort, CTRL-/ for diff preview ' \
+    --preview-window hidden:wrap:right:80% \
+    --preview 'grep -o "[a-f0-9]\{7,\}" <<< {} | (xargs git show | '$CURR_DELTA_COMMAND') ' |
   grep -o "[a-f0-9]\{7,\}" |
   tr '\n' ' '
 }
-alias gdiff="_git-history-fuzzy"
+alias glogg="_git-history-fuzzy"
 
 _git-stash-fuzzy() {
   is_in_git_repo || return

@@ -34,6 +34,8 @@ INITIAL_QUERY="${*:-}"
 
 output=$(
   FZF_DEFAULT_COMMAND="$RG_PREFIX $(printf %q "$INITIAL_QUERY")" \
+  FZF_TMUX_OPTS="$FZF_TMUX_OPTS -p 95%,95%" \
+  FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --height 90%" \
   fzf-tmux $FZF_TMUX_OPTS --ansi \
       --color "hl:-1:underline,hl+:-1:underline:reverse" \
       --disabled --query "$INITIAL_QUERY" \
