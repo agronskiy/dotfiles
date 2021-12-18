@@ -1,21 +1,14 @@
 #!/usr/bin/env bash
 
-source $DOTFILES/zsh/logging.explicit-load.zsh
-
-if [ "$(uname -s)" != "Darwin" ]; then
-    log_success "Skipped macos-specific stuff"
-    exit 0
-fi
-
 # Keeping you awake
 install_keepingyouawake() {
     brew list --cask keepingyouawake &>/dev/null
-    if [ $? -eq 0 ]
+    if [ ! $? -eq 0 ]
     then
         log_success "Skipped keepingyouawake"
     else
         log_info "Installing keepingyouawake"
-        brew install --cask keepingyouawake
+        brew install --cask keepingyouawake 2>&1 | log_cmd
         if [ $? -eq 0 ]
         then
             log_success "Successfully installed keepingyouawake"
@@ -34,7 +27,7 @@ install_fd() {
         log_success "Skipped fd"
     else
         log_info "Installing fd"
-        brew install fd
+        brew install fd 2>&1 | log_cmd
         if [ $? -eq 0 ]
         then
             log_success "Successfully installed fd"
@@ -53,7 +46,7 @@ install_htop() {
         log_success "Skipped htop"
     else
         log_info "Installing htop"
-        brew install htop
+        brew install htop 2>&1 | log_cmd
         if [ $? -eq 0 ]
         then
             log_success "Successfully installed htop"
@@ -73,7 +66,7 @@ install_bat() {
         log_success "Skipped bat"
     else
         log_info "Installing bat"
-        brew install bat
+        brew install bat 2>&1 | log_cmd
         if [ $? -eq 0 ]
         then
             log_success "Successfully installed bat"
@@ -92,7 +85,7 @@ install_ripgrep() {
         log_success "Skipped ripgrep"
     else
         log_info "Installing ripgrep"
-        brew install ripgrep
+        brew install ripgrep 2>&1 | log_cmd
         if [ $? -eq 0 ]
         then
             log_success "Successfully installed ripgrep"
@@ -111,7 +104,7 @@ install_coreutils() {
         log_success "Skipped coreutils"
     else
         log_info "Installing coreutils"
-        brew install coreutils
+        brew install coreutils 2>&1 | log_cmd
         if [ $? -eq 0 ]
         then
             log_success "Successfully installed coreutils"
@@ -130,7 +123,7 @@ install_tree() {
         log_success "Skipped tree"
     else
         log_info "Installing tree"
-        brew install tree
+        brew install tree 2>&1 | log_cmd
         if [ $? -eq 0 ]
         then
             log_success "Successfully installed tree"
@@ -149,7 +142,7 @@ install_tig() {
         log_success "Skipped tig"
     else
         log_info "Installing tig"
-        brew install tig
+        brew install tig 2>&1 | log_cmd
         if [ $? -eq 0 ]
         then
             log_success "Successfully installed tig"
@@ -168,7 +161,7 @@ install_exa() {
         log_success "Skipped exa"
     else
         log_info "Installing exa"
-        brew install exa
+        brew install exa 2>&1 | log_cmd
         if [ $? -eq 0 ]
         then
             log_success "Successfully installed exa"
@@ -187,7 +180,7 @@ install_delta() {
         log_success "Skipped delta"
     else
         log_info "Installing delta"
-        brew install git-delta
+        brew install git-delta 2>&1 | log_cmd
         if [ $? -eq 0 ]
         then
             log_success "Successfully installed delta"

@@ -9,13 +9,6 @@
 #
 # Run ./set-defaults.sh and you'll be good to go.
 
-source $DOTFILES/zsh/logging.explicit-load.zsh
-
-if [ "$(uname -s)" != "Darwin" ]; then
-    log_success "Skipped macos-specific stuff"
-    exit 0
-fi
-
 log_info "Setting macOS defaults..."
 
 # Disable press-and-hold for keys in favor of key repeat.

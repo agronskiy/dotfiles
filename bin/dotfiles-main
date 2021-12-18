@@ -10,22 +10,6 @@ else
   log_fail "Can't locate .dotfiles!"
 fi
 
-# Set macOS defaults
-case `uname` in
-    Darwin)
-        $DOTFILES/macos/set-defaults.sh
-    ;;
-esac
-
-
-# Install homebrew
-$DOTFILES/homebrew/install.explicit-load.sh 2>&1
-
-# Upgrade homebrew
-log_info "brew update"
-brew update
-log_success "brew updated"
-
 # Install software
 log_info "Running $DOTFILES/script/install"
 $DOTFILES/scripts/install

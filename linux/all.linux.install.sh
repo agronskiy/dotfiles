@@ -1,17 +1,5 @@
 #!/usr/bin/env bash
 
-source $DOTFILES/zsh/logging.explicit-load.zsh
-
-if ! [ "$(uname -s)" == "Linux" ]; then
-    log_success "Skipped linux-specific stuff"
-    exit 0
-fi
-
-if [ "$EUID" -ne 0 ]; then
-  SUDO_CMD=sudo
-else
-  SUDO_CMD=
-fi
 
 # Add here linux-specific installations
 
@@ -34,17 +22,19 @@ fi
 # }
 # install_TEMPLATE
 
+INDENT_NUM=$(( ${INDENT_NUM:-0}+2 ))
+
 install_fd() {
     which fdfind &>/dev/null
     if [ $? -eq 0 ]
     then
         # Have fd in the .local/bin directory
         mkdir -p "$HOME/.local/bin/"
-        ln -s --force $(which fdfind) "$HOME/.local/bin/fd"
+        ln -s --force $(which fdfind) "$HOME/.local/bin/fd" 2>&1 | log_cmd
         log_success "Skipped fd, relinked"
     else
         log_info "Installing fd"
-        $SUDO_CMD apt-get install fd-find
+        $SUDO_CMD apt-get install fd-find 2>&1 | log_cmd
         if [ $? -eq 0 ]
         then
             log_success "Successfully installed fd"
@@ -63,7 +53,7 @@ install_htop() {
         log_success "Skipped htop"
     else
         log_info "Installing htop"
-        $SUDO_CMD apt-get install htop
+        $SUDO_CMD apt-get install htop 2>&1 | log_cmd
         if [ $? -eq 0 ]
         then
             log_success "Successfully installed htop"
@@ -84,7 +74,7 @@ install_bat() {
         log_success "Skipped bat, relinked"
     else
         log_info "Installing bat"
-        $SUDO_CMD apt-get -y install bat
+        $SUDO_CMD apt-get -y install bat 2>&1 | log_cmd
         if [ $? -eq 0 ]
         then
             log_success "Successfully installed bat"
@@ -104,9 +94,11 @@ install_ripgrep() {
         log_success "Skipped ripgrep"
     else
         log_info "Installing ripgrep"
-        curl -LO https://github.com/BurntSushi/ripgrep/releases/download/12.1.1/ripgrep_12.1.1_amd64.deb
-        $SUDO_CMD dpkg -i ripgrep_12.1.1_amd64.deb
-        rm ripgrep_12.1.1_amd64.deb
+        (
+            curl -LO https://github.com/BurntSushi/ripgrep/releases/download/12.1.1/ripgrep_12.1.1_amd64.deb
+            $SUDO_CMD dpkg -i ripgrep_12.1.1_amd64.deb
+            rm ripgrep_12.1.1_amd64.deb
+        ) 2>&1 | log_cmd
         if [ $? -eq 0 ]
         then
             log_success "Successfully installed ripgrep"
@@ -125,7 +117,7 @@ install_tree() {
         log_success "Skipped tree"
     else
         log_info "Installing tree"
-        $SUDO_CMD apt-get -y install tree
+        $SUDO_CMD apt-get -y install tree 2>&1 | log_cmd
         if [ $? -eq 0 ]
         then
             log_success "Successfully installed tree"
@@ -144,7 +136,7 @@ install_tig() {
         log_success "Skipped tig"
     else
         log_info "Installing tig"
-        $SUDO_CMD apt-get -y install tig
+        $SUDO_CMD apt-get -y install tig 2>&1 | log_cmd
         if [ $? -eq 0 ]
         then
             log_success "Successfully installed tig"
@@ -163,21 +155,21 @@ install_exa() {
         log_success "Skipped exa"
     else
         log_info "Installing exa"
+        (
+            mkdir /tmp/exa-install
+            cd /tmp/exa-install
 
-        mkdir /tmp/exa-install
-        cd /tmp/exa-install
+            if ! command -v rustc &> /dev/null
+            then
+                curl https://sh.rustup.rs -sSf | sh -s -- -y
+            fi
+            $SUDO_CMD apt-get install -y build-essential
+            $HOME/.cargo/bin/cargo install exa
+            cp $HOME/.cargo/bin/exa $HOME/.local/bin
 
-        if ! command -v rustc &> /dev/null
-        then
-            curl https://sh.rustup.rs -sSf | sh -s -- -y
-        fi
-        $SUDO_CMD apt-get install -y build-essential
-        $HOME/.cargo/bin/cargo install exa
-        cp $HOME/.cargo/bin/exa $HOME/.local/bin
-
-        cd ~
-        rm -rf /tmp/exa-install
-
+            cd ~
+            rm -rf /tmp/exa-install
+        ) 2>&1 | log_cmd
         if [ $? -eq 0 ]
         then
             log_success "Successfully installed exa"
@@ -196,13 +188,14 @@ install_delta() {
         log_success "Skipped delta"
     else
         log_info "Installing delta"
+        (
+            mkdir /tmp/delta-install
+            cd /tmp/delta-install
 
-        mkdir /tmp/delta-install
-        cd /tmp/delta-install
-
-        curl -LO https://github.com/dandavison/delta/releases/download/0.11.2/git-delta_0.11.2_amd64.deb
-        $SUDO_CMD dpkg -i git-delta_0.11.2_amd64.deb
-        rm git-delta_0.11.2_amd64.deb
+            curl -LO https://github.com/dandavison/delta/releases/download/0.11.2/git-delta_0.11.2_amd64.deb
+            $SUDO_CMD dpkg -i git-delta_0.11.2_amd64.deb
+            rm git-delta_0.11.2_amd64.deb
+        ) 2>&1 | log_cmd
 
         if [ $? -eq 0 ]
         then

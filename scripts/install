@@ -1,10 +1,50 @@
 #!/usr/bin/env bash
 #
-# Run all dotfiles installers.
+# Run all dotfiles installers. This runs from bash.
 
-set -e
+set -eo pipefail
 
 cd "$(dirname $0)"/..
 
-# find the installers and run them iteratively
-find . -name *install.sh | while read installer ; do sh -c "${installer}" ; done
+source $DOTFILES/zsh/logging.explicit-load.zsh
+
+INDENT_NUM=2
+
+if [ "$EUID" -ne 0 ]; then
+  SUDO_CMD=sudo
+else
+  SUDO_CMD=
+fi
+
+# Priority install: everything that normal install needs.
+failed_installers=()
+install_order=( "install-base" "install" )
+for order in "${install_order[@]}"
+do
+    while read installer ; do
+        # Don't install `*.linux.install.sh` on non-linux
+        if [[ "${installer}" == *linux.${order}.sh ]] && [ "$(uname -s)" != "Linux" ]; then
+            log_success "Skipped linux-specific stuff in ${installer}"
+            continue
+        fi
+
+        # Don't install `*.macos.install.sh` on nion-mac
+        if [[ "${installer}" == *macos.${order}.sh ]] && [ "$(uname -s)" != "Darwin" ]; then
+            log_success "Skipped macos-specific stuff in ${installer}"
+            continue
+        fi
+
+        # Run as subshell to avoid polluting the environment, still keeping all functions
+        # accessible to the subshell.
+        (
+            source "${installer}"
+        ) || failed_installers+=( "${installer}" )
+
+    # The reasn for here string is modifying the `failed_installers` - we need while to be run
+    # not as a subshell
+    done <<<$(find . -type f -name "*${order}.sh")
+done
+
+if [ ! ${#failed_installers[@]} -eq 0 ]; then
+    log_fail "Some installers failed: ${failed_installers[@]}"
+fi
