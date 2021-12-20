@@ -3,7 +3,7 @@
 # Keeping you awake
 install_keepingyouawake() {
     brew list --cask keepingyouawake &>/dev/null
-    if [ ! $? -eq 0 ]
+    if [ $? -eq 0 ]
     then
         log_success "Skipped keepingyouawake"
     else

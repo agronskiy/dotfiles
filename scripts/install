@@ -42,7 +42,7 @@ do
 
     # The reasn for here string is modifying the `failed_installers` - we need while to be run
     # not as a subshell
-    done <<<$(find . -type f -name "*${order}.sh")
+    done <<< "$(find . -type f -name "*${order}.sh")"
 done
 
 if [ ! ${#failed_installers[@]} -eq 0 ]; then
