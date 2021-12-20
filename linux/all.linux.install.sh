@@ -22,8 +22,6 @@
 # }
 # install_TEMPLATE
 
-INDENT_NUM=$(( ${INDENT_NUM:-0}+2 ))
-
 install_fd() {
     which fdfind &>/dev/null
     if [ $? -eq 0 ]
