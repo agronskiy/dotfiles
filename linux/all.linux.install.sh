@@ -28,17 +28,14 @@ install_fd() {
     then
         # Have fd in the .local/bin directory
         mkdir -p "$HOME/.local/bin/"
-        ln -s --force $(which fdfind) "$HOME/.local/bin/fd" 2>&1 | log_cmd
+        ln -s --force $(which fdfind) "$HOME/.local/bin/fd" 2>&1 | log_cmd ||
+            log_fail "Failed to link fd"
         log_success "Skipped fd, relinked"
     else
         log_info "Installing fd"
-        $SUDO_CMD apt-get install fd-find 2>&1 | log_cmd
-        if [ $? -eq 0 ]
-        then
-            log_success "Successfully installed fd"
-        else
+        $SUDO_CMD apt-get install fd-find 2>&1 | log_cmd ||
             log_fail "Failed to install fd"
-        fi
+        log_success "Successfully installed fd"
     fi
 }
 install_fd
@@ -51,13 +48,9 @@ install_htop() {
         log_success "Skipped htop"
     else
         log_info "Installing htop"
-        $SUDO_CMD apt-get install htop 2>&1 | log_cmd
-        if [ $? -eq 0 ]
-        then
-            log_success "Successfully installed htop"
-        else
+        $SUDO_CMD apt-get install htop 2>&1 | log_cmd ||
             log_fail "Failed to install htop"
-        fi
+        log_success "Successfully installed htop"
     fi
 }
 install_htop
@@ -68,17 +61,14 @@ install_bat() {
     if [ $? -eq 0 ]
     then
         # Due to packaage clash they  have renamed bat to batcat, linking back
-        ln -s --force $(which batcat) "$HOME/.local/bin/bat"
+        ln -s --force $(which batcat) "$HOME/.local/bin/bat" ||
+            log_fail "Failed to relink bat"
         log_success "Skipped bat, relinked"
     else
         log_info "Installing bat"
-        $SUDO_CMD apt-get -y install bat 2>&1 | log_cmd
-        if [ $? -eq 0 ]
-        then
-            log_success "Successfully installed bat"
-        else
+        $SUDO_CMD apt-get -y install bat 2>&1 | log_cmd ||
             log_fail "Failed to install bat"
-        fi
+        log_success "Successfully installed bat"
     fi
 }
 install_bat
@@ -96,13 +86,8 @@ install_ripgrep() {
             curl -LO https://github.com/BurntSushi/ripgrep/releases/download/12.1.1/ripgrep_12.1.1_amd64.deb
             $SUDO_CMD dpkg -i ripgrep_12.1.1_amd64.deb
             rm ripgrep_12.1.1_amd64.deb
-        ) 2>&1 | log_cmd
-        if [ $? -eq 0 ]
-        then
-            log_success "Successfully installed ripgrep"
-        else
-            log_fail "Failed to install ripgrep"
-        fi
+        ) 2>&1 | log_cmd || log_fail "Failed to install ripgrep"
+        log_success "Successfully installed ripgrep"
     fi
 }
 install_ripgrep
@@ -115,13 +100,9 @@ install_tree() {
         log_success "Skipped tree"
     else
         log_info "Installing tree"
-        $SUDO_CMD apt-get -y install tree 2>&1 | log_cmd
-        if [ $? -eq 0 ]
-        then
-            log_success "Successfully installed tree"
-        else
+        $SUDO_CMD apt-get -y install tree 2>&1 | log_cmd ||
             log_fail "Failed to install tree"
-        fi
+        log_success "Successfully installed tree"
     fi
 }
 install_tree
@@ -134,13 +115,9 @@ install_tig() {
         log_success "Skipped tig"
     else
         log_info "Installing tig"
-        $SUDO_CMD apt-get -y install tig 2>&1 | log_cmd
-        if [ $? -eq 0 ]
-        then
-            log_success "Successfully installed tig"
-        else
+        $SUDO_CMD apt-get -y install tig 2>&1 | log_cmd ||
             log_fail "Failed to install tig"
-        fi
+        log_success "Successfully installed tig"
     fi
 }
 install_tig
@@ -167,13 +144,8 @@ install_exa() {
 
             cd ~
             rm -rf /tmp/exa-install
-        ) 2>&1 | log_cmd
-        if [ $? -eq 0 ]
-        then
-            log_success "Successfully installed exa"
-        else
-            log_fail "Failed to install exa"
-        fi
+        ) 2>&1 | log_cmd || log_fail "Failed to install exa"
+        log_success "Successfully installed exa"
     fi
 }
 install_exa
@@ -193,14 +165,23 @@ install_delta() {
             curl -LO https://github.com/dandavison/delta/releases/download/0.11.2/git-delta_0.11.2_amd64.deb
             $SUDO_CMD dpkg -i git-delta_0.11.2_amd64.deb
             rm git-delta_0.11.2_amd64.deb
-        ) 2>&1 | log_cmd
-
-        if [ $? -eq 0 ]
-        then
-            log_success "Successfully installed delta"
-        else
-            log_fail "Failed to install delta"
-        fi
+        ) 2>&1 | log_cmd || log_fail "Failed to install delta"
+        log_success "Successfully installed delta"
     fi
 }
 install_delta
+
+# jq
+install_jq() {
+    which jq &>/dev/null
+    if [ $? -eq 0 ]
+    then
+        log_success "Skipped jq"
+    else
+        log_info "Installing jq"
+        $SUDO_CMD apt-get -y install jq 2>&1 | log_cmd ||
+            log_fail "Failed to install jq"
+        log_success "Successfully installed jq"
+    fi
+}
+install_jq

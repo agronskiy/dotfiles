@@ -25,12 +25,12 @@ log_info () {
   if [ -z "$1" ]; then
       while IFS= read -r line
       do
-          printf "\r$indent[ \033[0;33mINFO\033[0m ] $line\n"
+          printf "\r$indent[ \033[0;33mINFO\033[0m ] %s\n" "$line"
       done
   else
       while IFS= read -r line
       do
-          printf "\r$indent[ \033[0;33mINFO\033[0m ] $line\n"
+          printf "\r$indent[ \033[0;33mINFO\033[0m ] %s\n" "$line"
       done < <(printf '%s\n' "$1")
   fi
 }
@@ -42,28 +42,28 @@ log_cmd () {
   if [ -z "$1" ]; then
       while IFS= read -r line
       do
-          printf "\r$indent[ \033[38;5;5mCMD\033[0m ] $line\n"
+          printf "\r$indent[ \033[38;5;5mCMD\033[0m ] %s\n" "$line"
       done
   else
       while IFS= read -r line
       do
-          printf "\r$indent[ \033[38;5;5mCMD\033[0m ] $line\n"
+          printf "\r$indent[ \033[38;5;5mCMD\033[0m ] %s\n" "$line"
       done < <(printf '%s\n' "$1")
   fi
 }
 
 log_user () {
   indent=$(__make_indent)
-  printf "\r$indent[ \033[0;33m??\033[0m   ] $1\n"
+  printf "\r$indent[ \033[0;33m??\033[0m   ] %s\n" "$1"
 }
 
 log_success () {
   indent=$(__make_indent)
-  printf "\r\033[2K$indent[  \033[00;32mOK\033[0m  ] $1\n"
+  printf "\r\033[2K$indent[  \033[00;32mOK\033[0m  ] %s\n" "$1"
 }
 
 log_fail () {
   indent=$(__make_indent)
-  printf "\r\033[2K$indent[ \033[0;31mFAIL\033[0m ] $1\n"
+  printf "\r\033[2K$indent[ \033[0;31mFAIL\033[0m ] %s\n" "$1"
   exit 1
 }

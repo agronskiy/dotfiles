@@ -1,58 +1,27 @@
 #!/usr/bin/env bash
 
-# Keeping you awake
-install_keepingyouawake() {
-    brew list --cask keepingyouawake &>/dev/null
-    if [ $? -eq 0 ]
-    then
-        log_success "Skipped keepingyouawake"
-    else
-        log_info "Installing keepingyouawake"
-        brew install --cask keepingyouawake 2>&1 | log_cmd
-        if [ $? -eq 0 ]
-        then
-            log_success "Successfully installed keepingyouawake"
-        else
-            log_fail "Failed to install keepingyouawake"
-        fi
-    fi
-}
-install_keepingyouawake
-
-# Keeping you awake
+# fd
 install_fd() {
-    brew list fd &>/dev/null
-    if [ $? -eq 0 ]
-    then
+   if brew list fd &>/dev/null; then
         log_success "Skipped fd"
     else
         log_info "Installing fd"
-        brew install fd 2>&1 | log_cmd
-        if [ $? -eq 0 ]
-        then
-            log_success "Successfully installed fd"
-        else
+        brew install fd 2>&1 | log_cmd ||
             log_fail "Failed to install fd"
-        fi
+        log_success "Successfully installed fd"
     fi
 }
 install_fd
 
 # htop
 install_htop() {
-    brew list htop &>/dev/null
-    if [ $? -eq 0 ]
-    then
+    if brew list htop &>/dev/null; then
         log_success "Skipped htop"
     else
         log_info "Installing htop"
-        brew install htop 2>&1 | log_cmd
-        if [ $? -eq 0 ]
-        then
-            log_success "Successfully installed htop"
-        else
+        brew install htop 2>&1 | log_cmd ||
             log_fail "Failed to install htop"
-        fi
+        log_success "Successfully installed htop"
     fi
 }
 install_htop
@@ -60,133 +29,104 @@ install_htop
 
 # bat
 install_bat() {
-    brew list bat &>/dev/null
-    if [ $? -eq 0 ]
-    then
+    if brew list bat &>/dev/null; then
         log_success "Skipped bat"
     else
         log_info "Installing bat"
-        brew install bat 2>&1 | log_cmd
-        if [ $? -eq 0 ]
-        then
-            log_success "Successfully installed bat"
-        else
+        brew install bat 2>&1 | log_cmd ||
             log_fail "Failed to install bat"
-        fi
+        log_success "Successfully installed bat"
     fi
 }
 install_bat
 
 # ripgrep
 install_ripgrep() {
-    brew list ripgrep &>/dev/null
-    if [ $? -eq 0 ]
-    then
+    if brew list ripgrep &>/dev/null; then
         log_success "Skipped ripgrep"
     else
         log_info "Installing ripgrep"
-        brew install ripgrep 2>&1 | log_cmd
-        if [ $? -eq 0 ]
-        then
-            log_success "Successfully installed ripgrep"
-        else
+        brew install ripgrep 2>&1 | log_cmd ||
             log_fail "Failed to install ripgrep"
-        fi
+        log_success "Successfully installed ripgrep"
     fi
 }
 install_ripgrep
 
 # coreutils
 install_coreutils() {
-    brew list coreutils &>/dev/null
-    if [ $? -eq 0 ]
-    then
+    if brew list coreutils &>/dev/null; then
         log_success "Skipped coreutils"
     else
         log_info "Installing coreutils"
-        brew install coreutils 2>&1 | log_cmd
-        if [ $? -eq 0 ]
-        then
-            log_success "Successfully installed coreutils"
-        else
+        brew install coreutils 2>&1 | log_cmd ||
             log_fail "Failed to install coreutils"
-        fi
+        log_success "Successfully installed coreutils"fi
     fi
 }
 install_coreutils
 
 # tree
 install_tree() {
-    brew list tree &>/dev/null
-    if [ $? -eq 0 ]
-    then
+    if brew list tree &>/dev/null; then
         log_success "Skipped tree"
     else
         log_info "Installing tree"
-        brew install tree 2>&1 | log_cmd
-        if [ $? -eq 0 ]
-        then
-            log_success "Successfully installed tree"
-        else
+        brew install tree 2>&1 | log_cmd ||
             log_fail "Failed to install tree"
-        fi
+        log_success "Successfully installed tree"
     fi
 }
 install_tree
 
 # tig
 install_tig() {
-    brew list tig &>/dev/null
-    if [ $? -eq 0 ]
-    then
+    if brew list tig &>/dev/null; then
         log_success "Skipped tig"
     else
         log_info "Installing tig"
-        brew install tig 2>&1 | log_cmd
-        if [ $? -eq 0 ]
-        then
-            log_success "Successfully installed tig"
-        else
+        brew install tig 2>&1 | log_cmd ||
             log_fail "Failed to install tig"
-        fi
+        log_success "Successfully installed tig"
     fi
 }
 install_tig
 
 # exa
 install_exa() {
-    brew list exa &>/dev/null
-    if [ $? -eq 0 ]
-    then
+   if brew list exa &>/dev/null; then
         log_success "Skipped exa"
     else
         log_info "Installing exa"
-        brew install exa 2>&1 | log_cmd
-        if [ $? -eq 0 ]
-        then
-            log_success "Successfully installed exa"
-        else
+        brew install exa 2>&1 | log_cmd ||
             log_fail "Failed to install exa"
-        fi
+        log_success "Successfully installed exa"
     fi
 }
 install_exa
 
 # delta
 install_delta() {
-    brew list git-delta &>/dev/null
-    if [ $? -eq 0 ]
-    then
+    if brew list git-delta &>/dev/null; then
         log_success "Skipped delta"
     else
         log_info "Installing delta"
-        brew install git-delta 2>&1 | log_cmd
-        if [ $? -eq 0 ]
-        then
-            log_success "Successfully installed delta"
-        else
+        brew install git-delta 2>&1 | log_cmd ||
             log_fail "Failed to install delta"
-        fi
+        log_success "Successfully installed delta"
     fi
 }
 install_delta
+
+# jq
+install_jq() {
+    if brew list jq &>/dev/null; then
+        log_success "Skipped jq"
+    else
+        log_info "Installing jq"
+        brew install jq 2>&1 | log_cmd ||
+            log_fail "Failed to install jq"
+        log_success "Successfully installed jq"
+    fi
+}
+install_jq
