@@ -1,6 +1,6 @@
 # My dotfiles and configs
 
-<a href="https://asciinema.org/a/2fPuaxRFuRH7MekwV8vKFKQDF" target="_blank"><img src="https://asciinema.org/a/2fPuaxRFuRH7MekwV8vKFKQDF.svg" width="90%" /></a>
+<img src="https://user-images.githubusercontent.com/9802715/146839432-fc9d8eee-a2bd-469e-b53e-52bcd5133617.gif" width="90%">
 
 <img src="assets/overall.png" width="90%">
 
