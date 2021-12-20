@@ -1,9 +1,10 @@
 # My dotfiles and configs
 
+<a href="https://asciinema.org/a/2fPuaxRFuRH7MekwV8vKFKQDF" target="_blank"><img src="https://asciinema.org/a/2fPuaxRFuRH7MekwV8vKFKQDF.svg" width="90%" /></a>
+
 <img src="assets/overall.png" width="90%">
 
 Some bits and pieces of the bashrc used here and there across my machines, e.g. for prompt and commands.
-Heavily adjusted version by @holman, inspiration from @AndreiBarsan and @samoshkin
 
 # Features
 
@@ -24,40 +25,25 @@ Local and remote, with local no receiving `prefix`:
 
 # Installation
 
-## Linking dotfiles:
+## Pre-requisites:
+- you run zsh
+- you have installed oh-my-zsh and restarted the terminal so that environment is picked up:
+```bash
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+```
+
+## Linking dotfiles and installing all the tools:
 
 ```bash
 ./scripts/bootstrap
 ```
 
-## Installing software and plugins:
+This would 99% smoothly install everything in a "Darwin" <-> "Ubuntu" cross-platform manner.
 
-Before you go, make sure you install zsh and oh-my-zsh (sections below), and restart terminal.
-
-**This is WIP**: currently all be should run by
-```bash
-./scripts/install
-```
-
-This would 90% smoothly install everything in a "Darwin" <-> "Ubuntu" cross-platform manner.
-
-### zsh plugins
-
-```
-# Install oh-my-zsh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-```
-
-### fzf
-
-Installs via `./scripts/install`
-
-## tmux
-
-Installs via `./scripts/install`
+## tmux notes
 
 Make sure that after installing tmux, you restart terminal and run it with `Prefix + Shift-I` to install 
-its own pluging.
+its own plugins.
 
 
 ## Trivia
@@ -79,3 +65,6 @@ In the homebrew case that can be the violating path:
 ```
 
 Need to delete that one and, assuming `oh-my-zsh` is installed, one gets the right one.
+
+# Acknowledgements
+This started as a heavily adjusted version by @holman, inspiration from @AndreiBarsan and @samoshkin. 
