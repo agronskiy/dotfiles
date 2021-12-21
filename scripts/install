@@ -7,6 +7,7 @@ set -eo pipefail
 cd "$(dirname $0)"/..
 
 source $DOTFILES/zsh/logging.explicit-load.zsh
+source $DOTFILES/zsh/install-utils.explicit-load.zsh
 
 INDENT_NUM=2
 
