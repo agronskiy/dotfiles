@@ -74,15 +74,13 @@ install_wrapper "exa" __install_exa
 
 # delta
 __install_delta() {
-    (
-        mkdir /tmp/delta-install
-        cd /tmp/delta-install
+    mkdir /tmp/delta-install
+    cd /tmp/delta-install
 
-        curl -LO https://github.com/dandavison/delta/releases/download/0.11.2/git-delta_0.11.2_amd64.deb
-        $SUDO_CMD dpkg -i git-delta_0.11.2_amd64.deb
-        cd ~
-        rm -rf /tmp/delta-install
-    )
+    curl -LO https://github.com/dandavison/delta/releases/download/0.11.2/git-delta_0.11.2_amd64.deb
+    $SUDO_CMD dpkg -i git-delta_0.11.2_amd64.deb
+    cd ~
+    rm -rf /tmp/delta-install
 }
 install_wrapper "delta" __install_delta
 
@@ -91,3 +89,19 @@ __install_jq() {
     $SUDO_CMD apt-get -y install jq
 }
 install_wrapper "jq" __install_jq
+
+# tmux
+__install_tmux() {
+    $SUDO_CMD apt-get -y install autoconf automake pkg-config libevent-dev bison byacc
+    mkdir /tmp/tmux-install
+    ( 
+        cd /tmp/tmux-install
+        git clone https://github.com/tmux/tmux.git && \
+            cd tmux && \
+            sh autogen.sh && \
+            ./configure && make
+    ) || return 1
+    rm -rf /tmp/tmux-install
+}
+install_wrapper "tmux" __install_tmux
+
