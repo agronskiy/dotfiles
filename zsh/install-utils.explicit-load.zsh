@@ -10,7 +10,7 @@ install_wrapper() {
   else
     $3 && exists=true || exists=false
   fi
-  echo $exists
+
   if "$exists"; then
     [ -z $4 ] && existing_cmd="" || existing_cmd=$4
     $existing_cmd 2>&1 | log_cmd || log_fail "Failed to perform existing case for $1"
