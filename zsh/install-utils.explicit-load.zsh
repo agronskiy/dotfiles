@@ -5,9 +5,14 @@ install_wrapper() {
   # $2 function name which does installation
   # $3 [optional, pass "" for default] command that checks when tool exists
   # $4 [optional, pass "" for default] command executed if tool exists
-  [ -z $3 ] && checker="[ -x "$(command -v $1)" ]" || checker=$3
-  [ -z $4 ] && existing_cmd="" || existing_cmd=$4
-  if $checker; then
+  if [ -z $3 ]; then
+    [ -x "$(command -v $1)" ] && exists=true || exists=false
+  else
+    $3 && exists=true || exists=false
+  fi
+  echo $exists
+  if "$exists"; then
+    [ -z $4 ] && existing_cmd="" || existing_cmd=$4
     $existing_cmd 2>&1 | log_cmd || log_fail "Failed to perform existing case for $1"
     log_success "Skipped $1 (already installed)"
   else
