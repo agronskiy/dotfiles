@@ -26,7 +26,7 @@ __install_ripgrep() {
 __check_ripgrep() {
     brew list ripgrep &>/dev/null
 }
-install_wrapper_with_checker "ripgrep" __install_ripgrep __check_ripgrep
+install_wrapper "ripgrep" __install_ripgrep __check_ripgrep
 
 # coreutils
 __install_coreutils() {
@@ -35,7 +35,7 @@ __install_coreutils() {
 __check_coreutils() {
     brew list coreutils &>/dev/null
 }
-install_wrapper_with_checker "coreutils" __install_coreutils __check_coreutils
+install_wrapper "coreutils" __install_coreutils __check_coreutils
 
 # tree
 __install_tree() {

@@ -1,187 +1,93 @@
-#!/usr/bin/env bash
-
-
-# Add here linux-specific installations
-
-# # TEMPLATE
-# install_TEMPLATE() {
-#     brew list --cask TEMPLATE &>/dev/null
-#     if [ $? -eq 0 ]
-#     then
-#         log_success "Skipped TEMPLATE"
-#     else
-#         log_info "Installing TEMPLATE"
-#         brew install --cask TEMPLATE
-#         if [ $? -eq 0 ]
-#         then
-#             log_success "Successfully installed TEMPLATE"
-#         else
-#             log_fail "Failed to install TEMPLATE"
-#         fi
-#     fi
-# }
-# install_TEMPLATE
-
-install_fd() {
-    which fdfind &>/dev/null
-    if [ $? -eq 0 ]
-    then
-        # Have fd in the .local/bin directory
-        mkdir -p "$HOME/.local/bin/"
-        ln -s --force $(which fdfind) "$HOME/.local/bin/fd" 2>&1 | log_cmd ||
-            log_fail "Failed to link fd"
-        log_success "Skipped fd, relinked"
-    else
-        log_info "Installing fd"
-        $SUDO_CMD apt-get install fd-find 2>&1 | log_cmd ||
-            log_fail "Failed to install fd"
-        log_success "Successfully installed fd"
-    fi
+# fd
+__install_fd() {
+    $SUDO_CMD apt-get -y install fd-find
 }
-install_fd
+__check_fd() {
+   [ -x "$(command -v fdfind)" ]
+}
+__if_exists_fd(){
+    ln -s --force $(which fdfind) "$HOME/.local/bin/fd"
+}
+install_wrapper "fd" __install_fd __check_fd __if_exists_fd
 
 # htop
-install_htop() {
-    which htop &>/dev/null
-    if [ $? -eq 0 ]
-    then
-        log_success "Skipped htop"
-    else
-        log_info "Installing htop"
-        $SUDO_CMD apt-get install htop 2>&1 | log_cmd ||
-            log_fail "Failed to install htop"
-        log_success "Successfully installed htop"
-    fi
+__install_htop() {
+   $SUDO_CMD apt-get -y install htop
 }
-install_htop
+install_wrapper "htop" __install_htop
 
 # bat
-install_bat() {
-    which batcat &>/dev/null
-    if [ $? -eq 0 ]
-    then
-        # Due to packaage clash they  have renamed bat to batcat, linking back
-        ln -s --force $(which batcat) "$HOME/.local/bin/bat" ||
-            log_fail "Failed to relink bat"
-        log_success "Skipped bat, relinked"
-    else
-        log_info "Installing bat"
-        $SUDO_CMD apt-get -y install bat 2>&1 | log_cmd ||
-            log_fail "Failed to install bat"
-        log_success "Successfully installed bat"
-    fi
+__install_batcat() {
+    $SUDO_CMD apt-get -y install bat
 }
-install_bat
+__check_batcat() {
+    [ -x "$(command -v batcat)" ]
+}
+__if_exists_batcat() {
+   ln -s --force $(which batcat) "$HOME/.local/bin/bat"
+}
+install_wrapper "bat" __install_batcat __check_batcat __if_exists_batcat
 
 
 # ripgrep
-install_ripgrep() {
-    which rg &>/dev/null
-    if [ $? -eq 0 ]
-    then
-        log_success "Skipped ripgrep"
-    else
-        log_info "Installing ripgrep"
-        (
-            curl -LO https://github.com/BurntSushi/ripgrep/releases/download/12.1.1/ripgrep_12.1.1_amd64.deb
-            $SUDO_CMD dpkg -i ripgrep_12.1.1_amd64.deb
-            rm ripgrep_12.1.1_amd64.deb
-        ) 2>&1 | log_cmd || log_fail "Failed to install ripgrep"
-        log_success "Successfully installed ripgrep"
-    fi
+__install_ripgrep() {
+    curl -LO https://github.com/BurntSushi/ripgrep/releases/download/12.1.1/ripgrep_12.1.1_amd64.deb
+    $SUDO_CMD dpkg -i ripgrep_12.1.1_amd64.deb
+    rm ripgrep_12.1.1_amd64.deb
 }
-install_ripgrep
+__check_ripgrep() {
+    [ -x "$(command -v rg)" ]
+}
+install_wrapper "ripgrep" __install_ripgrep __check_ripgrep
 
 # tree
-install_tree() {
-    which tree &>/dev/null
-    if [ $? -eq 0 ]
-    then
-        log_success "Skipped tree"
-    else
-        log_info "Installing tree"
-        $SUDO_CMD apt-get -y install tree 2>&1 | log_cmd ||
-            log_fail "Failed to install tree"
-        log_success "Successfully installed tree"
-    fi
+__install_tree() {
+   $SUDO_CMD apt-get -y install tree
 }
-install_tree
+install_wrapper "tree" __install_tree
 
 # tig
-install_tig() {
-    which tig &>/dev/null
-    if [ $? -eq 0 ]
-    then
-        log_success "Skipped tig"
-    else
-        log_info "Installing tig"
-        $SUDO_CMD apt-get -y install tig 2>&1 | log_cmd ||
-            log_fail "Failed to install tig"
-        log_success "Successfully installed tig"
-    fi
+__install_tig() {
+   $SUDO_CMD apt-get -y install tig
 }
-install_tig
+install_wrapper "tig" __install_tig
 
 # exa
-install_exa() {
-    which exa &>/dev/null
-    if [ $? -eq 0 ]
-    then
-        log_success "Skipped exa"
-    else
-        log_info "Installing exa"
-        (
-            mkdir /tmp/exa-install
-            cd /tmp/exa-install
+__install_exa() {
+    mkdir /tmp/exa-install
+    (
+        cd /tmp/exa-install
 
-            if ! command -v rustc &> /dev/null
-            then
-                curl https://sh.rustup.rs -sSf | sh -s -- -y
-            fi
-            $SUDO_CMD apt-get install -y build-essential
-            $HOME/.cargo/bin/cargo install exa
-            cp $HOME/.cargo/bin/exa $HOME/.local/bin
+        if ! command -v rustc &> /dev/null
+        then
+            curl https://sh.rustup.rs -sSf | sh -s -- -y
+        fi
+        $SUDO_CMD apt-get install -y build-essential
+        $HOME/.cargo/bin/cargo install exa
+        cp $HOME/.cargo/bin/exa $HOME/.local/bin
 
-            cd ~
-            rm -rf /tmp/exa-install
-        ) 2>&1 | log_cmd || log_fail "Failed to install exa"
-        log_success "Successfully installed exa"
-    fi
+        cd ~
+        rm -rf /tmp/exa-install
+    )
 }
-install_exa
+install_wrapper "exa" __install_exa
 
 # delta
-install_delta() {
-    which delta &>/dev/null
-    if [ $? -eq 0 ]
-    then
-        log_success "Skipped delta"
-    else
-        log_info "Installing delta"
-        (
-            mkdir /tmp/delta-install
-            cd /tmp/delta-install
+__install_delta() {
+    (
+        mkdir /tmp/delta-install
+        cd /tmp/delta-install
 
-            curl -LO https://github.com/dandavison/delta/releases/download/0.11.2/git-delta_0.11.2_amd64.deb
-            $SUDO_CMD dpkg -i git-delta_0.11.2_amd64.deb
-            rm git-delta_0.11.2_amd64.deb
-        ) 2>&1 | log_cmd || log_fail "Failed to install delta"
-        log_success "Successfully installed delta"
-    fi
+        curl -LO https://github.com/dandavison/delta/releases/download/0.11.2/git-delta_0.11.2_amd64.deb
+        $SUDO_CMD dpkg -i git-delta_0.11.2_amd64.deb
+        cd ~
+        rm -rf /tmp/delta-install
+    )
 }
-install_delta
+install_wrapper "delta" __install_delta
 
 # jq
-install_jq() {
-    which jq &>/dev/null
-    if [ $? -eq 0 ]
-    then
-        log_success "Skipped jq"
-    else
-        log_info "Installing jq"
-        $SUDO_CMD apt-get -y install jq 2>&1 | log_cmd ||
-            log_fail "Failed to install jq"
-        log_success "Successfully installed jq"
-    fi
+__install_jq() {
+    $SUDO_CMD apt-get -y install jq
 }
-install_jq
+install_wrapper "jq" __install_jq

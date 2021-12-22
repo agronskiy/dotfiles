@@ -1,6 +1,3 @@
-#!/usr/bin/env bash
-#
-# Basic installs
 
 if ! [ -x "$(command -v curl)" ]
 then
@@ -29,4 +26,3 @@ then
 else
     log_success "Skipped brew"
 fi
-
