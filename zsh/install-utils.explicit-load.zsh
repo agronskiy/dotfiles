@@ -18,6 +18,12 @@ install_wrapper() {
   else
     log_info "Installing $1"
     $2 2>&1 | log_cmd || log_fail "Failed to install $1"
+    # If the installer was not written cleverly, it still might fail silently.
+    if [ -z $3 ]; then
+      [ -x "$(command -v $1)" ] || log_fail "Failed to install $1"
+    else
+      $3 || log_fail "Failed to install $1"
+    fi
     log_success "Successfully installed $1"
   fi
 }

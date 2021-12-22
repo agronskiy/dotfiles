@@ -32,8 +32,8 @@ install_wrapper "bat" __install_batcat __check_batcat __if_exists_batcat
 # ripgrep
 __install_ripgrep() {
     curl -LO https://github.com/BurntSushi/ripgrep/releases/download/12.1.1/ripgrep_12.1.1_amd64.deb
-    $SUDO_CMD dpkg -i ripgrep_12.1.1_amd64.deb
-    rm ripgrep_12.1.1_amd64.deb
+    $SUDO_CMD dpkg -i ripgrep_12.1.1_amd64.deb \
+    && rm ripgrep_12.1.1_amd64.deb
 }
 __check_ripgrep() {
     [ -x "$(command -v rg)" ]
@@ -62,24 +62,22 @@ __install_exa() {
         then
             curl https://sh.rustup.rs -sSf | sh -s -- -y
         fi
-        $SUDO_CMD apt-get install -y build-essential
-        $HOME/.cargo/bin/cargo install exa
-        cp $HOME/.cargo/bin/exa $HOME/.local/bin
-
-        cd ~
-        rm -rf /tmp/exa-install
-    )
+        $SUDO_CMD apt-get install -y build-essential \
+        && $HOME/.cargo/bin/cargo install exa \
+        && cp $HOME/.cargo/bin/exa $HOME/.local/bin
+    ) \
+    && rm -rf /tmp/exa-install
 }
 install_wrapper "exa" __install_exa
 
 # delta
 __install_delta() {
     mkdir /tmp/delta-install
-    cd /tmp/delta-install
-
-    curl -LO https://github.com/dandavison/delta/releases/download/0.11.2/git-delta_0.11.2_amd64.deb
-    $SUDO_CMD dpkg -i git-delta_0.11.2_amd64.deb
-    cd ~
+    (
+        cd /tmp/delta-install
+        curl -LO https://github.com/dandavison/delta/releases/download/0.11.2/git-delta_0.11.2_amd64.deb \
+        && $SUDO_CMD dpkg -i git-delta_0.11.2_amd64.deb
+    )
     rm -rf /tmp/delta-install
 }
 install_wrapper "delta" __install_delta
@@ -92,16 +90,16 @@ install_wrapper "jq" __install_jq
 
 # tmux
 __install_tmux() {
-    $SUDO_CMD apt-get -y install autoconf automake pkg-config libevent-dev bison byacc
     mkdir /tmp/tmux-install
-    ( 
+    (
         cd /tmp/tmux-install
-        git clone https://github.com/tmux/tmux.git && \
-            cd tmux && \
-            sh autogen.sh && \
-            ./configure && make
-    ) || return 1
-    rm -rf /tmp/tmux-install
+        $SUDO_CMD apt-get -y install autoconf automake pkg-config libevent-dev bison byacc \
+        && git clone https://github.com/tmux/tmux.git \
+        && cd tmux \
+        && sh autogen.sh \
+        && ./configure && make
+    ) \
+    && rm -rf /tmp/tmux-install
 }
 install_wrapper "tmux" __install_tmux
 
