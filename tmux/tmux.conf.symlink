@@ -32,7 +32,7 @@ set -g @continuum-restore 'on'
 set -g @continuum-save-interval '5'
 
 # Renew environment, creadit of github.com/samoshkin
-# We do not update SSH_AUTH_SOCK because we handle it ourselves, see aliases.pre-load.zsh 
+# We do not update SSH_AUTH_SOCK because we handle it ourselves, see aliases.pre-load.zsh
 set -g update-environment \
   "DISPLAY\
   SSH_ASKPASS\
@@ -73,7 +73,7 @@ unbind p
 bind -r C-h previous-window # select previous window
 bind -r C-l next-window     # select next window
 
-# Pane navigation 
+# Pane navigation
 unbind o
 bind -r o select-pane -t :.+  # Just redefined o to allow cycling
 
@@ -118,7 +118,7 @@ set-window-option -g pane-active-border-style fg=colour172,bg=colour233
 
 # Quick switch to window using fzf:
 unbind f
-bind -r f run-shell -b "tmux list-windows -aF \"##S:##I:##W \t##{pane_current_path}\" | fzf-tmux | cut -d \":\" -f 1,2 | xargs -r tmux switch -t "
+bind -r f run-shell -b "tmux list-windows -aF \"##S:##I:##W \t##{pane_current_path}\" | fzf-tmux -p 80%,80% -- -d '[: ]' --nth 1,3 | cut -d \":\" -f 1,2 | xargs -r tmux switch -t "
 
 # Use r to quickly reload tmux settings
 unbind r
