@@ -1,4 +1,6 @@
-source $DOTFILES/zsh/logging.explicit-load.zsh
+# Installation utilities.
+
+source $YASNO_DIR/logging.inc.sh
 
 install_wrapper() {
   # $1 command name

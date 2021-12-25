@@ -1,20 +1,14 @@
 #!/usr/bin/env bash
 #
-# bootstrap installs things.
-
-# NOTE(agronskiy): mostly copy-paster from @andreibarsan/dotfiles
+# Run all dotfiles linking. This runs from bash.
 
 set -eo pipefail
 
-cd "$(dirname "$0")/.."
-DOTFILES=$(pwd -P)
+cd "$(dirname $0)"/..
 
-echo
+source $YASNO_DIR/logging.inc.sh
 
-# This just contains logging functions
-source $DOTFILES/zsh/logging.explicit-load.zsh
-
-link_file () {
+__link_single_file () {
   local src=$1 dst=$2
 
   local overwrite= backup= skip=
@@ -87,8 +81,8 @@ link_file () {
   fi
 }
 
-install_dotfiles () {
-    log_info 'installing dotfiles'
+__link_all_dotfiles () {
+    log_info 'Linking all dotfiles'
 
     local overwrite_all=false backup_all=false skip_all=false
 
@@ -105,29 +99,12 @@ install_dotfiles () {
             # Also, we no longer auto-add the dot in front of the filename.
             dst="$HOME/$dir/$(basename "${src%.*}")"
         else
-            # Everything not in '.config' will be linked directly into $HOME, with
+            # Everything not in '._verbose' will be linked directly into $HOME, with
             # a '.' automatically added to the file name.
             dst="$HOME/.$(basename "${src%.*}")"
         fi
-        link_file "$src" "$dst"
+        __link_single_file "$src" "$dst"
     done
 }
 
-# Suport locally installing things.
-mkdir -p "${HOME}/bin"
-mkdir -p "${HOME}/lib"
-mkdir -p "${HOME}/man"
-mkdir -p "${HOME}/include"
-
-install_dotfiles
-
-log_info "Installing dependencies (./bin/dotfiles-main)"
-if source ./bin/dotfiles-main;
-then
-    log_success "Dependencies installed (./bin/dotfiles-main)"
-else
-    log_fail "Error installing dependencies (./bin/dotfiles-main)"
-fi
-
-echo ''
-log_success '  All installed!'
+__link_all_dotfiles

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source $DOTFILES/zsh/logging.explicit-load.zsh
+source $DOTFILES/yasno/logging.inc.zsh
 
 if [ "$(uname -s)" != "Darwin" ]; then
     log_success "Skipped (non-mac)"
@@ -12,7 +12,7 @@ which cli-pass &>/dev/null
 if [ $? -eq 0 ]
 then
     cli-pass | sudo -S launchctl stop com.apple.audio.coreaudiod && sudo launchctl start com.apple.audio.coreaudiod
-else 
+else
     log_info "Requires sudo"
     sudo launchctl stop com.apple.audio.coreaudiod && sudo launchctl start com.apple.audio.coreaudiod
 fi

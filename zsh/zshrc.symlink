@@ -7,9 +7,9 @@ else
   exit 1
 fi
 
-source $DOTFILES/zsh/oh-my-zsh.explicit-load.zsh
+source $DOTFILES/zsh/oh-my-zsh.inc.zsh
 
-# Avoid closing terinal on ctrl-d
+# Avoid closing terminal on ctrl-d
 set -o ignoreeof
 
 # Added by fzf
@@ -42,23 +42,19 @@ export TERM=xterm-256color
 # This allows grepping with colors
 export GREP_COLOR='1;35;40'
 
-# Logging
-source $DOTFILES/zsh/logging.explicit-load.zsh
-
 # Loading the stuff from topic folders
-# Config files are all the files with *.zsh except for those with *.explicit-load.zsh
+# Config files are all the files with *.rc.zsh except for those with *.explicit-load.zsh
 # The latter are meant to be loaded somewhere explicitly (for prioritization control)
 declare -U config_files
-config_files=($DOTFILES/**/*.zsh)
-config_files=(${config_files:#*/*.explicit-load.zsh})
+config_files=($DOTFILES/**/*.rc.zsh)
 
-# Load the *.pre-load.zsh files. E.g. paths go here.
-for file in ${(M)config_files:#*/*.pre-load.zsh}; do
+# Load the *.rc.pre.zsh files. E.g. paths go here.
+for file in ${(M)config_files:#*/*.rc.pre.zsh}; do
     source $file
 done
 
-# Load everything but the *.pre-load.zsh and *.post-load.zsh
-for file in ${${config_files:#*/*.pre-load.zsh}:#*/*.post-load.zsh}; do
+# Load everything but the *.pre.zsh and *.rc.post.zsh
+for file in ${${config_files:#*/*.rc.pre.zsh}:#*/*.rc.post.zsh}; do
     source $file
 done
 
@@ -69,7 +65,7 @@ autoload -U +X bashcompinit && bashcompinit
 autoload -U colors && colors
 
 # Load things that must go afterwards. E.g. various options for autocomplete go here.
-for file in ${(M)config_files:#*/*.post-load.zsh}; do
+for file in ${(M)config_files:#*/*.rc.post.zsh}; do
     source $file
 done
 

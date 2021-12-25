@@ -1,43 +1,24 @@
 #!/usr/bin/env bash
 
-install_fzf () {
-    if ! [ -x "$(command -v fzf)" ]
-    then
-        log_info "Installing fzf"
-        git clone --depth 1 https://github.com/junegunn/fzf.git "$HOME/.fzf" && "$HOME/.fzf/install"  2>&1 | log_cmd
-        return_val=$?
-
-        if [ $return_val -ne 0 ]; then
-            log_fail "Failed to install fzf"
-        else
-            log_success "Installed fzf"
-        fi
-    else
-        log_success "Skipped installing fzf"
-    fi
+__install_fzf() {
+    git clone --depth 1 https://github.com/junegunn/fzf.git "$HOME/.fzf" \
+        && "$HOME/.fzf/install"
 }
-install_fzf
+install_wrapper "fzf" __install_fzf
 
 # zsh completions
-install_zsh_completions() {
-    if [ ! -d ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/zsh-completions ]
-    then
-        mkdir -p ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/
-        git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/zsh-completions 2>&1 | log_cmd
-        log_success "Cloned zsh-completions"
-    else
-        (
-            cd ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/zsh-completions
-            git pull &> /dev/null
-            if [ $? -eq 0 ]; then
-                log_success "Pulled zsh-completions"
-            else
-                log_fail "Error pulling zsh-completions"
-            fi
-        )
-    fi
+__install_zsh_completions() {
+    mkdir -p ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/
+    git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/zsh-completions
 }
-install_zsh_completions
+__check_zsh_completions() {
+    [ -d ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/zsh-completions ]
+}
+__if_exists_zsh_completions() {
+    cd ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/zsh-completions \
+        && git pull &> /dev/null
+}
+install_wrapper "zsh-completions" __install_zsh_completions __check_zsh_completions __if_exists_zsh_completions
 
 # Conda completions, see https://github.com/esc/conda-zsh-completion/blob/master/_conda
 install_conda_completions() {

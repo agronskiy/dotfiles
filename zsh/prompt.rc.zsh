@@ -27,7 +27,7 @@ export GIT_PS1_SHOWDIRTYSTATE=1
 export GIT_PS1_SHOWUPSTREAM="auto"
 export GIT_PS1_SHOWCOLORHINTS=1
 
-source $DOTFILES/zsh/git-prompt.explicit-load.zsh
+source $DOTFILES/zsh/git-prompt.inc.zsh
 
 # Determine active Python virtualenv details.
 function get_virtualenv() {
@@ -69,7 +69,7 @@ function middle_part() {
     if [ "$EUID" -eq 0 ]; then
         is_root="${LIGHT_RED}[root]${RESET}@"
     fi
-    
+
     # NOTE(agronskiy): set THIS_HOST_PROMPT_COLOR in .localrc of your host to override the default LIGHT_BLUE
     if [ ! -z ${TMUX+x} ]; then
         local host_name=""

@@ -2,7 +2,7 @@
 
 # This allows to quickly restart the DNS responder e.g. when SSH host is not recognized.
 
-source $DOTFILES/zsh/logging.explicit-load.zsh
+source $DOTFILES/yasno/logging.inc.zsh
 
 if [ "$(uname -s)" != "Darwin" ]; then
     log_success "Skipped (non-mac)"
@@ -12,8 +12,8 @@ fi
 which cli-pass &>/dev/null
 if [ $? -eq 0 ]
 then
-    cli-pass | sudo -S killall -HUP mDNSResponder 
-else 
+    cli-pass | sudo -S killall -HUP mDNSResponder
+else
     log_info "Requires sudo"
     sudo killall -HUP mDNSResponder
 fi

@@ -1,13 +1,9 @@
-#!/usr/bin/env bash
-#
-# Run all dotfiles installers. This runs from bash.
 
-set -eo pipefail
 
 cd "$(dirname $0)"/..
 
-source $DOTFILES/zsh/logging.explicit-load.zsh
-source $DOTFILES/zsh/install-utils.explicit-load.zsh
+source $YASNO_DIR/logging.inc.sh
+source $YASNO_DIR/install-utils.inc.sh
 
 INDENT_NUM=2
 
@@ -19,10 +15,12 @@ fi
 
 # Priority install: everything that normal install needs.
 failed_installers=()
-install_order=( "install-base" "install" )
+install_order=( "yasno.pre" "yasno" "yasno.post" )
 for order in "${install_order[@]}"
 do
     while read installer ; do
+        [ -z ${installer} ] && continue
+
         # Don't install `*.linux.install.sh` on non-linux
         if [[ "${installer}" == *linux.${order}.sh ]] && [ "$(uname -s)" != "Linux" ]; then
             log_success "Skipped linux-specific stuff in ${installer}"
@@ -43,7 +41,7 @@ do
 
     # The reasn for here string is modifying the `failed_installers` - we need while to be run
     # not as a subshell
-    done <<< "$(find . -type f -name "*${order}.sh")"
+    done <<< "$(find "$DOTFILES" -type f -name "*${order}.sh")"
 done
 
 if [ ! ${#failed_installers[@]} -eq 0 ]; then
