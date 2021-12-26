@@ -43,37 +43,31 @@ export TERM=xterm-256color
 export GREP_COLOR='1;35;40'
 
 # Loading the stuff from topic folders
-# Config files are all the files with *.rc.zsh except for those with *.explicit-load.zsh
-# The latter are meant to be loaded somewhere explicitly (for prioritization control)
-declare -U config_files
-config_files=($DOTFILES/**/*.rc.zsh)
-
+# Config files are all the files with *.rc.zsh.
 # Load the *.rc.pre.zsh files. E.g. paths go here.
-for file in ${(M)config_files:#*/*.rc.pre.zsh}; do
+while read file ; do
+    [ -z ${file} ] && continue
     source $file
-done
-
+done <<< "$(find "$DOTFILES" -type f -name "*rc.pre.zsh")"
 # Load everything but the *.pre.zsh and *.rc.post.zsh
-for file in ${${config_files:#*/*.rc.pre.zsh}:#*/*.rc.post.zsh}; do
+while read file ; do
+    [ -z ${file} ] && continue
     source $file
-done
-
+done <<< "$(find "$DOTFILES" -type f -name "*rc.zsh")"
 # Support bash-style autocompletion, not just zsh-style
 autoload -U +X bashcompinit && bashcompinit
-
 # Colors
 autoload -U colors && colors
-
 # Load things that must go afterwards. E.g. various options for autocomplete go here.
-for file in ${(M)config_files:#*/*.rc.post.zsh}; do
+while read file ; do
+    [ -z ${file} ] && continue
     source $file
-done
+done <<< "$(find "$DOTFILES" -type f -name "*rc.post.zsh")"
 
 # Stash local environment variables in ~/.localrc. This means they'll stay out
 # of the main dotfiles repository (which is public).
 if [[ -a ~/.localrc ]]; then
     source ~/.localrc
 fi
-unset config_files
 
 export ALREADY_SOURCED_ZSHRC=1

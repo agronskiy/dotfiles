@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source $DOTFILES/yasno/logging.inc.zsh
+source $DOTFILES/yasno/logging.inc.sh
 
 if [ "$(uname -s)" != "Darwin" ]; then
     log_success "Skipped (non-mac)"

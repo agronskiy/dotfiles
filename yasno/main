@@ -2,16 +2,7 @@
 
 set -eo pipefail
 
-YASNO_DIR="$(dirname "$0")"
-
-source $YASNO_DIR/logging.inc.sh
-
-[ -z $DOTFILES ] && DOTFILES=$HOME/.dotfiles
-[ -d $DOTFILES ] || log_fail "Requested dotfiles directory not found: $DOTFILES"
-
-# Suport locally installing things.
 mkdir -p "${HOME}/bin"
 
-( source ./yasno/link_dotfiles.inc.sh )
-( source ./yasno/install.inc.sh )
-
+./yasno/link
+./yasno/install

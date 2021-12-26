@@ -1,9 +1,15 @@
+#!/usr/bin/env bash
 
+set -eo pipefail
 
-cd "$(dirname $0)"/..
-
+YASNO_DIR="$(dirname "$0")"
 source $YASNO_DIR/logging.inc.sh
 source $YASNO_DIR/install-utils.inc.sh
+
+[ -z $DOTFILES ] && DOTFILES=$HOME/.dotfiles
+[ -d $DOTFILES ] || log_fail "Requested dotfiles directory not found: $DOTFILES"
+
+cd $DOTFILES
 
 INDENT_NUM=2
 
