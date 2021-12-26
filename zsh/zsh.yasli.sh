@@ -1,5 +1,16 @@
 #!/usr/bin/env bash
 
+[ -z $ZSH ] && { log_info "ZSH not set, assuming ~/.oh-my-zsh"; ZSH=$HOME/.oh-my-zsh; }
+
+__install_oh_my_zsh() {
+    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" \
+        && export ZSH=$HOME/.oh-my-zsh
+}
+__check_oh_my_zsh() {
+    [ ! -z $ZSH ]
+}
+install_wrapper "oh-my-zsh" __install_oh_my_zsh __check_oh_my_zsh
+
 __install_fzf() {
     git clone --depth 1 https://github.com/junegunn/fzf.git "$HOME/.fzf" \
         && "$HOME/.fzf/install"
