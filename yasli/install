@@ -2,9 +2,9 @@
 
 set -eo pipefail
 
-YASNO_DIR="$(dirname "$0")"
-source $YASNO_DIR/logging.inc.sh
-source $YASNO_DIR/install-utils.inc.sh
+YASLI_DIR="$(dirname "$0")"
+source $YASLI_DIR/logging.inc.sh
+source $YASLI_DIR/install-utils.inc.sh
 
 [ -z $DOTFILES ] && DOTFILES=$HOME/.dotfiles
 [ -d $DOTFILES ] || log_fail "Requested dotfiles directory not found: $DOTFILES"
@@ -21,7 +21,7 @@ fi
 
 # Priority install: everything that normal install needs.
 failed_installers=()
-install_order=( "yasno.pre" "yasno" "yasno.post" )
+install_order=( "yasli.pre" "yasli" "yasli.post" )
 for order in "${install_order[@]}"
 do
     while read installer ; do

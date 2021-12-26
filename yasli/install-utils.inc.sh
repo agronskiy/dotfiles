@@ -1,6 +1,6 @@
 # Installation utilities.
 
-source $YASNO_DIR/logging.inc.sh
+source $YASLI_DIR/logging.inc.sh
 
 install_wrapper() {
   # $1 command name
