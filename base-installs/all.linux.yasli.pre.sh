@@ -2,7 +2,7 @@
 if ! [ -x "$(command -v curl)" ]
 then
     log_info "Installing cURL"
-    $SUDO_CMD apt-get install curl 2>&1 | log_cmd
+    $SUDO_CMD apt-get -y install curl 2>&1 | log_cmd
     if [ $? -eq 0 ] ; then
         log_success "Successfully installed cURL"
     else
