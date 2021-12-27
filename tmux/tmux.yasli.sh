@@ -2,22 +2,19 @@
 #
 # NOTE(agronskiy) Nore that tmux-resurrect is custom version with ad-hoc patch.
 
-log_info "Installing tmux-tpm"
-
-if [ ! -d $HOME/.tmux/plugins/tpm/.git ]
-then
+install_tmux_tpm() {
     mkdir -p $HOME/.tmux/plugins
-    git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm  2>&1 | log_cmd
-    TMUX_PLUGIN_MANAGER_PATH=$HOME/.tmux/plugins /$HOME/.tmux/plugins/tpm/bin/install_plugins  2>&1 | log_cmd
-    log_success "Cloned tmux-tpm"
-else
-    (
-        cd $HOME/.tmux/plugins/tpm
-        git pull &> /dev/null 2>&1 | log_cmd
-        if [ $? -eq 0 ]; then
-            log_success "Pulled tmux-tpm"
-        else
-            log_fail "Error pulling tmux-tpm"
-        fi
-    )
-fi
+    git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm \
+        && TMUX_PLUGIN_MANAGER_PATH=$HOME/.tmux/plugins /$HOME/.tmux/plugins/tpm/bin/install_plugins
+}
+exists_tmux_tpm () {
+    [ -d $HOME/.tmux/plugins/tpm/.git ]
+}
+update_tmux_tpm () {
+    ( cd $HOME/.tmux/plugins/tpm && git pull &> /dev/null )
+}
+install_wrapper "tmux tpm" \
+    install_tmux_tpm \
+    exists_tmux_tpm \
+    update_tmux_tpm
+

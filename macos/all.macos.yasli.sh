@@ -1,68 +1,68 @@
 #!/usr/bin/env bash
 
 # fd
-__install_fd() {
+install_fd() {
     brew install fd
 }
-install_wrapper "fd" __install_fd
+install_wrapper "fd" install_fd
 
 # htop
-__install_htop() {
+install_htop() {
     brew install htop
 }
-install_wrapper "htop" __install_htop
+install_wrapper "htop" install_htop
 
 
 # bat
-__install_bat() {
+install_bat() {
     brew install bat
 }
-install_wrapper "bat" __install_bat
+install_wrapper "bat" install_bat
 
 # ripgrep
-__install_ripgrep() {
+install_ripgrep() {
     brew install ripgrep
 }
-__check_ripgrep() {
+exists_ripgrep() {
     brew list ripgrep &>/dev/null
 }
-install_wrapper "ripgrep" __install_ripgrep __check_ripgrep
+install_wrapper "ripgrep" install_ripgrep exists_ripgrep
 
 # coreutils
-__install_coreutils() {
+install_coreutils() {
     brew install coreutils
 }
-__check_coreutils() {
+exists_coreutils() {
     brew list coreutils &>/dev/null
 }
-install_wrapper "coreutils" __install_coreutils __check_coreutils
+install_wrapper "coreutils" install_coreutils exists_coreutils
 
 # tree
-__install_tree() {
+install_tree() {
     brew install tree
 }
-install_wrapper "tree" __install_tree
+install_wrapper "tree" install_tree
 
 # tig
-__install_tig() {
+install_tig() {
     brew install tig
 }
-install_wrapper "tig" __install_tig
+install_wrapper "tig" install_tig
 
 # exa
-__install_exa() {
+install_exa() {
     brew install exa
 }
-install_wrapper "exa" __install_exa
+install_wrapper "exa" install_exa
 
 # delta
-__install_delta() {
+install_delta() {
     brew install git-delta
 }
-install_wrapper "delta" __install_delta
+install_wrapper "delta" install_delta
 
 # jq
-__install_jq() {
+install_jq() {
     brew install jq
 }
-install_wrapper "jq" __install_jq
+install_wrapper "jq" install_jq

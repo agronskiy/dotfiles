@@ -1,59 +1,59 @@
 # fd
-__install_fd() {
+install_fd() {
     $SUDO_CMD apt-get -y install fd-find
 }
-__check_fd() {
+exists_fd() {
    [ -x "$(command -v fdfind)" ]
 }
-__if_exists_fd(){
+update_fd(){
     ln -s --force $(which fdfind) "$HOME/.local/bin/fd"
 }
-install_wrapper "fd" __install_fd __check_fd __if_exists_fd
+install_wrapper "fd" install_fd exists_fd update_fd
 
 # htop
-__install_htop() {
+install_htop() {
    $SUDO_CMD apt-get -y install htop
 }
-install_wrapper "htop" __install_htop
+install_wrapper "htop" install_htop
 
 # bat
-__install_batcat() {
+install_batcat() {
     $SUDO_CMD apt-get -y install bat
 }
-__check_batcat() {
+exists_batcat() {
     [ -x "$(command -v batcat)" ]
 }
-__if_exists_batcat() {
+update_batcat() {
    ln -s --force $(which batcat) "$HOME/.local/bin/bat"
 }
-install_wrapper "bat" __install_batcat __check_batcat __if_exists_batcat
+install_wrapper "bat" install_batcat exists_batcat update_batcat
 
 
 # ripgrep
-__install_ripgrep() {
+install_ripgrep() {
     curl -LO https://github.com/BurntSushi/ripgrep/releases/download/12.1.1/ripgrep_12.1.1_amd64.deb
     $SUDO_CMD dpkg -i ripgrep_12.1.1_amd64.deb \
     && rm ripgrep_12.1.1_amd64.deb
 }
-__check_ripgrep() {
+exists_ripgrep() {
     [ -x "$(command -v rg)" ]
 }
-install_wrapper "ripgrep" __install_ripgrep __check_ripgrep
+install_wrapper "ripgrep" install_ripgrep exists_ripgrep
 
 # tree
-__install_tree() {
+install_tree() {
    $SUDO_CMD apt-get -y install tree
 }
-install_wrapper "tree" __install_tree
+install_wrapper "tree" install_tree
 
 # tig
-__install_tig() {
+install_tig() {
    $SUDO_CMD apt-get -y install tig
 }
-install_wrapper "tig" __install_tig
+install_wrapper "tig" install_tig
 
 # exa
-__install_exa() {
+install_exa() {
     mkdir /tmp/exa-install
     (
         cd /tmp/exa-install
@@ -68,10 +68,10 @@ __install_exa() {
     ) \
     && rm -rf /tmp/exa-install
 }
-install_wrapper "exa" __install_exa
+install_wrapper "exa" install_exa
 
 # delta
-__install_delta() {
+install_delta() {
     mkdir /tmp/delta-install
     (
         cd /tmp/delta-install
@@ -80,16 +80,16 @@ __install_delta() {
     )
     rm -rf /tmp/delta-install
 }
-install_wrapper "delta" __install_delta
+install_wrapper "delta" install_delta
 
 # jq
-__install_jq() {
+install_jq() {
     $SUDO_CMD apt-get -y install jq
 }
-install_wrapper "jq" __install_jq
+install_wrapper "jq" install_jq
 
 # tmux
-__install_tmux() {
+install_tmux() {
     mkdir /tmp/tmux-install
     (
         cd /tmp/tmux-install
@@ -101,5 +101,5 @@ __install_tmux() {
     ) \
     && rm -rf /tmp/tmux-install
 }
-install_wrapper "tmux" __install_tmux
+install_wrapper "tmux" install_tmux
 

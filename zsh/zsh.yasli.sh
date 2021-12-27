@@ -1,121 +1,109 @@
 #!/usr/bin/env bash
 
+# Below, there're plugins that rely on
 [ -z $ZSH ] && { log_info "ZSH not set, assuming ~/.oh-my-zsh"; ZSH=$HOME/.oh-my-zsh; }
 
-__install_oh_my_zsh() {
+install_oh_my_zsh() {
     sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" \
         && export ZSH=$HOME/.oh-my-zsh
 }
-__check_oh_my_zsh() {
+exists_oh_my_zsh() {
     [ ! -z $ZSH ]
 }
-install_wrapper "oh-my-zsh" __install_oh_my_zsh __check_oh_my_zsh
+install_wrapper "oh-my-zsh" \
+    install_oh_my_zsh \
+    exists_oh_my_zsh
 
-__install_fzf() {
+install_fzf() {
     git clone --depth 1 https://github.com/junegunn/fzf.git "$HOME/.fzf" \
         && "$HOME/.fzf/install"
 }
-install_wrapper "fzf" __install_fzf
+install_wrapper "fzf" install_fzf
 
 # zsh completions
-__install_zsh_completions() {
+install_zsh_completions() {
     mkdir -p ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/
     git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/zsh-completions
 }
-__check_zsh_completions() {
+exists_zsh_completions() {
     [ -d ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/zsh-completions ]
 }
-__if_exists_zsh_completions() {
-    cd ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/zsh-completions \
-        && git pull &> /dev/null
+update_zsh_completions() {
+    ( cd ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/zsh-completions \
+        && git pull &> /dev/null )
 }
-install_wrapper "zsh-completions" __install_zsh_completions __check_zsh_completions __if_exists_zsh_completions
+install_wrapper "zsh-completions" \
+    install_zsh_completions \
+    exists_zsh_completions \
+    update_zsh_completions
 
-# Conda completions, see https://github.com/esc/conda-zsh-completion/blob/master/_conda
+# conda completions
 install_conda_completions() {
-    if [ ! -d ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/conda-zsh-completion ]
-    then
-        mkdir -p ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/
-        git clone https://github.com/esc/conda-zsh-completion ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/conda-zsh-completion 2>&1 | log_cmd
-        log_success "Cloned conda-zsh-completion"
-    else
-        (
-            cd ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/conda-zsh-completion
-            git pull &> /dev/null
-            if [ $? -eq 0 ]; then
-                log_success "Pulled conda-zsh-completion"
-            else
-                log_fail "Error pulling conda-zsh-completion"
-            fi
-        )
-    fi
+    mkdir -p ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/
+    git clone https://github.com/esc/conda-zsh-completion ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/conda-zsh-completion
 }
-install_conda_completions
+exists_conda_completions() {
+    [ -d ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/conda-zsh-completion ]
+}
+update_conda_completions() {
+    ( cd ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/conda-zsh-completion \
+        && git pull &> /dev/null )
+}
+install_wrapper "conda-completions" install_conda_completions exists_conda_completions update_conda_completions
+
 
 # fzf tab completions
 install_fzf_tab() {
-    if [ ! -d ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/fzf-tab ]
-    then
-        mkdir -p ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/
-        git clone https://github.com/Aloxaf/fzf-tab ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/fzf-tab 2>&1 | log_cmd
-        log_success "Cloned fzf-tab-completions"
-    else
-        (
-            cd ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/fzf-tab
-            git pull &> /dev/null
-            if [ $? -eq 0 ]; then
-                log_success "Pulled fzf-tab-completions"
-            else
-                log_fail "Error pulling fzf-tab-completions"
-            fi
-        )
-    fi
+    mkdir -p ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/
+    git clone https://github.com/Aloxaf/fzf-tab ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/fzf-tab
 }
-install_fzf_tab
+exists_fzf_tab () {
+    [ -d ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/fzf-tab ]
+}
+update_fzf_tab () {
+    ( cd ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/fzf-tab \
+        && git pull &> /dev/null )
+}
+install_wrapper "fzf-tab completions" \
+    install_fzf_tab \
+    exists_fzf_tab \
+    update_fzf_tab
 
 
 # zsh_syntax_highlight
 install_zsh_syntax_highlight() {
-    if [ ! -d ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/zsh-syntax-highlighting ]
-    then
-        mkdir -p ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/
-        git clone \
-            https://github.com/zsh-users/zsh-syntax-highlighting.git \
-            ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/zsh-syntax-highlighting \
-            2>&1 | log_cmd
-        log_success "Cloned zsh-syntax-highlighting"
-    else
-        (
-            cd ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/zsh-syntax-highlighting
-            git pull &> /dev/null
-            if [ $? -eq 0 ]; then
-                log_success "Pulled zsh-syntax-highlighting"
-            else
-                log_fail "Error pulling zsh-syntax-highlighting"
-            fi
-        )
-    fi
+    mkdir -p ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/
+    git clone \
+        https://github.com/zsh-users/zsh-syntax-highlighting.git \
+        ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/zsh-syntax-highlighting
 }
-install_zsh_syntax_highlight
+exists_zsh_syntax_highlight () {
+    [ -d ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/zsh-syntax-highlighting ]
+}
+update_zsh_syntax_highlight () {
+    ( cd ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/zsh-syntax-highlighting \
+        && git pull &> /dev/null )
+}
+install_wrapper "zsh syntax highlighting" \
+    install_zsh_syntax_highlight \
+    exists_zsh_syntax_highlight \
+    update_zsh_syntax_highlight
+
 
 # zsh_autosuggestions
 install_zsh_autosuggestions() {
-    if [ ! -d ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/zsh-autosuggestions ]
-    then
-        mkdir -p ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/
-        git clone https://github.com/zsh-users/zsh-autosuggestions \
-            ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions  2>&1 | log_cmd
-        log_success "Cloned zsh-autosuggestions"
-    else
-        (
-            cd ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/zsh-autosuggestions
-            git pull &> /dev/null
-            if [ $? -eq 0 ]; then
-                log_success "Pulled zsh-autosuggestions"
-            else
-                log_fail "Error pulling zsh-autosuggestions"
-            fi
-        )
-    fi
+    mkdir -p ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/
+    git clone https://github.com/zsh-users/zsh-autosuggestions \
+            ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 }
-install_zsh_autosuggestions
+exists_zsh_autosuggestions () {
+    [ -d ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/zsh-autosuggestions ]
+}
+update_zsh_autosuggestions () {
+    ( cd ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/zsh-autosuggestions \
+        && git pull &> /dev/null )
+}
+install_wrapper "zsh autosuggestions" \
+    install_zsh_autosuggestions \
+    exists_zsh_autosuggestions \
+    update_zsh_autosuggestions
