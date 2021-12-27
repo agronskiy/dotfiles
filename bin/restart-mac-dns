@@ -2,7 +2,7 @@
 
 # This allows to quickly restart the DNS responder e.g. when SSH host is not recognized.
 
-source $DOTFILES/yasli/logging.inc.sh
+source $YASLI_DIR/logging.inc.sh
 
 if [ "$(uname -s)" != "Darwin" ]; then
     log_success "Skipped (non-mac)"
