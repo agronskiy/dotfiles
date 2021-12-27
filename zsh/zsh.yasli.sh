@@ -15,6 +15,7 @@ install_wrapper "oh-my-zsh" \
     exists_oh_my_zsh
 
 install_fzf() {
+    rm -rf "$HOME/.fzf" || true
     git clone --depth 1 https://github.com/junegunn/fzf.git "$HOME/.fzf" \
         && "$HOME/.fzf/install"
 }
