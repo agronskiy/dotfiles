@@ -68,7 +68,10 @@ install_exa() {
     ) \
     && rm -rf /tmp/exa-install
 }
-install_wrapper "exa" install_exa
+exists_exa() {
+    [ -x "$HOME/.local/bin" ]
+}
+install_wrapper "exa" install_exa exists_exa
 
 # delta
 install_delta() {
