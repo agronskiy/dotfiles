@@ -1,0 +1,27 @@
+name: macos Test Installation
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+jobs:
+  run-github-macos-installation:
+    runs-on: macos-latest
+    steps:
+      - run: echo "Will run test installation on macos."
+      - name: Check out dotfiles
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.ref }}
+          path: .dotfiles
+      - name: Check out yasli
+        uses: actions/checkout@v2
+        with:
+          repository: agronskiy/yasli
+          path: .yasli
+      - run: echo $PWD
+      - name: Performing installation
+        run: DOTFILES=${{ github.workspace }}/.dotfiles ./.yasli/yasli-main
+      - name: Checking idempotence
+        run: DOTFILES=${{ github.workspace }}/.dotfiles ./.yasli/yasli-main
+      - run: echo "This job's status is ${{ job.status }}."

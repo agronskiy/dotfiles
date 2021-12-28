@@ -1,5 +1,8 @@
 # My dotfiles and configs
 
+![Ubuntu Test Install](https://github.com/agronskiy/configs/actions/workflows/ubuntu-test.yml/badge.svg)
+![Macod Test Install](https://github.com/agronskiy/configs/actions/workflows/macos-test.yml/badge.svg)
+
 <img src="https://user-images.githubusercontent.com/9802715/146839432-fc9d8eee-a2bd-469e-b53e-52bcd5133617.gif" width="90%">
 
 <img src="assets/overall.png" width="90%">
@@ -42,7 +45,7 @@ This would 99% smoothly install everything in a "Darwin" <-> "Ubuntu" cross-plat
 
 ## tmux notes
 
-Make sure that after installing tmux, you restart terminal and run it with `Prefix + Shift-I` to install 
+Make sure that after installing tmux, you restart terminal and run it with `Prefix + Shift-I` to install
 its own plugins.
 
 
@@ -67,4 +70,4 @@ In the homebrew case that can be the violating path:
 Need to delete that one and, assuming `oh-my-zsh` is installed, one gets the right one.
 
 # Acknowledgements
-This started as a heavily adjusted version by @holman, inspiration from @AndreiBarsan and @samoshkin. 
+This started as a heavily adjusted version by @holman, inspiration from @AndreiBarsan and @samoshkin.

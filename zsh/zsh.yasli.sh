@@ -14,12 +14,16 @@ install_wrapper "oh-my-zsh" \
     install_oh_my_zsh \
     exists_oh_my_zsh
 
+# fzf
 install_fzf() {
     rm -rf "$HOME/.fzf" || true
     git clone --depth 1 https://github.com/junegunn/fzf.git "$HOME/.fzf" \
-        && "$HOME/.fzf/install"
+        && "$HOME/.fzf/install" --key-bindings --completion --no-update-rc
 }
-install_wrapper "fzf" install_fzf
+exists_fzf() {
+    [ -x "$HOME/.fzf/bin/fzf" ]
+}
+install_wrapper "fzf" install_fzf exists_fzf
 
 # zsh completions
 install_zsh_completions() {

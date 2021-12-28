@@ -12,7 +12,6 @@ install_htop() {
 }
 install_wrapper "htop" install_htop
 
-
 # bat
 install_bat() {
     brew install bat
@@ -66,3 +65,9 @@ install_jq() {
     brew install jq
 }
 install_wrapper "jq" install_jq
+
+# tmux
+install_tmux() {
+    brew install tmux
+}
+install_wrapper "tmux" install_tmux
