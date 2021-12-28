@@ -54,6 +54,7 @@ install_wrapper "tig" install_tig
 
 # exa
 install_exa() {
+    [ -d /tmp/exa-install ] && rm -rf /tmp/exa-install
     mkdir /tmp/exa-install
     (
         cd /tmp/exa-install
@@ -69,19 +70,20 @@ install_exa() {
     && rm -rf /tmp/exa-install
 }
 exists_exa() {
-    [ -x "$HOME/.local/bin" ]
+    [ -x "$HOME/.local/bin/exa" ]
 }
 install_wrapper "exa" install_exa exists_exa
 
 # delta
 install_delta() {
+    [ -d /tmp/delta-install ] && rm -rf /tmp/delta-install
     mkdir /tmp/delta-install
     (
         cd /tmp/delta-install
         curl -LO https://github.com/dandavison/delta/releases/download/0.11.2/git-delta_0.11.2_amd64.deb \
         && $SUDO_CMD dpkg -i git-delta_0.11.2_amd64.deb
-    )
-    rm -rf /tmp/delta-install
+    ) \
+    && rm -rf /tmp/delta-install
 }
 install_wrapper "delta" install_delta
 
@@ -93,6 +95,7 @@ install_wrapper "jq" install_jq
 
 # tmux
 install_tmux() {
+    [ -d /tmp/tmux-install ] && rm -rf /tmp/tmux-install
     mkdir /tmp/tmux-install
     (
         cd /tmp/tmux-install
