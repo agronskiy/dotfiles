@@ -1,5 +1,7 @@
 # My dotfiles and configs
 
+[![license](https://badgen.net/badge/license/MIT/blue?label=License&icon=https%3A%2F%2Fapi.iconify.design%2Focticon%2Flaw-16.svg%3Fcolor%3Dwhite)](https://badgen.net/badge/license/MIT/blue?label=License&icon=https%3A%2F%2Fapi.iconify.design%2Focticon%2Flaw-16.svg%3Fcolor%3Dwhite)
+[![uses](https://badgen.net/badge/license/agronskiy%2Fyasli/orange?label=&icon=https%3A%2F%2Fapi.iconify.design%2Fic%2Ftwotone-crib.svg%3Fcolor%3Dwhite)](https://github.com/agronskiy/yasli)
 ![Ubuntu Test Install](https://github.com/agronskiy/configs/actions/workflows/ubuntu-test.yml/badge.svg)
 ![Macod Test Install](https://github.com/agronskiy/configs/actions/workflows/macos-test.yml/badge.svg)
 
@@ -7,7 +9,7 @@
 
 <img src="assets/overall.png" width="90%">
 
-Some bits and pieces of the bashrc used here and there across my machines, e.g. for prompt and commands.
+Some bits and pieces of the bashrc used here and there across my (Ubuntu/macos) machines, e.g. for prompt and commands.
 
 # Features
 
@@ -28,17 +30,11 @@ Local and remote, with local no receiving `prefix`:
 
 # Installation
 
-## Pre-requisites:
-- you run zsh
-- you have installed oh-my-zsh and restarted the terminal so that environment is picked up:
+Clone this repo into `~/.dotfiles`, clone [YASLI Framework](https://github.com/agronskiy/yasli) to `.yasli`, and run `yasli-main`:
 ```bash
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-```
-
-## Linking dotfiles and installing all the tools:
-
-```bash
-./scripts/bootstrap
+git clone https://github.com/agronskiy/configs.git $HOME/.dotfiles
+git clone https://github.com/agronskiy/yasli.git $HOME/.yasli
+~/.yasli/yasli-main
 ```
 
 This would 99% smoothly install everything in a "Darwin" <-> "Ubuntu" cross-platform manner.
@@ -71,3 +67,5 @@ Need to delete that one and, assuming `oh-my-zsh` is installed, one gets the rig
 
 # Acknowledgements
 This started as a heavily adjusted version by @holman, inspiration from @AndreiBarsan and @samoshkin.
+
+Uses [Material Icons](https://github.com/material-icons/material-icons)
