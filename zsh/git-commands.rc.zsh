@@ -25,10 +25,9 @@ _git-files-fuzzy() {
 
   ${status_command[@]} |
   $filter_command |
-    FZF_TMUX_OPTS="$FZF_TMUX_OPTS -p 95%,95%" \
     FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --height 90%" \
-  fzf-tmux $FZF_TMUX_OPTS -m --ansi --nth 2.. \
-    --preview-window wrap:right:80% \
+  fzf-tmux $FZF_TMUX_OPTS -p 95%,90% -- -m --ansi --nth 2.. \
+    --preview-window wrap:right:75% \
     --preview "$preview_command" |
   awk '{print $2}' | sed 's/.* -> //'
 
@@ -66,9 +65,8 @@ _git-history-fuzzy() {
   is_in_git_repo || return
 
   glog --color=always |
-    FZF_TMUX_OPTS="$FZF_TMUX_OPTS -p 95%,95%" \
     FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --height 90%" \
-  fzf-tmux $FZF_TMUX_OPTS --ansi --no-sort --reverse --multi --bind 'ctrl-s:toggle-sort' \
+  fzf-tmux $FZF_TMUX_OPTS -p 95%,90% -- --ansi --no-sort --reverse --multi --bind 'ctrl-s:toggle-sort' \
     --header 'Press CTRL-S to toggle sort, CTRL-/ for diff preview ' \
     --preview-window hidden:wrap:right:80% \
     --preview 'grep -o "[a-f0-9]\{7,\}" <<< {} | (xargs git show | delta -n '"${DELTA_DEFAULT_OPTS:-}"' ) ' |
