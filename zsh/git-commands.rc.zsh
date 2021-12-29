@@ -9,7 +9,7 @@ _git-files-fuzzy() {
   if [ -z "$1" ]; then
     commit_minus=""
     commit_plus=""
-    status_command=(git -c color.status=always status --short )
+    status_command=$(git -c color.status=always status --short)
     filter_command=cat
   else
     commit_minus="$1"
@@ -18,12 +18,15 @@ _git-files-fuzzy() {
     else
       commit_plus="$2"
     fi
-    status_command=(git diff --name-status $commit_minus $commit_plus )
+    status_command=$(git diff --name-status $commit_minus $commit_plus |
+      awk '{print $2}' |
+      xargs -I '{}' realpath --relative-to=. $(git rev-parse --show-toplevel)/'{}')
     filter_command=(tr '\t' ' ')
   fi
   preview_command="git diff $commit_minus $commit_plus "'{-1} | delta -n '"${DELTA_DEFAULT_OPTS:-}"
 
-  ${status_command[@]} |
+
+  printf "%s\n" "${status_command[@]}" |
   $filter_command |
     FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --height 90%" \
   fzf-tmux $FZF_TMUX_OPTS -p 95%,90% -- -m --ansi --nth 2.. \
