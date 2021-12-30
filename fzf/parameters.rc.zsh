@@ -2,7 +2,11 @@
 export FZF_DEFAULT_OPTS='--height 70% --reverse '\
 '--bind=f2:toggle-preview,'\
 'page-up:preview-half-page-up,'\
-'page-down:preview-half-page-down'
+'page-down:preview-half-page-down,'\
+'alt-up:preview-up,'\
+'alt-down:preview-down,'\
+'alt-g:preview-top,'\
+'alt-G:preview-bottom'
 
 export FZF_TMUX=1
 export FZF_TMUX_OPTS="-p 85%,85%"
