@@ -4,33 +4,38 @@ __RESTORE=$(echo -en '\033[0m')
 __RED=$(echo -en '\033[00;31m')
 __GREEN=$(echo -en '\033[00;32m')
 
-is_in_git_repo() {
+_is_in_git_repo() {
   git rev-parse HEAD > /dev/null 2>&1
 }
 
 _relative_path_helper() {
-  local modifier file_path
-  local red light_red green restore
+  # Make path to the file relative to the current place, otherwise the viewer breaks - because the
+  # `git diff` returns path relative to root.
+  local split_array
 
   while IFS= read -r line
   do
-      # Lines are in the format `M some/path/to/file` or `A other/file`
-      read -r modifier file_path <<< "$line"
-      case $modifier in
+      # Lines are in the format `M some/path/to/file`, OR `Rxxx path/before/rename
+      # path/after/rename`. Replace `-A` by `-a` for bash.
+      read -r -A split_array <<< "$line"
+
+      case ${split_array[1]} in
         [DM])
-          modifier="${__RED}${modifier}${__RESTORE}"
+          split_array[1]="${__RED}${split_array[1]}${__RESTORE}"
           ;;
         A)
-          modifier="${__GREEN}${modifier}${__RESTORE}"
+          split_array[1]="${__GREEN}${split_array[1]}${__RESTORE}"
           ;;
       esac
-      file_path="$(realpath --relative-to=. $(git rev-parse --show-toplevel)/$file_path)"
-      printf "%s %s\n" "$modifier" "$file_path"
+      path_to_root="$(realpath --quiet --relative-to=. $(git rev-parse --show-toplevel)/)"
+      split_array[-1]=$path_to_root/${split_array[-1]}
+      [ ${#split_array[@]} -ge 3 ] && split_array[-2]=$path_to_root/${split_array[-2]}
+      echo ${split_array[@]}
   done
 }
 
 _git-files-fuzzy() {
-  is_in_git_repo || return
+  _is_in_git_repo || return
   if [ -z "$1" ]; then
     commit_minus=""
     commit_plus=""
@@ -62,7 +67,7 @@ alias gss=_git-files-fuzzy
 compdef _git _git-files-fuzzy=git-diff
 
 _git-checkout-local-branches-fuzzy() {
-  is_in_git_repo || return
+  _is_in_git_repo || return
   chosen_branch=$(git branch --color=always | grep -v '/HEAD\s' | sort |
   fzf-tmux $FZF_TMUX_OPTS --ansi --multi --tac --preview-window right:70% \
     --preview 'git log --graph --color=always --abbrev-commit --decorate \
@@ -81,14 +86,14 @@ _git-checkout-local-branches-fuzzy() {
 alias gcol=_git-checkout-local-branches-fuzzy
 
 _git-tag-fuzzy() {
-  is_in_git_repo || return
+  _is_in_git_repo || return
   git tag --sort -version:refname |
   fzf-tmux $FZF_TMUX_OPTS --multi --preview-window right:70% \
     --preview 'git show --color=always {}'
 }
 
 _git-history-fuzzy() {
-  is_in_git_repo || return
+  _is_in_git_repo || return
 
   glog --color=always |
     FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --height 90%" \
@@ -102,7 +107,7 @@ _git-history-fuzzy() {
 alias glogg="_git-history-fuzzy"
 
 _git-stash-fuzzy() {
-  is_in_git_repo || return
+  _is_in_git_repo || return
   git stash list | fzf-tmux $FZF_TMUX_OPTS --reverse -d: --preview 'git show --color=always {1}' |
   cut -d: -f1
 }
