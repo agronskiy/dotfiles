@@ -47,6 +47,13 @@ _git-files-fuzzy() {
       commit_plus="HEAD"
     else
       commit_plus="$2"
+      # As an addition let's sort two commits so that minus goes before plus
+      git rev-list $commit_minus | grep $(git rev-parse $commit_plus) > /dev/null 2>&1
+      if [ ${pipestatus[-1]} -eq 0 ]; then
+        temp=$commit_minus
+        commit_minus=$commit_plus
+        commit_plus=$temp
+      fi
     fi
     status_command=$(git diff --name-status $commit_minus $commit_plus | _relative_path_helper)
     filter_command=(tr '\t' ' ')
