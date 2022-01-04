@@ -111,7 +111,7 @@ _git-history-fuzzy() {
   grep -o "[a-f0-9]\{7,\}" |
   tr '\n' ' '
 }
-alias glogg="_git-history-fuzzy"
+alias flog="_git-history-fuzzy"
 
 _git-stash-fuzzy() {
   _is_in_git_repo || return

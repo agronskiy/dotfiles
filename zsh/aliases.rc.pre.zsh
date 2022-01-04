@@ -45,7 +45,8 @@ function __ll() {
 }
 alias ll="__ll"
 alias la="ll -a"
-alias lf="la --color=always | fzf -m --ansi"
+alias fla="la --color=always | fzf -m --ansi"
+alias fll="ll --color=always | fzf -m --ansi"
 
 alias tree="tree -C -F -L 2"
 function __tree() {
