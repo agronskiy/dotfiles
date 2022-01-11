@@ -16,6 +16,6 @@ install_build_essential() {
     $SUDO_CMD apt-get -y install build-essential
 }
 exists_build_essential() {
-    dpkg-query -W -f='${Status}' build-essential | grep "ok installed"
+    dpkg-query -W -f='${Status}' build-essential | grep "ok installed" > /dev/null
 }
 install_wrapper "build-essentials" install_build_essential exists_build_essential
