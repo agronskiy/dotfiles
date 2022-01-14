@@ -99,7 +99,7 @@ install_tmux() {
     mkdir /tmp/tmux-install
     (
         cd /tmp/tmux-install
-        $SUDO_CMD apt-get -y install autoconf automake pkg-config libevent-dev bison byacc \
+        $SUDO_CMD apt-get -y install libncurses5-dev libncursesw5-dev autoconf automake pkg-config libevent-dev bison byacc \
         && git clone https://github.com/tmux/tmux.git \
         && cd tmux \
         && sh autogen.sh \
