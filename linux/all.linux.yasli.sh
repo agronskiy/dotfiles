@@ -103,7 +103,9 @@ install_tmux() {
         && git clone https://github.com/tmux/tmux.git \
         && cd tmux \
         && sh autogen.sh \
-        && ./configure && make && make install
+        && ./configure \
+        && make \
+        && $SUDO_CMD make install
     ) \
     && rm -rf /tmp/tmux-install
 }
