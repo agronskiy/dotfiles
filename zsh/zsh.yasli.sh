@@ -1,14 +1,18 @@
 #!/usr/bin/env bash
 
 # Below, there're plugins that rely on
-[ -z $ZSH ] && { log_info "ZSH not set, assuming ~/.oh-my-zsh"; ZSH=$HOME/.oh-my-zsh; }
+[ -z $ZSH ] && { log_info "ZSH not set, assuming ~/.oh-my-zsh"; export ZSH=$HOME/.oh-my-zsh; }
 
 install_oh_my_zsh() {
-    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" \
-        && export ZSH=$HOME/.oh-my-zsh
+    [ ! -z $ZSH ] && [ -d $ZSH ] && rm -rf $ZSH
+    echo "no" | sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" \
+        && export ZSH=$HOME/.oh-my-zsh \
+        && (
+            [ -f $HOME/.zshrc.pre-oh-my-zsh ] && mv $HOME/.zshrc.pre-oh-my-zsh $HOME/.zshrc || true
+        )
 }
 exists_oh_my_zsh() {
-    [ ! -z $ZSH ]
+    [ ! -z $ZSH ] && [ -d $ZSH ]
 }
 install_wrapper "oh-my-zsh" \
     install_oh_my_zsh \
