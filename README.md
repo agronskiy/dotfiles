@@ -5,7 +5,7 @@
 ![Ubuntu Test Install](https://github.com/agronskiy/configs/actions/workflows/ubuntu-test.yml/badge.svg)
 ![Macod Test Install](https://github.com/agronskiy/configs/actions/workflows/macos-test.yml/badge.svg)
 
-<img src="https://user-images.githubusercontent.com/9802715/146839432-fc9d8eee-a2bd-469e-b53e-52bcd5133617.gif" width="90%">
+<a href="https://asciinema.org/a/461991" target="_blank"><img src="https://asciinema.org/a/461991.svg" width="90%"/></a>
 
 <img src="assets/overall.png" width="90%">
 
