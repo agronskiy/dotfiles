@@ -61,6 +61,8 @@ function __tree() {
 }
 alias trel="__tree"
 alias trela="trel -a"
+alias ftrela="ftrel -a"
+alias ftrel="trel --color=always | fzf -m --ansi"
 
 export EXA_COLORS="xa=37:su=37:sf=37:ur=37:uw=37:ux=37:ue=37:gr=37:gw=37:gx=37:tr=37:tw=37:tx=37:uu=33:un=33:da=36"
 
