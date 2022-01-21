@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+# Removes local branches that have their remote counterparts gone.
+
+set -eo pipefail
+
+source $YASLI_DIR/logging.inc.sh
+
+branches_to_remove=( `print-git-gone-branches` )
+
+if [ ${#branches_to_remove[@]} -eq 0 ]; then
+    log_success "Nothing to remove"
+    exit 0
+fi
+
+log_info "Following branches will be removed:"
+INDENT_NUM=2 log_info $(printf '%s\n' "${branches_to_remove[@]}")
+log_user "Delete? [y/n]"
+read -n 1 action </dev/tty
+case "$action" in
+    [yY] )
+        delete=true;;
+    [nN] )
+        delete=false;;
+esac
+
+[ "$delete" == "true" ] || log_fail "Aborting"
+
+git branch -D "${branches_to_remove[@]}" 2>&1 | log_cmd || log_fail "Failed to delete all"
+
+log_success "Done"
