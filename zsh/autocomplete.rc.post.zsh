@@ -14,6 +14,8 @@ unsetopt list_beep
 _comp_options+=(globdots)
 # And avoid suggesting current dir
 zstyle ':completion:*' special-dirs false
+# Disable sorting
+zstyle ':completion:*' sort false
 
 # Default highlight color of the input
 export zle_highlight=( default:fg=7 )

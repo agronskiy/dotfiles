@@ -73,24 +73,39 @@ _git-files-fuzzy() {
 alias gss=_git-files-fuzzy
 compdef _git _git-files-fuzzy=git-diff
 
-_git-checkout-local-branches-fuzzy() {
+_git-checkout-local-branches() {
   _is_in_git_repo || return
-  chosen_branch=$(git branch --color=always | grep -v '/HEAD\s' | sort |
-  fzf-tmux $FZF_TMUX_OPTS --ansi --multi --tac --preview-window right:70% \
-    --preview 'git log --graph --color=always --abbrev-commit --decorate \
+
+  if [ ! -z $1 ]; then
+    chosen_branch=$1
+  else
+    return
+  fi
+
+  if [ ! -z "$chosen_branch" ] ; then
+    git checkout $chosen_branch
+  fi
+}
+alias gcol=_git-checkout-local-branches
+compdef _gcol-completion _git-checkout-local-branches
+
+_gcol-completion () {
+  local -a copts=( -o nosort )
+
+  _arguments -C -s -O copts \
+    '*:: :($(git for-each-ref --sort=-committerdate --format='"'%(refname:short)'"' refs/heads/))' && ret=0
+
+  return ret
+}
+
+zstyle ':fzf-tab:complete:(_git-checkout-local-branches|git-checkout):*' fzf-preview \
+  'git log --graph --color=always --abbrev-commit --decorate \
 --format=format:\
 "%C(bold blue)%h%C(reset) - \
 %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset) %C(dim white)- %an%C(reset)%n\
-          %C(white)%s%C(reset) " $(sed s/^..// <<< {} | cut -d" " -f1)' |
-  sed 's/^..//' | cut -d' ' -f1 |
-  sed 's#^remotes/##' | tr '\n' ' ' )
+          %C(white)%s%C(reset) " \
+$word'
 
-  if [ ! -z "$chosen_branch" ] ; then
-    curr_cmd="git checkout $chosen_branch"
-    print -z -- $curr_cmd
-  fi
-}
-alias gcol=_git-checkout-local-branches-fuzzy
 
 _git-tag-fuzzy() {
   _is_in_git_repo || return

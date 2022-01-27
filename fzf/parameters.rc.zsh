@@ -22,12 +22,13 @@ __fzf_tab_autocompletion_command() {
 
 __fzf_tab_autocompletion_flags() {
   [ -n "$TMUX_PANE" ] && { [ "${FZF_TMUX:-0}" != 0 ] || [ -n "$FZF_TMUX_OPTS" ]; } &&
-    echo "${FZF_TMUX_OPTS:--d${FZF_TMUX_HEIGHT:-40%}} " || echo "--height 90% --reverse --no-border"
+    echo "${FZF_TMUX_OPTS:--d${FZF_TMUX_HEIGHT:-40%}} " || echo "--height 90% --reverse --no-border "
 }
 
 # This makes `fzf-tab` completion more lightweight in general.
 zstyle ':fzf-tab:*' fzf-command $(__fzf_tab_autocompletion_command)
 zstyle ':fzf-tab:*' fzf-flags $(__fzf_tab_autocompletion_flags)
+
 # Git completion with preview on the right
 zstyle ':fzf-tab:complete:git-checkout:*' fzf-preview \
   'git log --graph --color=always --abbrev-commit --decorate \
@@ -36,6 +37,8 @@ zstyle ':fzf-tab:complete:git-checkout:*' fzf-preview \
 %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset) %C(dim white)- %an%C(reset)%n\
           %C(white)%s%C(reset) " \
 $word'
+
+
 # preview directory's content with exa when completing cd
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -TF -L=2 --color=always $realpath'
 
