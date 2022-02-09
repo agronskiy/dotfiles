@@ -14,7 +14,7 @@ if [ ${#branches_to_remove[@]} -eq 0 ]; then
 fi
 
 log_info "Following branches will be removed:"
-INDENT_NUM=2 log_info $(printf '%s\n' "${branches_to_remove[@]}")
+INDENT_NUM=2 log_info "$(printf '%s\n' "${branches_to_remove[@]}")"
 log_user "Delete? [y/n]"
 read -n 1 action </dev/tty
 case "$action" in
