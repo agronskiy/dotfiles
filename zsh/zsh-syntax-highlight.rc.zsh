@@ -6,7 +6,7 @@ typeset -A ZSH_HIGHLIGHT_STYLES
 
 ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=red,bold'
 ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=green'
-ZSH_HIGHLIGHT_STYLES[commandseparator]='fg=magenta'
+ZSH_HIGHLIGHT_STYLES[commandseparator]='fg=#c94d44'
 ZSH_HIGHLIGHT_STYLES[globbing]='fg=cyan'
 ZSH_HIGHLIGHT_STYLES[history-expansion]='fg=blue'
 ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=#D78700'
