@@ -206,11 +206,6 @@
     "vsicons.dontShowNewVersionMessage": true,
     "files.insertFinalNewline": true,
     "python.formatting.provider": "black",
-    "python.linting.mypyArgs": [
-        "--ignore-missing-imports",
-        "--allow-redefinition",
-        "--namespace-packages"
-    ],
     "sync.autoUpload": true,
     "sync.autoDownload": true,
     "sync.removeExtensions": false,
@@ -232,7 +227,8 @@
         "vscode-kubernetes.helm-path.mac": "/Users/agronskiy/.vs-kubernetes/tools/helm/darwin-amd64/helm"
     },
     "files.associations": {
-        "*.html": "liquid"
+        "*.html": "liquid",
+        "*.pants": "starlark"
     },
     "terminal.integrated.shell.windows": "C:\\Program Files\\Git\\bin\\bash.exe",
     "terminal.external.windowsExec": "%windir%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -ExecutionPolicy ByPass -NoExit -Command \"& 'C:\\ProgramData\\Anaconda3\\shell\\condabin\\conda-hook.ps1' ; conda activate 'C:\\ProgramData\\Anaconda3\\envs\\dev' \"",
@@ -407,7 +403,6 @@
     ],
     "indentRainbow.errorColor": "rgba(255, 255, 255,0.1)",
     "indentRainbow.tabmixColor": "rgba(128,32,96,0.01)",
-    "window.zoomLevel": 1,
     "[jsonc]": {
         "editor.defaultFormatter": "vscode.json-language-features"
     },
@@ -427,4 +422,8 @@
     "ccls.highlight.type.colors": [
         "#4EC9B0"
     ],
+    "[toml]": {
+        "editor.defaultFormatter": "tamasfe.even-better-toml"
+    },
+    "window.zoomLevel": 1,
 }
