@@ -5,6 +5,9 @@ alias glogg='git log --graph --abbrev-commit --decorate --format=format:"%C(bold
 # Colorized output
 alias cat="bat --plain"
 
+# Editor nvim = vim
+alias vim="nvim"
+
 # For ripgrep default options
 export RIPGREP_CONFIG_PATH="${HOME}/.ripgreprc"
 

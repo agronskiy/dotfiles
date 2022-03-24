@@ -42,12 +42,12 @@ $word'
 # preview directory's content with exa when completing cd
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -TF -L=2 --color=always $realpath'
 
-# preview on cat/bat/vim (remember that here cat is aliased to bat)
-zstyle ':fzf-tab:complete:(bat|cat|vim):*' fzf-preview 'bat --color=always --plain $realpath'
+# preview on cat/bat/vim/nvim (remember that here cat is aliased to bat)
+zstyle ':fzf-tab:complete:(bat|cat|vim|nvim):*' fzf-preview 'bat --color=always --plain $realpath'
 
 # NOTE: uncomment below to exclude directories from autocompletion. Usefulness is questionable
 # because we can still want to navigate to the subdirectory.
-# zstyle ':completion:*:*:(bat|cat|vim):*:*' file-patterns '*(-^/)'
+# zstyle ':completion:*:*:(bat|cat|vim|nvim):*:*' file-patterns '*(-^/)'
 
 # Completion for ssh
 zstyle ':completion:*:ssh:*' hosts
@@ -77,7 +77,7 @@ _fzf_comprun() {
     cd)           $(__fzfcmd) "$@" --preview 'exa -TF -L=2 --color=always {} | head -200' ;;
     export|unset) $(__fzfcmd) "$@" --preview "eval 'echo \$'{}" ;;
     ssh)          $(__fzfcmd) "$@" --preview 'dig {}' ;;
-    cat|bat|vim)  $(__fzfcmd) "$@" --preview 'bat --color=always --plain {}' ;;
+    cat|bat|vim|nvim)  $(__fzfcmd) "$@" --preview 'bat --color=always --plain {}' ;;
     *)            $(__fzfcmd) "$@" ;;
   esac
 }

@@ -111,3 +111,11 @@ install_tmux() {
 }
 install_wrapper "tmux" install_tmux
 
+# neovim
+install_neovim() {
+    $SUDO_CMD apt-get -y install neovim
+}
+exists_neovim() {
+    [ -x "$(command -v nvim)" ]
+}
+install_wrapper "neovim" install_neovim exists_neovim

@@ -25,7 +25,6 @@ Plug 'scrooloose/nerdtree'
 Plug 'mbbill/undotree'
 
 " Git related
-Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 
 " FZF support
@@ -119,7 +118,7 @@ endfunction
 augroup numbertoggle
   autocmd!
   autocmd BufEnter,FocusGained,InsertLeave * call OnGainFocus()
-  autocmd BufLeave,FocusLost,InsertEnter   * call OnLoseFocus() 
+  autocmd BufLeave,FocusLost,InsertEnter   * call OnLoseFocus()
 augroup END
 
 " Save on losing focus

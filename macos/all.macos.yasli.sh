@@ -71,3 +71,12 @@ install_tmux() {
     brew install tmux
 }
 install_wrapper "tmux" install_tmux
+
+# tmux
+install_neovim() {
+    brew install neovim
+}
+exists_neovim() {
+    [ -x "$(command -v nvim)" ]
+}
+install_wrapper "neovim" install_neovim exists_neovim

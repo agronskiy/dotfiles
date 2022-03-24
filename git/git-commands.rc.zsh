@@ -117,7 +117,7 @@ _git-tag-fuzzy() {
 _git-history-fuzzy() {
   _is_in_git_repo || return
 
-  glog --color=always |
+  glogg --color=always |
     FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --height 90%" \
   fzf-tmux $FZF_TMUX_OPTS -p 95%,90% -- --ansi --no-sort --reverse --multi --bind 'ctrl-s:toggle-sort' \
     --header 'Press CTRL-S to toggle sort, CTRL-/ for diff preview ' \
