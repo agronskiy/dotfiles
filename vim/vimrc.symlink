@@ -245,6 +245,15 @@ nnoremap <leader>LL            :Lines<CR>
 nnoremap <leader>rg            :FZFRg<CR>
 nnoremap <leader>hh            :FZFHistory<CR>
 
+" FZF preview window setup
+" See `man fzf-tmux` for available options
+if exists('$TMUX')
+  let g:fzf_layout = { 'tmux': '-p90%,90%' }
+else
+  let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9 } }
+endif
+let g:fzf_preview_window = ['up:60%']
+
 " Other buffer-related bindings
 nnoremap <silent> <leader>bn            :enew<CR>
 
