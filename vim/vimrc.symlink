@@ -205,7 +205,10 @@ nnoremap <C-T> :NERDTreeToggle<CR>
 let NERDTreeShowHidden=1
 let g:NERDTreeWinPos = "right"
 let NERDTreeIgnore = ['\.pyc$', '__pycache__']
-let g:NERDTreeWinSize=40
+let g:NERDTreeWinSize=45
+
+" (nt = nerd tree find) find the current file in the nerdtree.
+map <leader>nt :NERDTreeFind<cr>
 
 " Configure lightline
 let g:lightline = {
@@ -250,7 +253,7 @@ nnoremap <leader>bb            :Buffers<CR>
 nnoremap <leader>ll            :FZFBLines<CR>
 nnoremap <leader>LL            :Lines<CR>
 nnoremap <leader>rg            :FZFRg<CR>
-nnoremap <leader>hh            :FZFHistory<CR>
+nnoremap <silent><C-r>            :FZFHistory:<CR>
 
 " FZF preview window setup
 " See `man fzf-tmux` for available options
