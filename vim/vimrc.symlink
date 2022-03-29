@@ -38,6 +38,13 @@ Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 " Vim start page
 Plug 'mhinz/vim-startify'
 
+" Trailing whitespaces
+Plug 'ntpeters/vim-better-whitespace'
+
+" Conquer of completion
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'antoinemadec/coc-fzf'
+
 call plug#end()
 
 " TODO(agronskiy): need to understand the below, blindly copied from https://stevelosh.com/blog/2010/09/coming-home-to-vim/#s1-some-background-about-me
@@ -71,7 +78,6 @@ set shiftwidth=4
 set softtabstop=4
 set expandtab
 
-" TODO(agronskiy): not really gone through all of them
 set encoding=utf-8
 set autoindent
 set showmode
@@ -84,6 +90,7 @@ set cursorline
 set ttyfast
 set ruler
 set laststatus=2
+set cmdheight=2
 
 " Make 0 go to the first character rather than the beginning of the line. When
 " than empty space. If you want the traditional beginning of line, use ^.
@@ -296,3 +303,20 @@ highlight GitGutterChangeDelete ctermfg=4
 
 " Temporrily switch line numbers on and off
 nnoremap <leader>tl         :set relativenumber! nu!<CR> :GitGutterToggle<CR>
+
+" coc.nvim support
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+inoremap <silent><expr> <c-space> coc#refresh()
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+

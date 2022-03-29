@@ -80,3 +80,14 @@ exists_neovim() {
     [ -x "$(command -v nvim)" ]
 }
 install_wrapper "neovim" install_neovim exists_neovim
+
+
+# nodejs
+install_nodejs() {
+    brew install nodejs
+}
+exists_nodejs() {
+    [ -x "$(command -v node)" ]
+}
+install_wrapper "nodejs" install_nodejs exists_nodejs
+
