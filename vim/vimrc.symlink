@@ -149,9 +149,9 @@ set hlsearch
 nnoremap <leader><space> :noh<cr>
 
 set wrap
-set textwidth=119
+set textwidth=99
 set formatoptions=qrn1
-set colorcolumn=120
+set colorcolumn=100
 
 " Standard way of navigating wrapped lines.
 nnoremap j gj
@@ -173,9 +173,11 @@ inoremap jk <ESC>
 " Create window, navigate windows
 nnoremap <leader>w <C-w>v<C-w>l
 nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
+
+" Navigate buffers
+nnoremap <silent> <C-k> :bnext<CR>:call SyncTree()<CR>
+nnoremap <silent> <C-j> :bprev<CR>:call SyncTree()<CR>
 
 " When editing a file, always jump to the last known cursor position.
 " Don't do it when the position is invalid or when inside an event handler
@@ -194,20 +196,41 @@ cmap w!! w !sudo tee % >/dev/null
 " Toggle NERDTree using Ctrl-T.
 nnoremap <C-T> :NERDTreeToggle<CR>
 
+" (nt = nerd tree find) find the current file in the nerdtree.
+nnoremap <leader>nt :NERDTreeFind<cr>
+
+" If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
+autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
+    \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
+
 " Automatically quit if the only window left is NERDTree
-" NOTE(agronskiy) commented out because this kills the whole VIM if one accidentally closes the NERDTree buffer
 "   (i.e. `:bd` when focused in the NERDTree)
-"
-" autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+" >> Begin of sync with nerdtree
+" Check if NERDTree is open or active
+function! IsNERDTreeOpen()
+  return exists("t:NERDTreeBufName") && (bufwinnr(t:NERDTreeBufName) != -1)
+endfunction
+
+" Call NERDTreeFind iff NERDTree is active, current window contains a modifiable
+" file, and we're not in vimdiff
+function! SyncTree()
+  if &modifiable && IsNERDTreeOpen() && strlen(expand('%')) > 0 && !&diff
+    NERDTreeFind
+    wincmd p
+  endif
+endfunction
+
+" Highlight currently open buffer in NERDTree
+autocmd BufRead * call SyncTree()
+" >> End of sync with nerdtree
 
 " NerdTree configuration
 let NERDTreeShowHidden=1
 let g:NERDTreeWinPos = "right"
 let NERDTreeIgnore = ['\.pyc$', '__pycache__']
-let g:NERDTreeWinSize=45
-
-" (nt = nerd tree find) find the current file in the nerdtree.
-map <leader>nt :NERDTreeFind<cr>
+let g:NERDTreeWinSize=55
 
 " Configure lightline
 let g:lightline = {
