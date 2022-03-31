@@ -28,6 +28,8 @@ set -g @plugin 'tmux-plugins/tmux-prefix-highlight'
 
 set -g @plugin 'tmux-plugins/tmux-continuum'
 
+set -g @plugin 'sainnhe/tmux-fzf'
+
 set -g @continuum-restore 'on'
 set -g @continuum-save-interval '5'
 

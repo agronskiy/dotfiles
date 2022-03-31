@@ -199,10 +199,6 @@ nnoremap <C-T> :NERDTreeToggle<CR>
 " (nt = nerd tree find) find the current file in the nerdtree.
 nnoremap <leader>nt :NERDTreeFind<cr>
 
-" If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
-autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
-    \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
-
 " Automatically quit if the only window left is NERDTree
 "   (i.e. `:bd` when focused in the NERDTree)
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
@@ -276,6 +272,7 @@ nnoremap <leader>ll            :FZFBLines<CR>
 nnoremap <leader>LL            :Lines<CR>
 nnoremap <leader>rg            :FZFRg<CR>
 nnoremap <silent><C-r>            :FZFHistory:<CR>
+nnoremap <leader>CC            :Commands<CR>
 
 " FZF preview window setup
 " See `man fzf-tmux` for available options

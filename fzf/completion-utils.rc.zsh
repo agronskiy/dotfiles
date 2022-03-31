@@ -34,7 +34,7 @@ __custom_fzf_generic_path_completion() {
 }
 
 __custom_fzf_file_compgen_path() {
-  fd --type f --hidden --follow --no-ignore --exclude ".git" . "$1"
+  fd --type f --hidden --follow --exclude ".git" . "$1"
 }
 
 __custom_fzf_file_path_completion() {

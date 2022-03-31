@@ -1,9 +1,10 @@
 # Ripgrep default options
 --hidden
 --smart-case
---no-ignore
+# To enable set -u when manually running ripgrep
+# --no-ignore
 --follow
-# To ensable, put `(?m)` in the query.
+# To esable, put `(?m)` in the query.
 # --multiline
 --multiline-dotall
 --glob=!.git/*
