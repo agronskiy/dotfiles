@@ -270,9 +270,47 @@ nnoremap <leader>ff            :FZFFiles<CR>
 nnoremap <leader>bb            :Buffers<CR>
 nnoremap <leader>ll            :FZFBLines<CR>
 nnoremap <leader>LL            :Lines<CR>
-nnoremap <leader>rg            :FZFRg<CR>
-nnoremap <silent><C-r>            :FZFHistory:<CR>
+nnoremap <silent>hh            :FZFHistory:<CR>
 nnoremap <leader>CC            :Commands<CR>
+
+" Multiline ripgrep
+command! -bang -nargs=* Rg
+      \ call fzf#vim#grep(
+      \    'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1,
+      \     fzf_preview#p(<bang>0, {'options': '--delimiter : --nth 3..'}),
+      \     <bang>0
+      \)
+
+command! -bang -nargs=* Rgf
+      \ call fzf#vim#grep(
+      \    'rg --multiline --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1,
+      \     fzf_preview#p(<bang>0, {'options': '--delimiter : --nth 3..'}),
+      \     <bang>0
+      \)
+
+nnoremap <leader>rg            :Rg<CR>
+
+" `:RG`  and `:RGM` are ripgrep where no fuzzy search is done.
+" https://github.com/junegunn/fzf.vim#example-advanced-ripgrep-integration
+function! __RG(query, fullscreen)
+  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
+  let initial_command = printf(command_fmt, shellescape(a:query))
+  let reload_command = printf(command_fmt, '{q}')
+  let spec = {'options': ['--phony', '--prompt', 'RgNoFZF:> ', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+endfunction
+
+function!__RGM(query, fullscreen)
+  let command_fmt = 'rg --multiline --column --line-number --no-heading --color=always --smart-case -- %s || true'
+  let initial_command = printf(command_fmt, shellescape(a:query))
+  let reload_command = printf(command_fmt, '{q}')
+  let spec = {'options': ['--phony', '--prompt', 'RgNoFZF:> ', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+endfunction
+
+command! -nargs=* -bang RG call __RG(<q-args>, <bang>0)
+command! -nargs=* -bang RGM call __RGM(<q-args>, <bang>0)
+
 
 " FZF preview window setup
 " See `man fzf-tmux` for available options
