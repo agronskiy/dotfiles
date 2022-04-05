@@ -270,7 +270,7 @@ nnoremap <leader>ff            :FZFFiles<CR>
 nnoremap <leader>bb            :Buffers<CR>
 nnoremap <leader>ll            :FZFBLines<CR>
 nnoremap <leader>LL            :Lines<CR>
-nnoremap <silent>hh            :FZFHistory:<CR>
+nnoremap <silent>HH            :FZFHistory:<CR>
 nnoremap <leader>CC            :Commands<CR>
 
 " Multiline ripgrep
