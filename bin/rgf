@@ -8,6 +8,7 @@
 # 3. Open the file in Vim or print path
 
 # -m : multiline ripgrep
+
 while getopts m opt; do
   case $opt in
     m) MULTILINE_OPT_ARG="SET"
@@ -49,4 +50,9 @@ output=$(
 # output is `file_path:line:col:text_of_line`
 selected=(${(s/:/)output})
 
-[ -n "${selected[1]}" ] && vim "${selected[1]}" "+${selected[2]}"
+if [ "$TERM_PROGRAM" = "vscode" ]; then
+  [ -n "${selected[1]}" ] && code --goto "${selected[1]}:${selected[2]}:${selected[3]}"
+else
+  [ -n "${selected[1]}" ] && vim "${selected[1]}" "+${selected[2]}"
+fi
+
