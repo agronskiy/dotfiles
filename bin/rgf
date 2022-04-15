@@ -44,7 +44,7 @@ output=$(
       --prompt '1. ripgrep> ' \
       --delimiter : \
       --preview 'bat --style=numbers,header --color=always {1} --highlight-line {2}' \
-      --preview-window 'up,60%,border,+{2}+3/3,~3'
+      --preview-window 'up,75%,border,+{2}+3/3,~3'
 )
 # output is `file_path:line:col:text_of_line`
 selected=(${(s/:/)output})
