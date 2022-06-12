@@ -6,7 +6,7 @@ on:
       - master
 jobs:
   run-github-ubuntu-installation:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - run: echo "Will run test installation on ubuntu."
       - run: sudo apt-get install git zsh
