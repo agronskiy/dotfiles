@@ -1,12 +1,11 @@
 
-HISTSIZE=5000000            #  How many lines of history to keep in memory
-HISTFILE=~/.zsh_history     # Where to save history to disk
-SAVEHIST=4000000               # Number of history entries to save to disk
-HISTDUP=erase               # Erase duplicates in the history file
-setopt    sharehistory      # Share history across terminals
-setopt    incappendhistory  # Immediately append to the history file, not just when a term is killed
+export HISTSIZE=5000000            #  How many lines of history to keep in memory
+export HISTFILE=~/.zsh_history     # Where to save history to disk
+export SAVEHIST=4000000               # Number of history entries to save to disk
+export HISTDUP=erase               # Erase duplicates in the history file
+setopt SHARE_HISTORY      # Share history across terminals
+setopt INC_APPEND_HISTORY  # Immediately append to the history file, not just when a term is killed
 setopt EXTENDED_HISTORY
-setopt HIST_EXPIRE_DUPS_FIRST
 setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_IGNORE_SPACE
 setopt HIST_FIND_NO_DUPS
