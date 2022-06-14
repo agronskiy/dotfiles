@@ -85,6 +85,8 @@ export DELTA_DEFAULT_OPTS=\
 
 alias delta="delta $DELTA_DEFAULT_OPTS "
 
+export GPG_TTY=$TTY
+
 # If one does not want to use `exa`
 # # Makes colors in CLI ls output
 # case `uname` in
