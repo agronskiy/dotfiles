@@ -65,6 +65,7 @@ install_exa() {
         fi
         # Exa does not build with 1.61+ https://github.com/ogham/exa/issues/1040
         rustup install 1.60.0
+        rustup override set 1.60.0
 
         # Install
         $SUDO_CMD apt-get install -y build-essential \
