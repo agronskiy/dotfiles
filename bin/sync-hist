@@ -23,9 +23,10 @@ HIST_SYNC_DEFAULT_GPG="${HIST_SYNC_DEFAULT_GPG:-unspecified}"
     gpg --batch --yes --output zsh_history_decrypted --decrypt zsh_history
 ) 2>&1 | log_cmd || log_fail "Failed"
 
-zsh -c "builtin fc -R -I './zsh_history_decrypted'"
-zsh -c "builtin fc -R -I '$HISTFILE'"
-zsh -c "builtin fc -W '$HISTFILE'"
+log_info "Merging..."
+(
+    merge-hist "./zsh_history_decrypted" "$HISTFILE" "$HISTFILE"
+) 2>&1 | log_cmd || log_fail "Failed"
 
 [ -f $HISTFILE ] || log_fail "No $HISTFILE to encrypt"
 
