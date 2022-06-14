@@ -24,6 +24,7 @@ HIST_SYNC_DEFAULT_GPG="${HIST_SYNC_DEFAULT_GPG:-unspecified}"
 ) 2>&1 | log_cmd || log_fail "Failed"
 
 zsh -c "builtin fc -R -I './zsh_history_decrypted'"
+zsh -c "builtin fc -R -I '$HISTFILE'"
 zsh -c "builtin fc -W '$HISTFILE'"
 
 [ -f $HISTFILE ] || log_fail "No $HISTFILE to encrypt"
