@@ -30,6 +30,6 @@ if __name__ == "__main__":
     final_dict.update(_read_file_into_dict(Path(args.file_b)))
 
     with Path(args.file_c).open("bw") as f:
-        for k, v in final_dict.items():
-            for l in v:
+        for k in sorted(final_dict.keys()):
+            for l in final_dict[k]:
                 f.write(l)
