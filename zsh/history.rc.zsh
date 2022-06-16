@@ -1,15 +1,16 @@
 
-export HISTSIZE=5000000            #  How many lines of history to keep in memory
+export HISTSIZE=2000000            #  How many lines of history to keep in memo
 export HISTFILE=~/.zsh_history     # Where to save history to disk
-export SAVEHIST=4000000               # Number of history entries to save to disk
-export HISTDUP=erase               # Erase duplicates in the history file
-setopt SHARE_HISTORY      # Share history across terminals
-setopt INC_APPEND_HISTORY  # Immediately append to the history file, not just when a term is killed
-setopt EXTENDED_HISTORY
-setopt HIST_IGNORE_ALL_DUPS
-setopt HIST_IGNORE_SPACE
-setopt HIST_FIND_NO_DUPS
-setopt HIST_SAVE_NO_DUPS
+export SAVEHIST=2000000               # Number of history entries to save to disk
+setopt EXTENDED_HISTORY          # Write the history file in the ":start:elapsed;command" format.
+setopt SHARE_HISTORY             # Share history between all sessions.
+setopt HIST_EXPIRE_DUPS_FIRST    # Expire duplicate entries first when trimming history.
+setopt HIST_IGNORE_DUPS          # Don't record an entry that was just recorded again.
+setopt HIST_IGNORE_ALL_DUPS      # Delete old recorded entry if new entry is a duplicate.
+setopt HIST_FIND_NO_DUPS         # Do not display a line previously found.
+setopt HIST_IGNORE_SPACE         # Don't record an entry starting with a space.
+setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in the history file.
+setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording entry.
 
 # Wanting up-down arrows to be still local, credit of
 # https://superuser.com/questions/446594/separate-up-arrow-lookback-for-local-and-global-zsh-history/691603#691603

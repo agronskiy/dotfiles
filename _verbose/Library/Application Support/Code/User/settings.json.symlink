@@ -426,4 +426,5 @@
         "editor.defaultFormatter": "tamasfe.even-better-toml"
     },
     "window.zoomLevel": 1,
+    "snyk.yesWelcomeNotification": false,
 }
