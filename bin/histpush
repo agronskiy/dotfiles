@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+# This allows to quickly restart the DNS responder e.g. when SSH host is not recognized.
+
+set -eo pipefail
+
+source $YASLI_DIR/logging.inc.sh
+
+log_info "Fetching results"
+
+cd $HOME/.zsh_history_proj
+
+(
+    git fetch --all
+    git reset --hard origin/main
+) 2>&1 | log_cmd || log_fail "Failed"
+
+[ -f $HISTFILE ] || log_fail "No $HISTFILE to encrypt"
+
+cp $HISTFILE $HISTFILE.bak
+
+log_info "Copied history backup to $HISTFILE.bak"
+(
+    log_info "Encrypting"
+    gpg --batch --yes -r $HIST_SYNC_DEFAULT_GPG --output zsh_history --encrypt $HISTFILE
+) 2>&1 | log_cmd || log_fail "Failed"
+
+log_info "Committing"
+(
+    git commit -am "upd history $(date)"
+    git push --force
+) 2>&1 | log_cmd || log_fail "Failed"
+
+log_success "Done"
+
+
