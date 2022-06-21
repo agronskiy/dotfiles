@@ -87,6 +87,9 @@ alias delta="delta $DELTA_DEFAULT_OPTS "
 
 export GPG_TTY=$TTY
 
+# Syncs the zsh history, using scripts histpull/histpush from `./bin`
+alias histsync="histpull && builtin fc -R -I && builtin fc -W && histpush"
+
 # If one does not want to use `exa`
 # # Makes colors in CLI ls output
 # case `uname` in
