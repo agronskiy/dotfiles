@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# Removes all the escape sequences in-place
+# Credit of https://stackoverflow.com/questions/6534556/how-to-remove-and-all-of-the-escape-sequences-in-a-file-using-linux-shell-sc
+
+set -eo pipefail
+
+file=$1
+
+sed -i $'s,[\x01-\x1F\x7F][[0-9;]*[a-zA-Z],,g' $file
