@@ -53,7 +53,7 @@ __fzf-history-widget() {
   setopt localoptions noglobsubst noposixbuiltins pipefail 2> /dev/null
   # Sed's below strip date information such as `123 2021-11-01 09:48` and then replace `\n` with
   # newlines.
-  sed_preview='s#^[[:space:]]\{1,\}\([^[:space:]]\{1,\}[[:space:]]\{1,\}\)\{3\}#  #;s#\\n#\
+  sed_preview='s#^[[:space:]]\{0,\}\([^[:space:]]\{1,\}[[:space:]]\{1,\}\)\{3\}#  #;s#\\n#\
     #g'
 
   # Bat below highlights the command with bash syntax.
