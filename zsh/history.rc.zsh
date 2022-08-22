@@ -15,8 +15,8 @@ setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in the history 
 # https://superuser.com/questions/446594/separate-up-arrow-lookback-for-local-and-global-zsh-history/691603#691603
 bindkey "${key[Up]}" up-line-or-local-history
 bindkey "${key[Down]}" down-line-or-local-history
-bindkey "^P" up-line-or-local-history
-bindkey "^N" down-line-or-local-history
+bindkey "^P" up-command-local-history
+bindkey "^N" down-command-local-history
 
 up-line-or-local-history() {
     zle set-local-history 1
@@ -30,6 +30,19 @@ down-line-or-local-history() {
     zle set-local-history 0
 }
 zle -N down-line-or-local-history
+
+up-command-local-history() {
+    zle set-local-history 1
+    zle up-history
+    zle set-local-history 0
+}
+zle -N up-command-local-history
+down-command-local-history() {
+    zle set-local-history 1
+    zle down-history
+    zle set-local-history 0
+}
+zle -N down-command-local-history
 # End of dividing history
 
 # Finding history
