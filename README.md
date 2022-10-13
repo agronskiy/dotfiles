@@ -39,11 +39,10 @@ git clone https://github.com/agronskiy/yasli.git $HOME/.yasli
 
 This would 99% smoothly install everything in a "Darwin" <-> "Ubuntu" cross-platform manner.
 
-## tmux notes
+## Some things one does manually
 
-Make sure that after installing tmux, you restart terminal and run it with `Prefix + Shift-I` to install
-its own plugins.
-
+- install nerd fonts
+- check latest neovim
 
 ## Trivia
 
