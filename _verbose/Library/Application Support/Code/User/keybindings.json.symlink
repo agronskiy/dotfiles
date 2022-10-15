@@ -2,5 +2,19 @@
     {
         "key": "cmd+r",
         "command": "settings.cycle.lineNumber",
+    },
+    {
+        "key": "ctrl+m ctrl+m",
+        "command": "workbench.action.toggleMaximizedPanel"
+    },
+    {
+        "key": "alt+q",
+        "command": "rewrap.rewrapComment",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "alt+q",
+        "command": "-rewrap.rewrapComment",
+        "when": "editorTextFocus"
     }
 ]
