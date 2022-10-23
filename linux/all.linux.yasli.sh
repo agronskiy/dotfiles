@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # fd
 install_fd() {
     $SUDO_CMD apt-get -y install fd-find
@@ -6,7 +8,7 @@ exists_fd() {
    [ -x "$(command -v fdfind)" ]
 }
 update_fd(){
-    ln -s --force $(which fdfind) "$HOME/.local/bin/fd"
+    ln -s --force "$(which fdfind)" "$HOME/.local/bin/fd"
 }
 install_wrapper "fd" install_fd exists_fd update_fd
 
@@ -24,7 +26,7 @@ exists_batcat() {
     [ -x "$(command -v batcat)" ]
 }
 update_batcat() {
-   ln -s --force $(which batcat) "$HOME/.local/bin/bat"
+   ln -s --force "$(which batcat)" "$HOME/.local/bin/bat"
 }
 install_wrapper "bat" install_batcat exists_batcat update_batcat
 
@@ -118,10 +120,15 @@ install_wrapper "tmux" install_tmux
 
 # neovim
 install_neovim() {
-    $SUDO_CMD apt-get -y install neovim
+    [ -d "$HOME/.local/bin/neovim-install" ] && rm -rf "$HOME/.local/bin/neovim-install"
+    mkdir -p "$HOME/.local/bin/neovim-install"
+    cd $HOME/.local/bin/neovim-install \
+    && curl -LO https://github.com/neovim/neovim/releases/download/v0.8.0/nvim-linux64.tar.gz \
+    && tar xzvf nvim-linux64.tar.gz \
+    && ln -s --force "$(realpath ./nvim-linux64/bin/nvim)" "$HOME/.local/bin/nvim"
 }
 exists_neovim() {
-    [ -x "$(command -v nvim)" ]
+    nvim --version | grep -q "0.8.0"
 }
 install_wrapper "neovim" install_neovim exists_neovim
 
