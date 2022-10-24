@@ -93,7 +93,7 @@ local config = {
       number = true, -- sets vim.opt.number
       spell = false, -- sets vim.opt.spell
       signcolumn = "auto", -- sets vim.opt.signcolumn to auto
-      wrap = false, -- sets vim.opt.wrap
+      wrap = true, -- sets vim.opt.wrap
     },
     g = {
       mapleader = " ", -- sets vim.g.mapleader
@@ -255,11 +255,20 @@ local config = {
       ["<leader>bj"] = { "<cmd>BufferLinePick<cr>", desc = "Pick to jump" },
       ["<leader>bt"] = { "<cmd>BufferLineSortByTabs<cr>", desc = "Sort by tabs" },
       [";"] = ":",
-      ["<leader>fs"] = { "<cmd>Telescope current_buffer_fuzzy_find<cr>", desc = "Search current buffer" },
-      ["<leader>fc"] = { "<cmd>Telescope commands<cr>", desc = "Search commands" },
-      ["<leader>fh"] = { "<cmd>Telescope command_history<cr>", desc = "Search command history" },
+      ["<leader>fs"] = { function() require("telescope.builtin").current_buffer_fuzzy_find() end,
+        desc = "Search current buffer" },
+      ["<leader>fc"] = { function() require("telescope.builtin").commands() end, desc = "Search commands" },
+      ["<leader>fh"] = { function() require("telescope.builtin").command_history() end, desc = "Search command history" },
       -- quick save
       -- ["<C-s>"] = { ":w!<cr>", desc = "Save File" },  -- change description but the same command
+      -- navigating wrapped lines
+      j = { "gj", desc = "Navigate down" },
+      k = { "gk", desc = "Navigate down" },
+    },
+    v = {
+      -- navigating wrapped lines
+      j = { "gj", desc = "Navigate down" },
+      k = { "gk", desc = "Navigate down" },
     },
     t = {
       -- setting a mapping to false will disable it
@@ -276,6 +285,18 @@ local config = {
 
       -- You can also add new plugins here as well:
       { "Mofiqul/vscode.nvim" },
+      { "lervag/vimtex",
+        event = "BufRead",
+        config = function()
+          -- A lot of important info is here https://dr563105.github.io/blog/skim-vimtex-setup/
+          -- and here https://znculee.github.io/blogs/tools/vim#vimtex
+          vim.g.vimtex_view_method = "skim"
+          -- Value 1 allows forward search after every successful compilation
+          vim.g.vimtex_view_skim_sync = 1
+          -- Value 1 allows change focus to skim after command `:VimtexView` is given
+          vim.g.vimtex_view_skim_activate = 1
+        end,
+      },
 
       -- Add plugins, the packer syntax without the "use"
       -- { "andweeb/presence.nvim" },

@@ -72,15 +72,21 @@ install_tmux() {
 }
 install_wrapper "tmux" install_tmux
 
-# tmux
+
+# neovim
 install_neovim() {
-    brew install neovim
+    [ -d "$HOME/.local/bin/neovim-install" ] && rm -rf "$HOME/.local/bin/neovim-install"
+    mkdir -p "$HOME/.local/bin/neovim-install"
+    cd $HOME/.local/bin/neovim-install \
+    && curl -LO https://github.com/neovim/neovim/releases/download/v0.8.0/nvim-macos.tar.gz \
+    && xattr -c ./nvim-macos.tar.gz \
+    && tar xzvf ./nvim-macos.tar.gz \
+    && ln -sf "$(realpath ./nvim-macos/bin/nvim)" "$HOME/.local/bin/nvim"
 }
 exists_neovim() {
-    [ -x "$(command -v nvim)" ]
+  [ -x "$(command -v nvim)" ] && nvim --version | grep -q "0.8.0"
 }
 install_wrapper "neovim" install_neovim exists_neovim
-
 
 # nodejs
 install_nodejs() {
@@ -90,4 +96,13 @@ exists_nodejs() {
     [ -x "$(command -v node)" ]
 }
 install_wrapper "nodejs" install_nodejs exists_nodejs
+
+# install shellcheck
+install_shellcheck() {
+  brew install shellcheck
+}
+exists_shellcheck() {
+  [ -x "$(command -v shellcheck)" ]
+}
+install_wrapper "shellcheck" install_shellcheck exists_shellcheck
 

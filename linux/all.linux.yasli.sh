@@ -128,7 +128,7 @@ install_neovim() {
     && ln -s --force "$(realpath ./nvim-linux64/bin/nvim)" "$HOME/.local/bin/nvim"
 }
 exists_neovim() {
-    nvim --version | grep -q "0.8.0"
+  [ -x "$(command -v nvim)" ] && nvim --version | grep -q "0.8.0"
 }
 install_wrapper "neovim" install_neovim exists_neovim
 
@@ -140,3 +140,12 @@ exists_nodejs() {
     [ -x "$(command -v node)" ]
 }
 install_wrapper "nodejs" install_nodejs exists_nodejs
+
+# shellcheck
+install_shellcheck() {
+  $SUDO_CMD apt install shellcheck
+}
+exists_shellcheck() {
+    [ -x "$(command -v shellcheck)" ]
+}
+install_wrapper "shellcheck" install_shellcheck exists_shellcheck
