@@ -290,6 +290,7 @@ local config = {
         config = function()
           -- A lot of important info is here https://dr563105.github.io/blog/skim-vimtex-setup/
           -- and here https://znculee.github.io/blogs/tools/vim#vimtex
+          vim.g.tex_flavor = "latex"
           vim.g.vimtex_view_method = "skim"
           -- Value 1 allows forward search after every successful compilation
           vim.g.vimtex_view_skim_sync = 1
@@ -435,6 +436,20 @@ local config = {
     --     ["~/%.config/foo/.*"] = "fooscript",
     --   },
     -- }
+
+    -- Create specific bindings for TeX
+    vim.api.nvim_create_augroup("mytex", { clear = true })
+    vim.api.nvim_create_autocmd({ "BufEnter", "VimEnter", "FileType" }, {
+      desc = "Bindings for LaTeX",
+      group = "mytex",
+      pattern = "tex",
+      callback = function()
+        if vim.bo.filetype == "tex" then
+          vim.api.nvim_buf_set_keymap(0, "n", "<leader>lv", "<cmd>VimtexView<cr>", {})
+          vim.api.nvim_buf_set_keymap(0, "n", "<leader>lc", "<cmd>VimtexCompile<cr>", {})
+        end
+      end,
+    })
   end,
 }
 
