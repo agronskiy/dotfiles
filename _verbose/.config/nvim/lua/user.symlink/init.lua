@@ -1,4 +1,3 @@
---              AstroNvim Configuration Table
 -- All configuration changes should go inside of the table below
 
 local telescope_actions = require "telescope.actions"
@@ -250,6 +249,7 @@ local config = {
     n = {
       -- second key is the lefthand side of the map
       -- mappings seen under group name "Buffer"
+      ["<leader>bo"] = { "<cmd>BufferLineCloseLeft<cr><cmd>BufferLineCloseRight<cr>", desc = "Close other tabs" },
       ["<leader>bb"] = { "<cmd>tabnew<cr>", desc = "New tab" },
       ["<leader>bc"] = { "<cmd>BufferLinePickClose<cr>", desc = "Pick to close" },
       ["<leader>bj"] = { "<cmd>BufferLinePick<cr>", desc = "Pick to jump" },
@@ -447,6 +447,12 @@ local config = {
         if vim.bo.filetype == "tex" then
           vim.api.nvim_buf_set_keymap(0, "n", "<leader>lv", "<cmd>VimtexView<cr>", {})
           vim.api.nvim_buf_set_keymap(0, "n", "<leader>lc", "<cmd>VimtexCompile<cr>", {})
+
+          -- Set vim servername for callbacks
+          local nvim_server_file = "/tmp/curnvimserver.txt"
+          local servername = vim.v.servername
+          local cmd = vim.fn.printf("echo %s > %s", servername, nvim_server_file)
+          vim.fn.system(cmd)
         end
       end,
     })
