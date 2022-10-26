@@ -264,6 +264,9 @@ local config = {
       -- navigating wrapped lines
       j = { "gj", desc = "Navigate down" },
       k = { "gk", desc = "Navigate down" },
+      -- close other windows and buffers ("Focus")
+      ["<leader>F"] = { "<cmd>BufferLineCloseLeft<cr><cmd>BufferLineCloseRight<cr><cmd>on<cr>",
+        desc = "Close other tabs and windows" },
     },
     i = {
       ["jj"] = { "<esc>la", desc = "Move one symbol right" },
@@ -330,7 +333,6 @@ local config = {
         -- bash
         null_ls.builtins.code_actions.shellcheck,
         null_ls.builtins.diagnostics.shellcheck,
-
         -- python
         -- null_ls.builtins.diagnostics.flake8,
         -- null_ls.builtins.diagnostics.pyproject_flake8,
@@ -340,6 +342,7 @@ local config = {
         -- null_ls.builtins.diagnostics.pylint,
         null_ls.builtins.formatting.black,
         null_ls.builtins.formatting.isort,
+        null_ls.builtins.formatting.latexindent,
       }
 
       return defaults
