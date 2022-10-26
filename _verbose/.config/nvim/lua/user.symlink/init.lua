@@ -265,6 +265,11 @@ local config = {
       j = { "gj", desc = "Navigate down" },
       k = { "gk", desc = "Navigate down" },
     },
+    i = {
+      ["jj"] = { "<esc>la", desc = "Move one symbol right" },
+      -- Useful when editing and inside autoclosed quotes
+      ["jl"] = { "<esc>A", desc = "Move to the end and continue edit" },
+    },
     v = {
       -- navigating wrapped lines
       j = { "gj", desc = "Navigate down" },
@@ -344,6 +349,10 @@ local config = {
       -- ensure_installed = { "lua" },
     },
 
+    ["better_escape"] = {
+      mapping = { "jk" },
+    },
+
     -- use mason-lspconfig to configure LSP installations
     ["mason-lspconfig"] = { -- overrides `require("mason-lspconfig").setup(...)`
       ensure_installed = { "sumneko_lua", "clangd", "pyright" },
@@ -366,7 +375,11 @@ local config = {
       pickers = {
         live_grep = {
           mappings = {
-            i = { ["<c-f>"] = telescope_actions.to_fuzzy_refine },
+            i = {
+              ["<c-f>"] = telescope_actions.to_fuzzy_refine,
+              ["jl"] = false,
+              ["jj"] = false,
+            },
           },
         },
       }
