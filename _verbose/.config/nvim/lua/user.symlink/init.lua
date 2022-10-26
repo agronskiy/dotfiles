@@ -87,12 +87,14 @@ local config = {
       autoindent = false,
       relativenumber = true, -- sets vim.opt.relativenumber
       cmdheight = 2,
+      colorcolumn = { 80, 100, 120 },
       shiftwidth = 2,
       tabstop = 2,
       number = true, -- sets vim.opt.number
       spell = false, -- sets vim.opt.spell
       signcolumn = "auto", -- sets vim.opt.signcolumn to auto
       wrap = true, -- sets vim.opt.wrap
+      linebreak = true,
     },
     g = {
       mapleader = " ", -- sets vim.g.mapleader
@@ -350,6 +352,12 @@ local config = {
 
     treesitter = { -- overrides `require("treesitter").setup(...)`
       -- ensure_installed = { "lua" },
+    },
+
+    bufferline = {
+      options = {
+        close_command = "bdelete %d",
+      },
     },
 
     ["better_escape"] = {
