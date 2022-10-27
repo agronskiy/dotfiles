@@ -472,7 +472,10 @@ local config = {
           vim.api.nvim_buf_set_keymap(0, "n", "<leader>lv", "<cmd>VimtexView<cr>", {})
           vim.api.nvim_buf_set_keymap(0, "n", "<leader>lc", "<cmd>VimtexCompile<cr>", {})
 
-          -- Set vim servername for callbacks
+          -- Set vim servername for callbacks from Skim (for inverse search). Setup of the
+          -- Skim->Preferences->Synk is thus:
+          --   Command:   nvr
+          --   Arguments: --servername `cat /tmp/curnvimserver.txt` +"%line" "%file"
           local nvim_server_file = "/tmp/curnvimserver.txt"
           local servername = vim.v.servername
           local cmd = vim.fn.printf("echo %s > %s", servername, nvim_server_file)
