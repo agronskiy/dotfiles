@@ -399,7 +399,7 @@ local config = {
             },
           },
         },
-      }
+      },
     },
 
     toggleterm = {
@@ -489,6 +489,12 @@ local config = {
         end
       end,
     })
+
+    -- This avoids deprecation warnings about not needed to call aerial on_attach
+    -- TODO(alex.gronskiy): should be deleted after 2023-02
+    -- https://github.com/stevearc/aerial.nvim/blob/9c179f5932e3a6237f2dd29500e44b9b8cd47f48/lua/aerial/init.lua#L450
+    local aerial_avail, aerial = pcall(require, "aerial")
+    if aerial_avail then aerial.on_attach = nil end
   end,
 }
 
