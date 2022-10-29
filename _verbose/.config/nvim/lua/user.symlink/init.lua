@@ -261,6 +261,12 @@ local config = {
         desc = "Search current buffer" },
       ["<leader>fc"] = { function() require("telescope.builtin").commands() end, desc = "Search commands" },
       ["<leader>fh"] = { function() require("telescope.builtin").command_history() end, desc = "Search command history" },
+      ["<leader>fm"] = { function() require("telescope.builtin").live_grep({
+          additional_args = function()
+            return { '--multiline', '--multiline-dotall' }
+          end
+        })
+      end, desc = "Search multiline" },
       -- quick save
       -- ["<C-s>"] = { ":w!<cr>", desc = "Save File" },  -- change description but the same command
       -- navigating wrapped lines
