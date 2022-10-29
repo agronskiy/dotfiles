@@ -10,7 +10,7 @@ local config = {
   -- Configure AstroNvim updates
   updater = {
     remote = "origin", -- remote to use
-    channel = "nightly", -- "stable" or "nightly"
+    channel = "stable", -- "stable" or "nightly"
     version = "latest", -- "latest", tag name, or regex search like "v1.*" to only do updates before v2 (STABLE ONLY)
     branch = "main", -- branch name (NIGHTLY ONLY)
     commit = nil, -- commit hash (NIGHTLY ONLY)
@@ -370,6 +370,10 @@ local config = {
       mapping = { "jk" },
     },
 
+    gitsigns = {
+      current_line_blame = true,
+    },
+
     -- use mason-lspconfig to configure LSP installations
     ["mason-lspconfig"] = { -- overrides `require("mason-lspconfig").setup(...)`
       ensure_installed = { "sumneko_lua", "clangd", "pyright" },
@@ -490,11 +494,6 @@ local config = {
       end,
     })
 
-    -- This avoids deprecation warnings about not needed to call aerial on_attach
-    -- TODO(alex.gronskiy): should be deleted after 2023-02
-    -- https://github.com/stevearc/aerial.nvim/blob/9c179f5932e3a6237f2dd29500e44b9b8cd47f48/lua/aerial/init.lua#L450
-    local aerial_avail, aerial = pcall(require, "aerial")
-    if aerial_avail then aerial.on_attach = nil end
   end,
 }
 
