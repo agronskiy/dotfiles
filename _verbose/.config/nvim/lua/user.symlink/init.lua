@@ -267,12 +267,17 @@ local config = {
           end
         })
       end, desc = "Search multiline" },
+
+      -- Git things
+      ["<leader>gg"] = { function() require("neogit").open() end, desc = "Open neogit" },
+      ["<leader>gd"] = { function() require("diffview").open() end, desc = "Open diffview" },
+
       -- quick save
       -- ["<C-s>"] = { ":w!<cr>", desc = "Save File" },  -- change description but the same command
       -- navigating wrapped lines
       j = { "gj", desc = "Navigate down" },
       k = { "gk", desc = "Navigate down" },
-      -- close other windows and buffers ("Focus")
+
       ["<leader>F"] = { "<cmd>BufferLineCloseLeft<cr><cmd>BufferLineCloseRight<cr><cmd>on<cr>",
         desc = "Close other tabs and windows" },
     },
@@ -300,8 +305,8 @@ local config = {
       ["Darazaki/indent-o-matic"] = { disable = true },
 
       -- You can also add new plugins here as well:
-      { "Mofiqul/vscode.nvim" },
-      { "lervag/vimtex",
+      ["Mofiqul/vscode.nvim"] = {},
+      ["lervag/vimtex"] = {
         event = "BufRead",
         config = function()
           -- A lot of important info is here https://dr563105.github.io/blog/skim-vimtex-setup/
@@ -312,6 +317,21 @@ local config = {
           vim.g.vimtex_view_skim_sync = 1
           -- Value 1 allows change focus to skim after command `:VimtexView` is given
           vim.g.vimtex_view_skim_activate = 1
+        end,
+      },
+
+      ["sindrets/diffview.nvim"] = {},
+
+      ["TimUntersberger/neogit"] = {
+        requires = { "nvim-lua/plenary.nvim", "sindrets/diffview.nvim" },
+        config = function()
+          require("neogit").setup {
+            disable_commit_confirmation = true,
+            kind = "floating",
+            integrations = {
+              diffview = true,
+            },
+          }
         end,
       },
 
