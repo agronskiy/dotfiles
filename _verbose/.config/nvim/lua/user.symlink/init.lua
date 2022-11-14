@@ -327,7 +327,7 @@ local config = {
         config = function()
           require("neogit").setup {
             disable_commit_confirmation = true,
-            kind = "floating",
+            kind = "replace",
             integrations = {
               diffview = true,
             },
