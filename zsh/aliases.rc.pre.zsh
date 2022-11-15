@@ -114,3 +114,6 @@ alias histsync="histpull && builtin fc -R -I && builtin fc -W && histpush"
 #     __tree "$@" | less
 # }
 
+# lazygit
+alias lg="lazygit"
+
