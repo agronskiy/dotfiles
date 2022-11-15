@@ -106,10 +106,10 @@ install_zsh_autosuggestions() {
             ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 }
 exists_zsh_autosuggestions () {
-    [ -d ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/zsh-autosuggestions ]
+    [ -d "${ZSH_CUSTOM:=${ZSH}/custom}/plugins/zsh-autosuggestions" ]
 }
 update_zsh_autosuggestions () {
-    ( cd ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/zsh-autosuggestions \
+    ( cd "${ZSH_CUSTOM:=${ZSH}/custom}/plugins/zsh-autosuggestions" \
         && git pull &> /dev/null )
 }
 install_wrapper "zsh autosuggestions" \

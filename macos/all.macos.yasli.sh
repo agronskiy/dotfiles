@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# For mac, this is not a standard bin location, so to make the `exists_...` (where we install 
+# some binaries) commands below work we need to ensure it is in `PATH`.
+export PATH="$HOME/.local/bin:$PATH"
+
 # fd
 install_fd() {
     brew install fd
@@ -77,7 +81,7 @@ install_wrapper "tmux" install_tmux
 install_neovim() {
     [ -d "$HOME/.local/bin/neovim-install" ] && rm -rf "$HOME/.local/bin/neovim-install"
     mkdir -p "$HOME/.local/bin/neovim-install"
-    cd $HOME/.local/bin/neovim-install \
+    cd "$HOME/.local/bin/neovim-install" \
     && curl -LO https://github.com/neovim/neovim/releases/download/v0.8.0/nvim-macos.tar.gz \
     && xattr -c ./nvim-macos.tar.gz \
     && tar xzvf ./nvim-macos.tar.gz \
