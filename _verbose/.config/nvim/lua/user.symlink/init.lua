@@ -272,6 +272,9 @@ local config = {
       ["<leader>gg"] = { function() require("neogit").open() end, desc = "Open neogit" },
       ["<leader>gd"] = { function() require("diffview").open() end, desc = "Open diffview" },
 
+      -- Hop command to quickly go to bigram
+      ["gh"] = { function() require("hop").hint_char2() end, desc = "Hop to bigram" },
+
       -- quick save
       -- ["<C-s>"] = { ":w!<cr>", desc = "Save File" },  -- change description but the same command
       -- navigating wrapped lines
@@ -290,6 +293,9 @@ local config = {
       -- navigating wrapped lines
       j = { "gj", desc = "Navigate down" },
       k = { "gk", desc = "Navigate down" },
+
+      -- Hop command to quickly go to bigram
+      ["gh"] = { function() require("hop").hint_char2() end, desc = "Hop to bigram" },
     },
     t = {
       -- setting a mapping to false will disable it
@@ -306,6 +312,13 @@ local config = {
 
       -- You can also add new plugins here as well:
       ["Mofiqul/vscode.nvim"] = {},
+
+      ["phaazon/hop.nvim"] = {
+        config = function()
+          require("hop").setup {}
+        end,
+      },
+
       ["lervag/vimtex"] = {
         event = "BufRead",
         config = function()
@@ -377,7 +390,17 @@ local config = {
     end,
 
     treesitter = { -- overrides `require("treesitter").setup(...)`
-      -- ensure_installed = { "lua" },
+      ensure_installed = {
+        'bash', 'cpp', 'css', 'html', 'json', 'lua', 'python', 'vim', 'markdown_inline', 'markdown',
+      },
+      highlight = {
+        -- `false` will disable the whole extension
+        enable = true,
+        -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+        -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+        -- Using this option may slow down your editor, and you may see some duplicate highlights.
+        -- Instead of true it can also be a list of languages
+      },
     },
 
     bufferline = {
