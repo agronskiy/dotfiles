@@ -115,6 +115,7 @@ local config = {
       relativenumber = true, -- sets vim.opt.relativenumber
       cmdheight = 2,
       colorcolumn = { 80, 100, 120 },
+      textwidth = 100,
       shiftwidth = 2,
       tabstop = 2,
       number = true, -- sets vim.opt.number
