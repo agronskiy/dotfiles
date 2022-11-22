@@ -31,9 +31,26 @@ local config = {
 
   -- Add highlight groups in any theme
   highlights = {
-    -- init = { -- this table overrides highlights in all themes
-    --   Normal = { bg = "#000000" },
-    -- }
+    init = { -- this table overrides highlights in all themes
+      PounceMatch = {
+        underline = true,
+        bold = true,
+        bg = vim.api.nvim_get_hl_by_name("Normal", true).background,
+        fg = "#FF00FF",
+      },
+      PounceGap = {
+        underline = true,
+        bold = false,
+        bg = vim.api.nvim_get_hl_by_name("Normal", true).background,
+        fg = "#FF00FF",
+      },
+      PounceAccept = {
+        underline = true,
+        bold = true,
+        bg = vim.api.nvim_get_hl_by_name("Normal", true).background,
+        fg = "#00FFFF",
+      },
+    }
     -- duskfox = { -- a table of overrides/changes to the duskfox theme
     --   Normal = { bg = "#000000" },
     -- },
@@ -81,6 +98,16 @@ local config = {
   -- vim.opt.shortmess:append "c"                    -- hide all the completion messages, e.g. "-- XXX completion (YYY)", "match 1 of 2", "The only match", "Pattern not found"
   -- vim.opt.whichwrap:append("<,>,[,],h,l")         -- keys allowed to move to the previous/next line when the beginning/end of line is reached
   -- vim.opt.iskeyword:append("-")                   -- treats words with `-` as single words
+
+  -- If you need more control, you can use the function()...end notation
+  -- options = function(local_vim)
+  --   local_vim.opt.relativenumber = true
+  --   local_vim.g.mapleader = " "
+  --   local_vim.opt.whichwrap = vim.opt.whichwrap - { 'b', 's' } -- removing option from list
+  --   local_vim.opt.shortmess = vim.opt.shortmess + { I = true } -- add to option list
+  --
+  --   return local_vim
+  -- end,
   options = {
     opt = {
       -- set to true or false etc.
@@ -111,15 +138,6 @@ local config = {
     cpp = { tabstop = 2, softtabstop = 2, shiftwidth = 2 },
     python = { tabstop = 4, softtabstop = 4, shiftwidth = 4 },
   },
-  -- If you need more control, you can use the function()...end notation
-  -- options = function(local_vim)
-  --   local_vim.opt.relativenumber = true
-  --   local_vim.g.mapleader = " "
-  --   local_vim.opt.whichwrap = vim.opt.whichwrap - { 'b', 's' } -- removing option from list
-  --   local_vim.opt.shortmess = vim.opt.shortmess + { I = true } -- add to option list
-  --
-  --   return local_vim
-  -- end,
 
   -- Set dashboard header
   header = {
@@ -268,12 +286,10 @@ local config = {
         })
       end, desc = "Search multiline" },
 
-      -- Git things
-      ["<leader>gg"] = { function() require("neogit").open() end, desc = "Open neogit" },
-      ["<leader>gd"] = { function() require("diffview").open() end, desc = "Open diffview" },
-
-      -- Hop command to quickly go to bigram
-      ["gh"] = { function() require("hop").hint_char2() end, desc = "Hop to bigram" },
+      -- Hop command to quickly go to uni/bi-graom
+      ["w"] = { function() require("hop").hint_words() end, desc = "Hop to word" },
+      ["t"] = { function() require("hop").hint_char1() end, desc = "Hop to char" },
+      ["f"] = { function() require("pounce").pounce() end, desc = "Fuzzy hop with pounce" },
 
       -- quick save
       -- ["<C-s>"] = { ":w!<cr>", desc = "Save File" },  -- change description but the same command
@@ -295,7 +311,9 @@ local config = {
       k = { "gk", desc = "Navigate down" },
 
       -- Hop command to quickly go to bigram
-      ["gh"] = { function() require("hop").hint_char2() end, desc = "Hop to bigram" },
+      ["w"] = { function() require("hop").hint_words() end, desc = "Hop to word" },
+      ["t"] = { function() require("hop").hint_char1() end, desc = "Hop to char" },
+      ["f"] = { function() require("pounce").pounce() end, desc = "Fuzzy hop with pounce" },
     },
     t = {
       -- setting a mapping to false will disable it
@@ -312,6 +330,8 @@ local config = {
 
       -- You can also add new plugins here as well:
       ["Mofiqul/vscode.nvim"] = {},
+
+      ["rlane/pounce.nvim"] = {},
 
       ["phaazon/hop.nvim"] = {
         config = function()
@@ -334,19 +354,6 @@ local config = {
       },
 
       ["sindrets/diffview.nvim"] = {},
-
-      ["TimUntersberger/neogit"] = {
-        requires = { "nvim-lua/plenary.nvim", "sindrets/diffview.nvim" },
-        config = function()
-          require("neogit").setup {
-            disable_commit_confirmation = true,
-            kind = "replace",
-            integrations = {
-              diffview = true,
-            },
-          }
-        end,
-      },
 
       -- Add plugins, the packer syntax without the "use"
       -- { "andweeb/presence.nvim" },
