@@ -117,3 +117,6 @@ alias histsync="histpull && builtin fc -R -I && builtin fc -W && histpush"
 # lazygit
 alias lg="lazygit"
 
+# kubectl alias
+alias kc="kubectl"
+

@@ -442,7 +442,7 @@
     "clangd.path": "/Users/agronskiy/Library/Application Support/Code/User/globalStorage/llvm-vs-code-extensions.vscode-clangd/install/14.0.3/clangd_14.0.3/bin/clangd",
     "githubPullRequests.fileListLayout": "flat",
     "git.ignoredRepositories": [
-        "/Users/agronskiy/.vscode/extensions/stepsize.stepsize-0.63.1/resources/demo-repository"
+        "/Users/agronskiy/.vscode/extensions/stepsize.stepsize-0.72.0/resources/demo-repository"
     ],
     "latex-workshop.latex.tools": [
         {
@@ -551,4 +551,12 @@
     ],
     "window.zoomLevel": 1,
     "snyk.yesWelcomeNotification": false,
+    "snyk.trustedFolders": [
+        "/tmp",
+        "/home/alex_gronskiy_snyk_io/tmp",
+        "/home/alex_gronskiy_snyk_io/tmp/lsp",
+        "/Users/agronskiy/tmp/lsp"
+    ],
+    "snyk.advanced.cliPath": "/Users/agronskiy/Library/Application Support/snyk-ls/snyk-macos",
+    "snyk.advanced.customEndpoint": "https://localhost:6005",
 }
