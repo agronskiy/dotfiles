@@ -61,21 +61,23 @@ function hh()
 }
 
 # New version - widget bound to Ctrl-R
+# NOTE(agronskiy): this is taken and enhanced from
+# https://github.com/junegunn/fzf/blob/master/shell/key-bindings.zsh
 __fzf-history-widget() {
   local selected num
-  setopt localoptions noglobsubst noposixbuiltins pipefail 2> /dev/null
+  setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2> /dev/null
   # Sed's below strip date information such as `123 2021-11-01 09:48` and then replace `\n` with
   # newlines.
   sed_preview='s#^[[:space:]]\{0,\}\([^[:space:]]\{1,\}[[:space:]]\{1,\}\)\{3\}#  #;s#\\n#\
     #g'
 
   # Bat below highlights the command with bash syntax.
-  selected=( $(fc -rli 1 |
-    FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index
+  selected=( $(fc -rl 1 | awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, "", cmd); if (!seen[cmd]++) print $0 }' |
+    FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --scheme=history
     --preview-window down:15:wrap --preview='printf '\''%s'\'' {} |
     sed '\''$sed_preview'\'' |
     bat --color=always --plain -l '\''Bourne Again Shell (bash)'\'' '
-    $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} +m" $(__fzfcmd)) )
+    ${FZF_CTRL_R_OPTS-} --query=${(qqq)LBUFFER} +m" $(__fzfcmd)) )
   local ret=$?
   if [ -n "$selected" ]; then
     num=$selected[1]
