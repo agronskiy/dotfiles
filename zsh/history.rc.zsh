@@ -92,17 +92,3 @@ zle     -N   __fzf-history-widget
 bindkey '^R' __fzf-history-widget
 bindkey 'jk' __fzf-history-widget
 
-# NOTE(agronskiy): unused since moving to zsh
-log_persistent_history_unused()
-{
-    local COMMAND_PART=$1
-    local COMMAND_PART_NONEWLINE=("${COMMAND_PART//'\'$'\n'/}")
-    COMMAND_PART_NONEWLINE=("${COMMAND_PART_NONEWLINE//$'\n'/}")
-    if [ "$COMMAND_PART_NONEWLINE" != "$PERSISTENT_HISTORY_LAST" ] \
-        && ! [[ "$COMMAND_PART_NONEWLINE " =~ ^(no)?hh[[:space:]]+ ]] \
-        && ! [[ $COMMAND_PART_NONEWLINE =~ ^[[:space:]] ]];
-    then
-        echo "$(date "+%Y-%m-%d %H:%M:%S")" " | " "$COMMAND_PART_NONEWLINE" >> ~/.persistent_history
-        export PERSISTENT_HISTORY_LAST="$COMMAND_PART_NONEWLINE"
-    fi
-}
