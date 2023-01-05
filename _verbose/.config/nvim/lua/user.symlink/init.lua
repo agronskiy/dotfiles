@@ -334,6 +334,14 @@ local config = {
 
       ["rlane/pounce.nvim"] = {},
 
+      -- For yanking from terminal
+      ["ojroques/vim-oscyank"] = {
+        event = "BufRead",
+        config = function()
+          vim.g.oscyank_term = "default"
+        end,
+      },
+
       ["phaazon/hop.nvim"] = {
         config = function()
           require("hop").setup {}
