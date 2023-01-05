@@ -315,6 +315,7 @@ local config = {
       ["w"] = { function() require("hop").hint_words() end, desc = "Hop to word" },
       ["t"] = { function() require("hop").hint_char1() end, desc = "Hop to char" },
       ["f"] = { function() require("pounce").pounce() end, desc = "Fuzzy hop with pounce" },
+      ["<leader>c"] = { ":'<,'>OSCYank<CR>", desc = "Yank to OSC52 clipboard", noremap = true },
     },
     t = {
       -- setting a mapping to false will disable it
@@ -334,9 +335,8 @@ local config = {
 
       ["rlane/pounce.nvim"] = {},
 
-      -- For yanking from terminal
+      -- For yanking from terminal, see
       ["ojroques/vim-oscyank"] = {
-        event = "BufRead",
         config = function()
           vim.g.oscyank_term = "default"
         end,
