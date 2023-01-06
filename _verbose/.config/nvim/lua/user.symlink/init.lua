@@ -112,7 +112,7 @@ local config = {
     opt = {
       -- set to true or false etc.
       autoindent = false,
-      relativenumber = true, -- sets vim.opt.relativenumber
+      relativenumber = false, -- sets vim.opt.relativenumber
       cmdheight = 2,
       colorcolumn = { 80, 100, 120 },
       textwidth = 100,
@@ -123,6 +123,7 @@ local config = {
       signcolumn = "auto", -- sets vim.opt.signcolumn to auto
       wrap = true, -- sets vim.opt.wrap
       linebreak = true,
+      mouse = "a",
     },
     g = {
       mapleader = " ", -- sets vim.g.mapleader
@@ -341,6 +342,9 @@ local config = {
           vim.g.oscyank_term = "default"
         end,
       },
+
+      -- Allowing seamless navigation btw tmux and vim
+      ["christoomey/vim-tmux-navigator"] = {},
 
       ["phaazon/hop.nvim"] = {
         config = function()
