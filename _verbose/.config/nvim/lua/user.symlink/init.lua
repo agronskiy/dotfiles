@@ -359,6 +359,16 @@ local config = {
       -- Allowing seamless navigation btw tmux and vim
       ["christoomey/vim-tmux-navigator"] = {},
 
+
+      -- Allows to preview in floating window
+      ["rmagatti/goto-preview"] = {
+        config = function()
+          require('goto-preview').setup {}
+          vim.keymap.set("n", "gp", "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", { noremap = true })
+        end
+      },
+
+      -- Hop allows to quickly jump ti different places in the screen
       ["phaazon/hop.nvim"] = {
         config = function()
           require("hop").setup {}
