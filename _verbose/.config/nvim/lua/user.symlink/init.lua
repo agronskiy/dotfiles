@@ -1,7 +1,5 @@
 -- All configuration changes should go inside of the table below
 
-local telescope_actions = require "telescope.actions"
-
 -- You can think of a Lua "table" as a dictionary like data structure the
 -- normal format is "key = value". These also handle array like data structures
 -- where a value with no key simply has an implicit numeric key
@@ -483,7 +481,7 @@ local config = {
         live_grep = {
           mappings = {
             i = {
-              ["<c-f>"] = telescope_actions.to_fuzzy_refine,
+              ["<c-f>"] = require("telescope.actions").to_fuzzy_refine,
               ["jl"] = false,
               ["jj"] = false,
             },
