@@ -363,6 +363,7 @@ local config = {
         config = function()
           require('goto-preview').setup {}
           vim.keymap.set("n", "gp", "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", { noremap = true })
+          vim.keymap.set("n", "<C-w>p", "<C-w>H<C-w>x<C-w>l", { desc = "Open in split", noremap = true })
         end
       },
 
