@@ -66,9 +66,9 @@ function hh()
 __fzf-history-widget() {
   local selected num
   setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2> /dev/null
-  # Sed's below strip date information such as `123 2021-11-01 09:48` and then replace `\n` with
+  # Sed's below strip history ordinal information such as `12345* ` and then replace `\n` with
   # newlines.
-  sed_preview='s#^[[:space:]]\{0,\}\([^[:space:]]\{1,\}[[:space:]]\{1,\}\)\{3\}#  #;s#\\n#\
+  sed_preview='s#^[[:space:]]\{0,\}\([^[:space:]]\{1,\}[[:space:]]\{1,\}\)\{1\}#  #;s#\\n#\
     #g'
 
   # Bat below highlights the command with bash syntax.
