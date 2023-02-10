@@ -1,3 +1,5 @@
+local is_available = astronvim.is_available
+
 -- All configuration changes should go inside of the table below
 
 -- You can think of a Lua "table" as a dictionary like data structure the
@@ -197,6 +199,7 @@ local config = {
   lsp = {
     -- enable servers that you already have installed without mason
     servers = {
+      "snykls"
       -- "pyright"
     },
     formatting = {
@@ -244,6 +247,7 @@ local config = {
       --     },
       --   },
       -- },
+
       pyright = {
         settings = {
           python = {
@@ -482,7 +486,12 @@ local config = {
         live_grep = {
           mappings = {
             i = {
-              ["<c-f>"] = require("telescope.actions").to_fuzzy_refine,
+              ["<c-f>"] = function(args)
+                local telescope_avail, _ = pcall(require, "telescope.actions")
+                if telescope_avail then
+                  require("telescope.actions").to_fuzzy_refine(args)
+                end
+              end,
               ["jl"] = false,
               ["jj"] = false,
             },
