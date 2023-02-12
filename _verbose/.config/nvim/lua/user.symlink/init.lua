@@ -1,12 +1,9 @@
-local is_available = astronvim.is_available
-
 -- All configuration changes should go inside of the table below
 
 -- You can think of a Lua "table" as a dictionary like data structure the
 -- normal format is "key = value". These also handle array like data structures
 -- where a value with no key simply has an implicit numeric key
 local config = {
-
   -- Configure AstroNvim updates
   updater = {
     remote = "origin", -- remote to use
@@ -25,10 +22,8 @@ local config = {
     --   ["remote3"] = "github_user", -- GitHub user assume AstroNvim fork
     -- },
   },
-
   -- Set colorscheme to use
   colorscheme = "vscode",
-
   -- Add highlight groups in any theme
   highlights = {
     init = { -- this table overrides highlights in all themes
@@ -55,7 +50,6 @@ local config = {
     --   Normal = { bg = "#000000" },
     -- },
   },
-
   -- set vim options here (vim.<first_key>.<second_key> =  value)
 
   -- vim.opt.backup = false                          -- creates a backup file
@@ -135,16 +129,13 @@ local config = {
       icons_enabled = true, -- disable icons in the UI (disable if no nerd font is available, requires :PackerSync after changing)
     },
   },
-
   rules = {
     cpp = { tabstop = 2, softtabstop = 2, shiftwidth = 2 },
     python = { tabstop = 4, softtabstop = 4, shiftwidth = 4 },
+    lua = { tabstop = 4, softtabstop = 4, shiftwidth = 4 },
   },
-
   -- Set dashboard header
-  header = {
-  },
-
+  header = {},
   -- Default theme configuration
   default_theme = {
     -- Modify the color palette for the default theme
@@ -188,18 +179,16 @@ local config = {
       ["which-key"] = true,
     },
   },
-
   -- Diagnostics configuration (for vim.diagnostics.config({...})) when diagnostics are on
   diagnostics = {
     virtual_text = true,
     underline = true,
   },
-
   -- Extend LSP configuration
   lsp = {
     -- enable servers that you already have installed without mason
     servers = {
-      "snykls"
+      -- "snykls"
       -- "pyright"
     },
     formatting = {
@@ -262,7 +251,6 @@ local config = {
       },
     },
   },
-
   -- Mapping data with "desc" stored directly by vim.keymap.set().
   --
   -- Please use this mappings table to set keyboard mapping since this is the
@@ -283,9 +271,10 @@ local config = {
         desc = "Search current buffer" },
       ["<leader>fc"] = { function() require("telescope.builtin").commands() end, desc = "Search commands" },
       ["<leader>fh"] = { function() require("telescope.builtin").command_history() end, desc = "Search command history" },
-      ["<leader>fm"] = { function() require("telescope.builtin").live_grep({
+      ["<leader>fm"] = { function()
+        require("telescope.builtin").live_grep({
           additional_args = function()
-            return { '--multiline', '--multiline-dotall' }
+            return { "--multiline", "--multiline-dotall" }
           end
         })
       end, desc = "Search multiline" },
@@ -325,7 +314,6 @@ local config = {
       -- ["<esc>"] = false,
     },
   },
-
   -- Configure plugins
   plugins = {
     init = {
@@ -365,8 +353,9 @@ local config = {
       -- Allows to preview in floating window
       ["rmagatti/goto-preview"] = {
         config = function()
-          require('goto-preview').setup {}
-          vim.keymap.set("n", "gp", "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", { noremap = true })
+          require("goto-preview").setup {}
+          vim.keymap.set("n", "gp", "<cmd>lua require('goto-preview').goto_preview_definition()<CR>",
+            { noremap = true })
           vim.keymap.set("n", "<C-w>p", "<C-w>H<C-w>x<C-w>l", { desc = "Open in split", noremap = true })
         end
       },
@@ -437,7 +426,7 @@ local config = {
 
     treesitter = { -- overrides `require("treesitter").setup(...)`
       ensure_installed = {
-        'bash', 'cpp', 'css', 'html', 'json', 'lua', 'python', 'vim', 'markdown_inline', 'markdown',
+        "bash", "cpp", "css", "html", "json", "lua", "python", "vim", "markdown_inline", "markdown",
       },
       highlight = {
         -- `false` will disable the whole extension
@@ -481,25 +470,25 @@ local config = {
     },
 
     -- Telescope options
-    telescope = {
-      pickers = {
-        live_grep = {
-          mappings = {
-            i = {
-              ["<c-f>"] = function(args)
-                local telescope_avail, _ = pcall(require, "telescope.actions")
-                if telescope_avail then
-                  require("telescope.actions").to_fuzzy_refine(args)
-                end
-              end,
-              ["jl"] = false,
-              ["jj"] = false,
+    telescope = function(default_table)
+      local actions = require("telescope.actions")
+      local custom_opts = {
+        pickers = {
+          live_grep = {
+            mappings = {
+              i = {
+                ["<c-f>"] = actions.to_fuzzy_refine,
+                ["jl"] = false,
+                ["jj"] = false,
+              },
             },
           },
         },
-      },
-    },
+      }
+      return vim.tbl_deep_extend("force", default_table, custom_opts)
+    end,
 
+    -- Heirline options
     heirline = function(config)
       -- the first element of the default configuration table is the statusline
       config[1] = {
@@ -523,8 +512,6 @@ local config = {
       return config
     end,
   },
-
-
   -- LuaSnip Options
   luasnip = {
     -- Add paths for including more VS Code style snippets in luasnip
@@ -534,7 +521,6 @@ local config = {
       -- javascript = { "javascriptreact" },
     },
   },
-
   -- CMP Source Priorities
   -- modify here the priorities of default cmp sources
   -- higher value == higher priority
@@ -549,7 +535,6 @@ local config = {
       path = 250,
     },
   },
-
   -- Modify which-key registration (Use this with mappings table in the above.)
   ["which-key"] = {
     -- Add bindings which show up as group name
@@ -565,7 +550,6 @@ local config = {
       },
     },
   },
-
   -- This function is run last and is a good place to configuring
   -- augroups/autocommands and custom filetypes also this just pure lua so
   -- anything that doesn't fit in the normal config locations above can go here
@@ -605,7 +589,6 @@ local config = {
         end
       end,
     })
-
   end,
 }
 
