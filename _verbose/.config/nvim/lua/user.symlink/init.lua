@@ -225,17 +225,26 @@ local config = {
     -- Add overrides for LSP server settings, the keys are the name of the server
     ["server-settings"] = {
       -- example for addings schemas to yamlls
-      -- yamlls = { -- override table for require("lspconfig").yamlls.setup({...})
-      --   settings = {
-      --     yaml = {
-      --       schemas = {
-      --         ["http://json.schemastore.org/github-workflow"] = ".github/workflows/*.{yml,yaml}",
-      --         ["http://json.schemastore.org/github-action"] = ".github/action.{yml,yaml}",
-      --         ["http://json.schemastore.org/ansible-stable-2.9"] = "roles/tasks/*.{yml,yaml}",
-      --       },
-      --     },
-      --   },
-      -- },
+      yamlls = { -- override table for require("lspconfig").yamlls.setup({...})
+        on_attach = function(client, bufnr)
+          if vim.bo[bufnr].buftype ~= "" or vim.bo[bufnr].filetype == "helm" then
+            vim.diagnostic.disable(bufnr)
+            vim.defer_fn(function()
+              vim.diagnostic.reset(nil, bufnr)
+            end, 1000)
+          end
+        end,
+        settings = {
+          yaml = {
+            schemas = {
+              ["https://json.schemastore.org/chart.json"] = "templates/*",
+              ["http://json.schemastore.org/github-workflow"] = ".github/workflows/*.{yml,yaml}",
+              ["http://json.schemastore.org/github-action"] = ".github/action.{yml,yaml}",
+              -- ["http://json.schemastore.org/ansible-stable-2.9"] = "roles/tasks/*.{yml,yaml}",
+            },
+          },
+        },
+      },
 
       pyright = {
         settings = {
@@ -324,7 +333,11 @@ local config = {
       -- You can also add new plugins here as well:
       ["Mofiqul/vscode.nvim"] = {},
 
+      -- Pounce allows to quickly jump to fuzzy place on visible screen
       ["rlane/pounce.nvim"] = {},
+
+      -- Helm gotpl+yaml highlighter, see also `on_attach` for `yamlls`
+      ["towolf/vim-helm"] = { ft = "helm" },
 
       -- For yanking from terminal, see
       ["ojroques/vim-oscyank"] = {
