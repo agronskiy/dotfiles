@@ -6,16 +6,16 @@
 local config = {
   -- Configure AstroNvim updates
   updater = {
-    remote = "origin", -- remote to use
-    channel = "stable", -- "stable" or "nightly"
-    version = "latest", -- "latest", tag name, or regex search like "v1.*" to only do updates before v2 (STABLE ONLY)
-    branch = "main", -- branch name (NIGHTLY ONLY)
-    commit = nil, -- commit hash (NIGHTLY ONLY)
-    pin_plugins = nil, -- nil, true, false (nil will pin plugins on stable only)
-    skip_prompts = false, -- skip prompts about breaking changes
+    remote = "origin",     -- remote to use
+    channel = "stable",    -- "stable" or "nightly"
+    version = "latest",    -- "latest", tag name, or regex search like "v1.*" to only do updates before v2 (STABLE ONLY)
+    branch = "main",       -- branch name (NIGHTLY ONLY)
+    commit = nil,          -- commit hash (NIGHTLY ONLY)
+    pin_plugins = nil,     -- nil, true, false (nil will pin plugins on stable only)
+    skip_prompts = false,  -- skip prompts about breaking changes
     show_changelog = true, -- show the changelog after performing an update
-    auto_reload = false, -- automatically reload and sync packer after a successful update
-    auto_quit = false, -- automatically quit the current session after a successful update
+    auto_reload = false,   -- automatically reload and sync packer after a successful update
+    auto_quit = false,     -- automatically quit the current session after a successful update
     -- remotes = { -- easily add new remotes to track
     --   ["remote_name"] = "https://remote_url.come/repo.git", -- full remote url
     --   ["remote2"] = "github_user/repo", -- GitHub user/repo shortcut,
@@ -26,7 +26,8 @@ local config = {
   colorscheme = "vscode",
   -- Add highlight groups in any theme
   highlights = {
-    init = { -- this table overrides highlights in all themes
+    init = {
+      -- this table overrides highlights in all themes
       PounceMatch = {
         underline = true,
         bold = true,
@@ -109,24 +110,24 @@ local config = {
       relativenumber = false, -- sets vim.opt.relativenumber
       cmdheight = 2,
       colorcolumn = { 80, 100, 120 },
-      textwidth = 100,
+      -- textwidth = 100,
       shiftwidth = 2,
       tabstop = 2,
-      number = true, -- sets vim.opt.number
-      spell = false, -- sets vim.opt.spell
+      number = true,       -- sets vim.opt.number
+      spell = false,       -- sets vim.opt.spell
       signcolumn = "auto", -- sets vim.opt.signcolumn to auto
-      wrap = true, -- sets vim.opt.wrap
+      wrap = true,         -- sets vim.opt.wrap
       linebreak = true,
       mouse = "a",
     },
     g = {
-      mapleader = " ", -- sets vim.g.mapleader
-      autoformat_enabled = true, -- enable or disable auto formatting at start (lsp.formatting.format_on_save must be enabled)
-      cmp_enabled = true, -- enable completion at start
-      autopairs_enabled = true, -- enable autopairs at start
-      diagnostics_enabled = true, -- enable diagnostics at start
+      mapleader = " ",                   -- sets vim.g.mapleader
+      autoformat_enabled = true,         -- enable or disable auto formatting at start (lsp.formatting.format_on_save must be enabled)
+      cmp_enabled = true,                -- enable completion at start
+      autopairs_enabled = true,          -- enable autopairs at start
+      diagnostics_enabled = true,        -- enable diagnostics at start
       status_diagnostics_enabled = true, -- enable diagnostics in statusline
-      icons_enabled = true, -- disable icons in the UI (disable if no nerd font is available, requires :PackerSync after changing)
+      icons_enabled = true,              -- disable icons in the UI (disable if no nerd font is available, requires :PackerSync after changing)
     },
   },
   rules = {
@@ -188,13 +189,13 @@ local config = {
   lsp = {
     -- enable servers that you already have installed without mason
     servers = {
-      -- "snykls"
+      "snykls"
       -- "pyright"
     },
     formatting = {
       -- control auto formatting on save
       format_on_save = {
-        enabled = true, -- enable or disable format on save globally
+        enabled = true,       -- enable or disable format on save globally
         disable_filetypes = { -- disable format on save for specified filetypes
           -- "python",
         },
@@ -225,7 +226,8 @@ local config = {
     -- Add overrides for LSP server settings, the keys are the name of the server
     ["server-settings"] = {
       -- example for addings schemas to yamlls
-      yamlls = { -- override table for require("lspconfig").yamlls.setup({...})
+      yamlls = {
+        -- override table for require("lspconfig").yamlls.setup({...})
         on_attach = function(client, bufnr)
           if vim.bo[bufnr].buftype ~= "" or vim.bo[bufnr].filetype == "helm" then
             vim.diagnostic.disable(bufnr)
@@ -287,18 +289,15 @@ local config = {
           end
         })
       end, desc = "Search multiline" },
-
       -- Hop command to quickly go to uni/bi-graom
       ["w"] = { function() require("hop").hint_words() end, desc = "Hop to word" },
       ["t"] = { function() require("hop").hint_char1() end, desc = "Hop to char" },
       ["f"] = { function() require("pounce").pounce() end, desc = "Fuzzy hop with pounce" },
-
       -- quick save
       -- ["<C-s>"] = { ":w!<cr>", desc = "Save File" },  -- change description but the same command
       -- navigating wrapped lines
       j = { "gj", desc = "Navigate down" },
       k = { "gk", desc = "Navigate down" },
-
       ["<leader>F"] = { "<cmd>BufferLineCloseLeft<cr><cmd>BufferLineCloseRight<cr><cmd>on<cr>",
         desc = "Close other tabs and windows" },
     },
@@ -311,7 +310,6 @@ local config = {
       -- navigating wrapped lines
       j = { "gj", desc = "Navigate down" },
       k = { "gk", desc = "Navigate down" },
-
       -- Hop command to quickly go to bigram
       ["w"] = { function() require("hop").hint_words() end, desc = "Hop to word" },
       ["t"] = { function() require("hop").hint_char1() end, desc = "Hop to char" },
@@ -329,16 +327,12 @@ local config = {
       -- You can disable default plugins as follows:
       -- ["goolord/alpha-nvim"] = { disable = true },
       ["Darazaki/indent-o-matic"] = { disable = true },
-
       -- You can also add new plugins here as well:
       ["Mofiqul/vscode.nvim"] = {},
-
       -- Pounce allows to quickly jump to fuzzy place on visible screen
       ["rlane/pounce.nvim"] = {},
-
       -- Helm gotpl+yaml highlighter, see also `on_attach` for `yamlls`
       ["towolf/vim-helm"] = { ft = "helm" },
-
       -- For yanking from terminal, see
       ["ojroques/vim-oscyank"] = {
         config = function()
@@ -358,11 +352,24 @@ local config = {
           })
         end,
       },
-
       -- Allowing seamless navigation btw tmux and vim
       ["christoomey/vim-tmux-navigator"] = {},
-
-
+      -- Markdown renderer
+      -- CAVEAT: might need `yarn` to be installed. Might need to manually go to the directory
+      -- `~/.local/share/nvim/site/pack/packer/start/markdown-preview.nvim/` and run `yarn install`
+      ["iamcco/markdown-preview.nvim"] = {
+        run = function()
+          vim.fn["mkdp#util#install"]()
+        end,
+        setup = function()
+          vim.g.mkdp_filetypes = { "markdown" }
+          vim.g.mkdp_port = "8000"
+          vim.g.mkdp_browser = ""
+          vim.g.mkdp_browserfunc = ""
+          vim.g.mkdp_echo_preview_url = 1
+        end,
+        ft = { "markdown" }
+      },
       -- Allows to preview in floating window
       ["rmagatti/goto-preview"] = {
         config = function()
@@ -372,14 +379,12 @@ local config = {
           vim.keymap.set("n", "<C-w>p", "<C-w>H<C-w>x<C-w>l", { desc = "Open in split", noremap = true })
         end
       },
-
       -- Hop allows to quickly jump ti different places in the screen
       ["phaazon/hop.nvim"] = {
         config = function()
           require("hop").setup {}
         end,
       },
-
       ["lervag/vimtex"] = {
         event = "BufRead",
         config = function()
@@ -393,9 +398,7 @@ local config = {
           vim.g.vimtex_view_skim_activate = 1
         end,
       },
-
       ["sindrets/diffview.nvim"] = {},
-
       -- Add plugins, the packer syntax without the "use"
       -- { "andweeb/presence.nvim" },
       -- {
@@ -414,7 +417,6 @@ local config = {
       --   end,
       -- },
     },
-
     -- All other entries override the require("<key>").setup({...}) call for default plugins
     ["null-ls"] = function(defaults)
       local null_ls = require("null-ls")
@@ -436,8 +438,8 @@ local config = {
 
       return defaults
     end,
-
-    treesitter = { -- overrides `require("treesitter").setup(...)`
+    treesitter = {
+      -- overrides `require("treesitter").setup(...)`
       ensure_installed = {
         "bash", "cpp", "css", "html", "json", "lua", "python", "vim", "markdown_inline", "markdown",
       },
@@ -450,38 +452,31 @@ local config = {
         -- Instead of true it can also be a list of languages
       },
     },
-
     bufferline = {
       options = {
         close_command = "bdelete %d",
       },
     },
-
     ["better_escape"] = {
       mapping = { "jk" },
     },
-
     gitsigns = {
       current_line_blame = true,
     },
-
     -- use mason-lspconfig to configure LSP installations
     ["mason-lspconfig"] = { -- overrides `require("mason-lspconfig").setup(...)`
       ensure_installed = { "sumneko_lua", "clangd", "pyright" },
     },
-
     -- use mason-null-ls to configure Formatters/Linter installation for null-ls sources
     ["mason-null-ls"] = { -- overrides `require("mason-null-ls").setup(...)`
       -- ensure_installed = { "prettier", "stylua" },
     },
-
     ["neo-tree"] = {
       window = {
         position = "right",
         width = 55,
       }
     },
-
     -- Telescope options
     telescope = function(default_table)
       local actions = require("telescope.actions")
@@ -500,7 +495,6 @@ local config = {
       }
       return vim.tbl_deep_extend("force", default_table, custom_opts)
     end,
-
     -- Heirline options
     heirline = function(config)
       -- the first element of the default configuration table is the statusline
