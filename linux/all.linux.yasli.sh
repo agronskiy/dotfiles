@@ -165,3 +165,11 @@ exists_lazygit() {
 }
 install_wrapper "lazygit" install_lazygit exists_lazygit
 
+# install k9s
+install_k9s() {
+  curl -sS https://webinstall.dev/k9s | bash
+}
+exists_k9s() {
+    [ -x "$(command -v k9s)" ]
+}
+install_wrapper "k9s" install_k9s exists_k9s
