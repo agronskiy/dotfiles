@@ -480,7 +480,15 @@ local config = {
     -- Telescope options
     telescope = function(default_table)
       local actions = require("telescope.actions")
+
       local custom_opts = {
+        defaults = {
+          mappings = {
+            i = {
+              ["jk"] = actions.close,
+            },
+          }
+        },
         pickers = {
           live_grep = {
             mappings = {
