@@ -120,3 +120,5 @@ alias lg="lazygit"
 # kubectl alias
 alias kc="kubectl"
 
+# fuzzy env
+alias fenv="env | fzf"
