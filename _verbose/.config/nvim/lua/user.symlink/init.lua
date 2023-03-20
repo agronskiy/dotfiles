@@ -328,7 +328,13 @@ local config = {
       -- ["goolord/alpha-nvim"] = { disable = true },
       ["Darazaki/indent-o-matic"] = { disable = true },
       -- You can also add new plugins here as well:
-      ["Mofiqul/vscode.nvim"] = {},
+      ["Mofiqul/vscode.nvim"] = {
+        config = function()
+          require("vscode").setup {
+            transparent = true,
+          }
+        end,
+      },
       -- Pounce allows to quickly jump to fuzzy place on visible screen
       ["rlane/pounce.nvim"] = {},
       -- Helm gotpl+yaml highlighter, see also `on_attach` for `yamlls`
@@ -455,6 +461,9 @@ local config = {
     bufferline = {
       options = {
         close_command = "bdelete %d",
+        tab_size = 25,
+        max_name_length = 25,
+        separator_style = { "", "" },
       },
     },
     ["better_escape"] = {
@@ -471,11 +480,22 @@ local config = {
     ["mason-null-ls"] = { -- overrides `require("mason-null-ls").setup(...)`
       -- ensure_installed = { "prettier", "stylua" },
     },
+    lualine = {
+      options = {
+        theme = "vscode",
+      },
+    },
     ["neo-tree"] = {
       window = {
         position = "right",
         width = 55,
-      }
+      },
+      filesystem = {
+        filtered_items = {
+          visible = true,
+          hide_dotfiles = false,
+        },
+      },
     },
     -- Telescope options
     telescope = function(default_table)
@@ -503,6 +523,12 @@ local config = {
       }
       return vim.tbl_deep_extend("force", default_table, custom_opts)
     end,
+    -- NOTE: couldn't make that work in the main config part.
+    -- We need it to play well with  the transparent color of the `vscode` theme, see
+    -- `transparent = true` above
+    notify = {
+      background_colour = "#000000",
+    },
     -- Heirline options
     heirline = function(config)
       -- the first element of the default configuration table is the statusline
