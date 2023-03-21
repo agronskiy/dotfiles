@@ -440,6 +440,8 @@ local config = {
         null_ls.builtins.formatting.black,
         null_ls.builtins.formatting.isort,
         null_ls.builtins.formatting.latexindent,
+        -- bazel, also see `polish` below for `filetypes`
+        null_ls.builtins.diagnostics.buildifier,
       }
 
       return defaults
@@ -474,11 +476,18 @@ local config = {
     },
     -- use mason-lspconfig to configure LSP installations
     ["mason-lspconfig"] = { -- overrides `require("mason-lspconfig").setup(...)`
-      ensure_installed = { "sumneko_lua", "clangd", "pyright" },
+      ensure_installed = {
+        "sumneko_lua",
+        "clangd",
+        "pyright",
+        "rust_analyzer",
+      },
     },
     -- use mason-null-ls to configure Formatters/Linter installation for null-ls sources
     ["mason-null-ls"] = { -- overrides `require("mason-null-ls").setup(...)`
-      -- ensure_installed = { "prettier", "stylua" },
+      ensure_installed = {
+        "buildifier",
+      },
     },
     lualine = {
       options = {
@@ -607,6 +616,13 @@ local config = {
     --     ["~/%.config/foo/.*"] = "fooscript",
     --   },
     -- }
+
+    -- BUILD files -> starlark type
+    vim.filetype.add {
+      pattern = {
+        [".*BUILD.*"] = "bzl",
+      }
+    }
 
     -- Create specific bindings for TeX
     vim.api.nvim_create_augroup("mytex", { clear = true })
