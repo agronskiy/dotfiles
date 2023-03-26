@@ -87,7 +87,7 @@ function prompt_symbol() {
     else
         local color="${LIGHT_GREEN}%B"
     fi
-    echo -e  "\n${color}〉${RESET}"
+    echo -e  "\n${color}❱ ${RESET}"
 }
 
 function precmd() {
