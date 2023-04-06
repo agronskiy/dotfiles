@@ -45,6 +45,8 @@ Plug 'ntpeters/vim-better-whitespace'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'antoinemadec/coc-fzf'
 
+Plug 'ojroques/vim-oscyank', {'branch': 'main'}
+
 call plug#end()
 
 " TODO(agronskiy): need to understand the below, blindly copied from https://stevelosh.com/blog/2010/09/coming-home-to-vim/#s1-some-background-about-me
@@ -382,3 +384,14 @@ inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
 
 " Search for visually selected text
 vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
+
+" OSCYank for copying
+nmap <leader>c <Plug>OSCYankOperator
+nmap <leader>cc <leader>c_
+vmap <leader>c <Plug>OSCYankVisual
+
+" Copy on every `y` operation
+autocmd TextYankPost *
+    \ if v:event.operator is 'y' && v:event.regname is '' |
+    \ execute 'OSCYankRegister "' |
+    \ endif

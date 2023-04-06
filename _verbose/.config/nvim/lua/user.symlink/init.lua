@@ -345,7 +345,7 @@ local config = {
           -- Should be accompanied by a setting clipboard in tmux.conf, also see
           -- https://github.com/ojroques/vim-oscyank#the-plugin-does-not-work-with-tmux
           vim.g.oscyank_term = "default"
-          vim.g.oscyank_max_length = 1000000
+          vim.g.oscyank_max_length = 0
           -- Below autocmd is for copying to OSC52 for any yank operation,
           -- see https://github.com/ojroques/vim-oscyank#copying-from-a-register
           vim.api.nvim_create_autocmd("TextYankPost", {
@@ -502,7 +502,17 @@ local config = {
       filesystem = {
         filtered_items = {
           visible = true,
-          hide_dotfiles = false,
+          hide_dotfiles = true,
+        },
+      },
+      event_handlers = {
+        {
+          -- https://github.com/nvim-neo-tree/neo-tree.nvim/wiki/Recipes#auto-close-on-open-file
+          event = "file_opened",
+          handler = function(file_path)
+            --auto close
+            require("neo-tree").close_all()
+          end
         },
       },
     },
