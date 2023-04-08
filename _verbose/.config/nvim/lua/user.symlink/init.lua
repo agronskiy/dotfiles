@@ -46,6 +46,9 @@ local config = {
         bg = vim.api.nvim_get_hl_by_name("Normal", true).background,
         fg = "#00FFFF",
       },
+      NormalNC = {
+        bg = "#121212",
+      }
     }
     -- duskfox = { -- a table of overrides/changes to the duskfox theme
     --   Normal = { bg = "#000000" },
@@ -487,11 +490,6 @@ local config = {
     ["mason-null-ls"] = { -- overrides `require("mason-null-ls").setup(...)`
       ensure_installed = {
         "buildifier",
-      },
-    },
-    lualine = {
-      options = {
-        theme = "vscode",
       },
     },
     ["neo-tree"] = {
