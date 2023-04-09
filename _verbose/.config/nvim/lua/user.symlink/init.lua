@@ -46,7 +46,12 @@ local config = {
         bg = vim.api.nvim_get_hl_by_name("Normal", true).background,
         fg = "#00FFFF",
       },
+      -- `NC` are non-current. The color corresponds to my unfocused color for
+      -- e.g. tmux panes etc.
       NormalNC = {
+        bg = "#121212",
+      },
+      WinBarNC = {
         bg = "#121212",
       }
     }
