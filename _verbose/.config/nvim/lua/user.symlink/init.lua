@@ -49,11 +49,14 @@ local config = {
       -- `NC` are non-current. The color corresponds to my unfocused color for
       -- e.g. tmux panes etc.
       NormalNC = {
-        bg = "#121212",
+        bg = "#1c1c1c",
       },
       WinBarNC = {
-        bg = "#121212",
-      }
+        bg = "#1c1c1c",
+      },
+      NormalFloat = { -- overrides the floating windows
+        bg = "#080808",
+      },
     }
     -- duskfox = { -- a table of overrides/changes to the duskfox theme
     --   Normal = { bg = "#000000" },
@@ -236,7 +239,7 @@ local config = {
       -- example for addings schemas to yamlls
       yamlls = {
         -- override table for require("lspconfig").yamlls.setup({...})
-        on_attach = function(client, bufnr)
+        on_attach = function(_, bufnr)
           if vim.bo[bufnr].buftype ~= "" or vim.bo[bufnr].filetype == "helm" then
             vim.diagnostic.disable(bufnr)
             vim.defer_fn(function()
@@ -297,6 +300,8 @@ local config = {
           end
         })
       end, desc = "Search multiline" },
+      -- Opens preview in the split on the right.
+      ["gp"] = { "<cmd>vsplit | lua vim.lsp.buf.definition()<CR>", desc = "Open preview in split" },
       -- Hop command to quickly go to uni/bi-graom
       ["w"] = { function() require("hop").hint_words() end, desc = "Hop to word" },
       ["t"] = { function() require("hop").hint_char1() end, desc = "Hop to char" },
@@ -306,7 +311,18 @@ local config = {
       -- navigating wrapped lines
       j = { "gj", desc = "Navigate down" },
       k = { "gk", desc = "Navigate down" },
-      ["<leader>F"] = { "<cmd>BufferLineCloseLeft<cr><cmd>BufferLineCloseRight<cr><cmd>on<cr>",
+      ["gf"] = false, -- Disable `go to file under cursor`
+      ["<leader>F"] = {
+        -- `F` for `Focus`: it move to the leftmost split and leaves only it, closing all the other
+        -- buffer. Useful for a round of exploration in the code.
+        function()
+          for _ = 1, 7 do
+            vim.cmd("wincmd h")
+          end
+          vim.cmd("BufferLineCloseLeft")
+          vim.cmd("BufferLineCloseRight")
+          vim.cmd("only")
+        end,
         desc = "Close other tabs and windows" },
     },
     i = {
@@ -388,9 +404,8 @@ local config = {
       ["rmagatti/goto-preview"] = {
         config = function()
           require("goto-preview").setup {}
-          vim.keymap.set("n", "gp", "<cmd>lua require('goto-preview').goto_preview_definition()<CR>",
-            { noremap = true })
-          vim.keymap.set("n", "<C-w>p", "<C-w>H<C-w>x<C-w>l", { desc = "Open in split", noremap = true })
+          vim.keymap.set("n", "gf", "<cmd>lua require('goto-preview').goto_preview_definition()<CR>",
+            { noremap = true, desc = "Open preview in a float window" })
         end
       },
       -- Hop allows to quickly jump ti different places in the screen
@@ -512,7 +527,7 @@ local config = {
         {
           -- https://github.com/nvim-neo-tree/neo-tree.nvim/wiki/Recipes#auto-close-on-open-file
           event = "file_opened",
-          handler = function(file_path)
+          handler = function(_) -- argument is `file_path`
             --auto close
             require("neo-tree").close_all()
           end
@@ -522,7 +537,6 @@ local config = {
     -- Telescope options
     telescope = function(default_table)
       local actions = require("telescope.actions")
-
       local custom_opts = {
         defaults = {
           mappings = {
@@ -545,11 +559,27 @@ local config = {
       }
       return vim.tbl_deep_extend("force", default_table, custom_opts)
     end,
+    cmp = function(opts)
+      -- opts parameter is the default options table
+      -- the function is lazy loaded so cmp is able to be required
+      local cmp = require "cmp"
+      -- https://www.reddit.com/r/neovim/comments/yo77q6/comment/j6rr9kc/?utm_source=share&utm_medium=web2x&context=3
+      vim.api.nvim_set_hl(0, "CustomCmpBG", { bg = "#080808" })
+
+      local border_opts = {
+        border = "single",
+        winhighlight = "Normal:CustomCmpBG,FloatBorder:CustomCmpBG,CursorLine:Visual,Search:None",
+      }
+      opts.window.completion = cmp.config.window.bordered(border_opts)
+      opts.window.documentation = cmp.config.window.bordered(border_opts)
+      -- return the new table to be used
+      return opts
+    end,
     -- NOTE: couldn't make that work in the main config part.
     -- We need it to play well with  the transparent color of the `vscode` theme, see
     -- `transparent = true` above
     notify = {
-      background_colour = "#000000",
+      background_colour = "#080808",
     },
     -- Heirline options
     heirline = function(config)
