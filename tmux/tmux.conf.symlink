@@ -121,10 +121,9 @@ unbind z
 bind C-f resize-pane -Z
 
 # For better visibility of the active pane
-set -g window-style 'bg=colour233'
+set -g window-style 'bg=colour234'
 set -g window-active-style 'bg=colour232'
-
-set-window-option -g pane-border-style fg=colour245,bg=colour233
+set-window-option -g pane-border-style fg=colour245,bg=colour234
 set-window-option -g pane-active-border-style fg=colour172,bg=colour232
 
 # Quick switch to window using fzf:

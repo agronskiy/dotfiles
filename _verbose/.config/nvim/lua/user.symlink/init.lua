@@ -49,11 +49,14 @@ local config = {
       -- `NC` are non-current. The color corresponds to my unfocused color for
       -- e.g. tmux panes etc.
       NormalNC = {
-        bg = "#121212",
+        bg = "#1c1c1c",
       },
       WinBarNC = {
-        bg = "#121212",
-      }
+        bg = "#1c1c1c",
+      },
+      NormalFloat = { -- overrides the floating windows
+        bg = "#080808",
+      },
     }
     -- duskfox = { -- a table of overrides/changes to the duskfox theme
     --   Normal = { bg = "#000000" },
@@ -545,11 +548,27 @@ local config = {
       }
       return vim.tbl_deep_extend("force", default_table, custom_opts)
     end,
+    cmp = function(opts)
+      -- opts parameter is the default options table
+      -- the function is lazy loaded so cmp is able to be required
+      local cmp = require "cmp"
+      -- https://www.reddit.com/r/neovim/comments/yo77q6/comment/j6rr9kc/?utm_source=share&utm_medium=web2x&context=3
+      vim.api.nvim_set_hl(0, "CustomCmpBG", { bg = "#080808" })
+
+      local border_opts = {
+        border = "single",
+        winhighlight = "Normal:CustomCmpBG,FloatBorder:CustomCmpBG,CursorLine:Visual,Search:None",
+      }
+      opts.window.completion = cmp.config.window.bordered(border_opts)
+      opts.window.documentation = cmp.config.window.bordered(border_opts)
+      -- return the new table to be used
+      return opts
+    end,
     -- NOTE: couldn't make that work in the main config part.
     -- We need it to play well with  the transparent color of the `vscode` theme, see
     -- `transparent = true` above
     notify = {
-      background_colour = "#000000",
+      background_colour = "#080808",
     },
     -- Heirline options
     heirline = function(config)
