@@ -301,7 +301,8 @@ local config = {
         })
       end, desc = "Search multiline" },
       -- Opens preview in the split on the right.
-      ["gp"] = { "<cmd>vsplit | lua vim.lsp.buf.definition()<CR>", desc = "Open preview in split" },
+      -- ["gp"] = { "<cmd>vsplit | lua vim.lsp.buf.definition()<CR>", desc = "Open preview in split" },
+      ["gp"] = { '<cmd>lua require"telescope.builtin".lsp_definitions({jump_type="vsplit"})<CR>', noremap = true, silent = true },
       -- Hop command to quickly go to uni/bi-graom
       ["w"] = { function() require("hop").hint_words() end, desc = "Hop to word" },
       ["t"] = { function() require("hop").hint_char1() end, desc = "Hop to char" },
