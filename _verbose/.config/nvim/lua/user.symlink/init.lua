@@ -200,7 +200,7 @@ local config = {
   lsp = {
     -- enable servers that you already have installed without mason
     servers = {
-      "snykls"
+      -- "snykls"
       -- "pyright"
     },
     formatting = {
@@ -301,23 +301,7 @@ local config = {
         })
       end, desc = "Search multiline" },
       -- Opens preview in the split on the right.
-      ["gp"] = {
-        function()
-          -- https://www.reddit.com/r/neovim/comments/ya4up3/go_to_definition_in_split_view/
-          vim.lsp.buf_request(0, "textDocument/definition", vim.lsp.util.make_position_params(),
-            function(err, result, ctx, config)
-              if err then
-                print(err)
-                return
-              end
-
-              local command = "vsplit " .. vim.uri_to_fname(result[1].uri)
-              local line = "call cursor(" ..
-                (result[1].range.start.line + 1) .. "," .. (result[1].range.start.character + 1) .. ")"
-              vim.cmd(command)
-              vim.cmd(line)
-            end)
-        end, desc = "Open preview in split" },
+      ["gp"] = { "<cmd>vert winc ]<cr>", desc = "Open preview in split" },
       -- Hop command to quickly go to uni/bi-graom
       ["w"] = { function() require("hop").hint_words() end, desc = "Hop to word" },
       ["t"] = { function() require("hop").hint_char1() end, desc = "Hop to char" },
