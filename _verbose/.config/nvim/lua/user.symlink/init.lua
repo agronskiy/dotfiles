@@ -567,6 +567,10 @@ local config = {
       local actions = require("telescope.actions")
       local custom_opts = {
         defaults = {
+          layout_config = {
+            width = 0.95,
+            height = 0.9,
+          },
           mappings = {
             i = {
               ["jk"] = actions.close,
