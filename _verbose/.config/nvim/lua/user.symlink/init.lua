@@ -1,5 +1,9 @@
 -- All configuration changes should go inside of the table below
 
+-- Colors are synced with tmux.conf (`window-style`, `window-active-style`, `pane-border-style` etc)
+local activeBgColor = "#1c1c1c"
+local inactiveBgColor = "#262626"
+
 -- You can think of a Lua "table" as a dictionary like data structure the
 -- normal format is "key = value". These also handle array like data structures
 -- where a value with no key simply has an implicit numeric key
@@ -49,13 +53,37 @@ local config = {
       -- `NC` are non-current. The color corresponds to my unfocused color for
       -- e.g. tmux panes etc.
       NormalNC = {
-        bg = "#1c1c1c",
+        bg = inactiveBgColor,
       },
       WinBarNC = {
-        bg = "#1c1c1c",
+        bg = inactiveBgColor,
       },
       NormalFloat = { -- overrides the floating windows
-        bg = "#080808",
+        bg = activeBgColor,
+      },
+      TelescopeBorder = {
+        bg = activeBgColor,
+      },
+      TelescopeNormal = {
+        bg = activeBgColor,
+      },
+      TelescopePromptBorder = {
+        bg = activeBgColor,
+      },
+      TelescopePromptNormal = {
+        bg = activeBgColor,
+      },
+      TelescopeResultsBorder = {
+        bg = activeBgColor,
+      },
+      TelescopeResultsNormal = {
+        bg = activeBgColor,
+      },
+      TelescopePreviewBorder = {
+        bg = activeBgColor,
+      },
+      TelescopePreviewNormal = {
+        bg = activeBgColor,
       },
     }
     -- duskfox = { -- a table of overrides/changes to the duskfox theme
@@ -564,7 +592,7 @@ local config = {
       -- the function is lazy loaded so cmp is able to be required
       local cmp = require "cmp"
       -- https://www.reddit.com/r/neovim/comments/yo77q6/comment/j6rr9kc/?utm_source=share&utm_medium=web2x&context=3
-      vim.api.nvim_set_hl(0, "CustomCmpBG", { bg = "#080808" })
+      vim.api.nvim_set_hl(0, "CustomCmpBG", { bg = activeBgColor })
 
       local border_opts = {
         border = "single",
@@ -579,7 +607,7 @@ local config = {
     -- We need it to play well with  the transparent color of the `vscode` theme, see
     -- `transparent = true` above
     notify = {
-      background_colour = "#080808",
+      background_colour = activeBgColor,
     },
     -- Heirline options
     heirline = function(config)
