@@ -599,6 +599,9 @@ local config = {
             i = {
               ["jk"] = actions.close,
               ["<C-i>"] = layout_actions.toggle_preview,
+              ["<C-f>"] = actions.to_fuzzy_refine,
+              ["jl"] = false,
+              ["jj"] = false,
             },
             n = {
               ["<C-i>"] = layout_actions.toggle_preview,
@@ -606,16 +609,12 @@ local config = {
           }
         },
         pickers = {
-          live_grep = {
-            mappings = {
-              i = {
-                ["<C-f>"] = actions.to_fuzzy_refine,
-                ["jl"] = false,
-                ["jj"] = false,
-              },
-            },
-          },
           find_files = {
+            preview = {
+              hide_on_startup = true, -- long paths friendly
+            }
+          },
+          oldfiles = {
             preview = {
               hide_on_startup = true, -- long paths friendly
             }
