@@ -64,6 +64,71 @@ In the homebrew case that can be the violating path:
 
 Need to delete that one and, assuming `oh-my-zsh` is installed, one gets the right one.
 
+# Snippets 
+
+## Highlight groups for lighter background 
+```lua
+highlights = {
+  init = {
+    -- `NC` are non-current. The color corresponds to my unfocused color for
+    -- e.g. tmux panes etc.
+    NormalNC = {
+      bg = inactiveBgColor,
+    },
+    WinBarNC = {
+      bg = inactiveBgColor,
+    },
+    NormalFloat = { -- overrides the floating windows
+      bg = activeBgColor,
+    },
+    TelescopeBorder = {
+      bg = activeBgColor,
+    },
+    TelescopeNormal = {
+      bg = activeBgColor,
+    },
+    TelescopePromptBorder = {
+      bg = activeBgColor,
+    },
+    TelescopePromptNormal = {
+      bg = activeBgColor,
+    },
+    TelescopeResultsBorder = {
+      bg = activeBgColor,
+    },
+    TelescopeResultsNormal = {
+      bg = activeBgColor,
+    },
+    TelescopePreviewBorder = {
+      bg = activeBgColor,
+    },
+    TelescopePreviewNormal = {
+      bg = activeBgColor,
+    },
+  }
+},
+```
+
+## `nvim-cmp` setup for darker background
+```lua
+cmp = function(opts)
+  -- opts parameter is the default options table
+  -- the function is lazy loaded so cmp is able to be required
+  local cmp = require "cmp"
+  -- https://www.reddit.com/r/neovim/comments/yo77q6/comment/j6rr9kc/?utm_source=share&utm_medium=web2x&context=3
+  vim.api.nvim_set_hl(0, "CustomCmpBG", { bg = activeBgColor })
+
+  local border_opts = {
+    border = "single",
+    winhighlight = "Normal:CustomCmpBG,FloatBorder:CustomCmpBG,CursorLine:Visual,Search:None",
+  }
+  opts.window.completion = cmp.config.window.bordered(border_opts)
+  opts.window.documentation = cmp.config.window.bordered(border_opts)
+  -- return the new table to be used
+  return opts
+end,
+```
+
 # Acknowledgements
 This started as a heavily adjusted version by @holman, inspiration from @AndreiBarsan and @samoshkin.
 
