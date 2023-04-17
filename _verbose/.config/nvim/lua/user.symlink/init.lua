@@ -317,7 +317,11 @@ local config = {
       ["<leader>bj"] = { "<cmd>BufferLinePick<cr>", desc = "Pick to jump" },
       ["<leader>bt"] = { "<cmd>BufferLineSortByTabs<cr>", desc = "Sort by tabs" },
       [";"] = ":",
-      ["<leader>fs"] = { function() require("telescope.builtin").current_buffer_fuzzy_find() end,
+      ["<leader>fs"] = { function()
+        require("telescope.builtin").current_buffer_fuzzy_find({
+          layout_strategy = "horizontal",
+        })
+      end,
         desc = "Search current buffer" },
       ["<leader>fc"] = { function() require("telescope.builtin").commands() end, desc = "Search commands" },
       ["<leader>fh"] = { function() require("telescope.builtin").command_history() end, desc = "Search command history" },
@@ -565,15 +569,40 @@ local config = {
     -- Telescope options
     telescope = function(default_table)
       local actions = require("telescope.actions")
+      local layout_actions = require("telescope.actions.layout")
+      local common_settings = {
+        w = 0.95,
+        h = 0.9,
+        vert_lines_cutoff = 20,
+      }
       local custom_opts = {
         defaults = {
+          layout_strategy = "horizontal",
           layout_config = {
-            width = 0.95,
-            height = 0.9,
+            width = common_settings.h,
+            height = common_settings.h,
+            vertical = {
+              mirror = true,
+              prompt_position = "top",
+              preview_cutoff = common_settings.vert_lines_cutoff,
+              -- :h telescope.resolve
+              preview_height = function(_, _, max_lines)
+                -- Logic: keep preview dynamically changing in order to fix results
+                -- height fixed
+                if max_lines < common_settings.vert_lines_cutoff then
+                  return math.ceil(max_lines * common_settings.h) - 6
+                end
+                return math.ceil(max_lines * common_settings.h) - 12
+              end,
+            }
           },
           mappings = {
             i = {
               ["jk"] = actions.close,
+              ["<C-i>"] = layout_actions.toggle_preview,
+            },
+            n = {
+              ["<C-i>"] = layout_actions.toggle_preview,
             },
           }
         },
@@ -581,11 +610,27 @@ local config = {
           live_grep = {
             mappings = {
               i = {
-                ["<c-f>"] = actions.to_fuzzy_refine,
+                ["<C-f>"] = actions.to_fuzzy_refine,
                 ["jl"] = false,
                 ["jj"] = false,
               },
             },
+          },
+          find_files = {
+            preview = {
+              hide_on_startup = true, -- long paths friendly
+            }
+          },
+          lsp_references = {
+            fname_width = 60,
+          },
+          lsp_document_symbols = {
+            fname_width = 60,
+            symbol_width = 35,
+          },
+          lsp_workspace_symbols = {
+            fname_width = 60,
+            symbol_width = 35,
           },
         },
       }
@@ -636,6 +681,23 @@ local config = {
       -- return the final configuration table
       return config
     end,
+    -- toggelterms
+    toggleterm = {
+      float_opts = {
+        -- The border key is *almost* the same as 'nvim_open_win'
+        -- see :h nvim_open_win for details on borders however
+        -- the 'curved' border is a custom border type
+        -- not natively supported but implemented in this plugin.
+        border = "single",
+        -- like `size`, width and height can be a number or function which is passed the current terminal
+        width = function()
+          return math.ceil(vim.o.columns * 0.87)
+        end,
+        height = function()
+          return math.ceil(vim.o.lines * 0.85)
+        end,
+      },
+    }
   },
   -- LuaSnip Options
   luasnip = {
