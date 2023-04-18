@@ -13,7 +13,7 @@ export FZF_DEFAULT_OPTS='--height 70% --reverse '\
 'alt-G:preview-bottom'
 
 export FZF_TMUX=1
-export FZF_TMUX_OPTS="-p 90%,90%"
+export FZF_TMUX_OPTS="-p 90%,85%"
 
 #
 # FZF-Tab options
