@@ -41,7 +41,8 @@ return {
       vim.api.nvim_create_autocmd("TextYankPost", {
         pattern = "*",
         callback = function()
-          if vim.v.event.operator == "y" and vim.v.event.regname == "" then
+          if ((vim.v.event.operator == "y" or vim.v.event.operator == "d")
+            and vim.v.event.regname == "") then
             vim.cmd('OSCYankRegister "')
           end
         end,

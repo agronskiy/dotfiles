@@ -57,6 +57,9 @@ return {
       end,
       desc = "Previous buffer",
     },
+    -- Navigating within wrapped lines
+    ["k"] = { "gk" },
+    ["j"] = { "gj" },
     -- Opens preview in the split on the right.
     ["gp"] = { "<cmd>vert winc ]<cr>", desc = "Open preview in split" },
     -- Hop command to quickly go to uni/bi-graom
@@ -85,7 +88,7 @@ return {
     -- this is useful for naming menus
     ["<leader>b"] = { name = "Buffers" },
     ["<leader>F"] = {
-      -- `F` for `Focus`: it move to the leftmost split and leaves only it, closing all the other
+      -- `F` for `Focus`: it moves to the leftmost split and leaves only it, closing all the other
       -- buffer. Useful for a round of exploration in the code.
       function()
         for _ = 1, 7 do
