@@ -24,7 +24,12 @@ return {
       background_colour = activeBgColor,
     },
   },
-
+  {
+    "lewis6991/gitsigns.nvim",
+    opts = {
+      current_line_blame = true,
+    },
+  },
   {
     "akinsho/toggleterm.nvim",
     opts = {
@@ -44,7 +49,8 @@ return {
     opts = function(_, opts)
       local status = require("astronvim.utils.status")
 
-      opts.statusline = { -- statusline
+      opts.statusline = {
+        -- statusline
         hl = { fg = "fg", bg = "bg" },
         status.component.mode({
           mode_text = { padding = { left = 1, right = 1 } },
