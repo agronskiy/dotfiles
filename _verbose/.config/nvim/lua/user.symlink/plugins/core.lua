@@ -56,7 +56,14 @@ return {
           mode_text = { padding = { left = 1, right = 1 } },
         }),
         status.component.git_branch(),
-        status.component.file_info({ filetype = {}, filename = false, file_modified = false }),
+        status.component.file_info({
+          -- enable the file_icon and disable the highlighting based on filetype
+          file_icon = false,
+          -- See here https://vimhelp.org/cmdline.txt.html#filename-modifiers
+          filename = { modify = ":p:.", padding = { left = 0 } },
+          -- add padding
+          padding = { right = 0 },
+        }),
         status.component.git_diff(),
         status.component.diagnostics(),
         status.component.fill(),
