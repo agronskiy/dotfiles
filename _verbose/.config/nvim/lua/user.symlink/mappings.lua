@@ -7,7 +7,12 @@ return {
   n = {
     -- second key is the lefthand side of the map
     -- mappings seen under group name "Buffer"
-    ["<leader>bo"] = { "<cmd>BufferLineCloseLeft<cr><cmd>BufferLineCloseRight<cr>", desc = "Close other tabs" },
+    ["<leader>bo"] = {
+      function()
+        require("astronvim.utils.buffer").close_all({ keep_current = true })
+      end,
+      desc = "Close other tabs",
+    },
     ["<leader>bb"] = { "<cmd>tabnew<cr>", desc = "New tab" },
     ["<leader>bc"] = { "<cmd>BufferLinePickClose<cr>", desc = "Pick to close" },
     ["<leader>bj"] = { "<cmd>BufferLinePick<cr>", desc = "Pick to jump" },
