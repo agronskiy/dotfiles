@@ -77,6 +77,18 @@ return {
       return opts
     end,
   },
+
+  {
+    "stevearc/aerial.nvim",
+    opts = {
+      keymaps = {
+        ["<CR>"] = { callback = function()
+          require("aerial").select()
+          vim.cmd("AerialClose")
+        end },
+      }
+    }
+  }
   --
   -- You can also easily customize additional setup of plugins that is outside of the plugin's setup call
   -- {

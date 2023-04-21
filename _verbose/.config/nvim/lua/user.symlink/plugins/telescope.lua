@@ -54,14 +54,14 @@ return {
           }
         },
         lsp_references = {
-          fname_width = 60,
+          fname_width = 80,
         },
         lsp_document_symbols = {
-          fname_width = 60,
+          fname_width = 80,
           symbol_width = 35,
         },
         lsp_workspace_symbols = {
-          fname_width = 60,
+          fname_width = 80,
           symbol_width = 35,
         },
       },
