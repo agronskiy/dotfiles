@@ -88,7 +88,7 @@ return {
         end },
       }
     }
-  }
+  },
   --
   -- You can also easily customize additional setup of plugins that is outside of the plugin's setup call
   -- {

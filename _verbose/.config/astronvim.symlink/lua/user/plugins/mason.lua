@@ -30,7 +30,32 @@ return {
     "jay-babu/mason-nvim-dap.nvim",
     -- overrides `require("mason-nvim-dap").setup(...)`
     opts = {
-      -- ensure_installed = { "python" },
+      ensure_installed = { "python", "codelldb" },
+      handlers = {
+        -- 1. https://miguelcrespo.co/how-to-debug-like-a-pro-using-neovim
+        -- 2. https://astronvim.com/Recipes/dap#installing-debuggers-with-mason
+        -- 3. https://github.com/jay-babu/mason-nvim-dap.nvim/blob/main/README.md#advanced-customization
+        codelldb = function(config)
+          -- https://github.com/mfussenegger/nvim-dap/issues/20#issuecomment-1212214935 for dicts
+          -- {
+          --     "version": "0.2.0",
+          --     "configurations": [
+          --         {
+          --             "type": "codelldb",
+          --             "request": "launch",
+          --             "name": "Debug",
+          --             "program": "${fileDirname}/../target/debug/hello_cargo",
+          --             "args": [],
+          --             "sourceLanguages": [
+          --                 "rust"
+          --             ]
+          --         }
+          --     ]
+          -- }
+          require("dap.ext.vscode").load_launchjs(nil, { codelldb = { "rust", "cpp" } })
+          require("mason-nvim-dap").default_setup(config)
+        end,
+      },
     },
   },
 }
