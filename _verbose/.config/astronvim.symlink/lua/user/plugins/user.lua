@@ -20,6 +20,24 @@ return {
       }
     end,
   },
+  -- Allows git links for lines and selections
+  {
+    "ruifm/gitlinker.nvim",
+    lazy = false,
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = function()
+      require("gitlinker").setup {
+        opts = {
+          action_callback = function(url)
+            -- yank to unnamed register
+            vim.api.nvim_command('let @" = \'' .. url .. "\'")
+            -- copy to the system clipboard using OSC52
+            vim.cmd('OSCYankRegister "')
+          end,
+        },
+      }
+    end,
+  },
   {
     "folke/tokyonight.nvim",
     config = function()
