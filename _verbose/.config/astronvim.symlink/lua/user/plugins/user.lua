@@ -238,4 +238,11 @@ return {
       vim.g.vimtex_view_skim_activate = 1
     end,
   },
+  {
+    "leoluz/nvim-dap-go",
+    lazy = false,
+    config = function()
+      require("dap-go").setup {}
+    end,
+  }
 }
