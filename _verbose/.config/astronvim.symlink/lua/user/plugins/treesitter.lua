@@ -3,8 +3,19 @@ return {
   opts = {
     -- overrides `require("treesitter").setup(...)`
     ensure_installed = {
-      "bash", "cpp", "css", "html", "json", "lua", "python", "vim", "markdown_inline", "markdown",
-      "javascript", "yaml",
+      "bash",
+      "cpp",
+      "css",
+      "html",
+      "json",
+      "lua",
+      "python",
+      "vim",
+      "markdown_inline",
+      "markdown",
+      "proto",
+      "javascript",
+      "yaml",
     },
     highlight = {
       -- `false` will disable the whole extension

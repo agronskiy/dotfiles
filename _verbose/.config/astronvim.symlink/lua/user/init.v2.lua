@@ -503,7 +503,17 @@ local config = {
     treesitter = {
       -- overrides `require("treesitter").setup(...)`
       ensure_installed = {
-        "bash", "cpp", "css", "html", "json", "lua", "python", "vim", "markdown_inline", "markdown",
+        "bash",
+        "cpp",
+        "css",
+        "html",
+        "json",
+        "lua",
+        "python",
+        "vim",
+        "markdown_inline",
+        "markdown",
+        "proto",
       },
       highlight = {
         -- `false` will disable the whole extension

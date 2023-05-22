@@ -15,8 +15,20 @@ return {
   {
     "Mofiqul/vscode.nvim",
     config = function()
+      local c = require("vscode.colors").get_colors()
       require("vscode").setup {
         transparent = true,
+        -- Override highlight groups (see ./lua/vscode/theme.lua)
+        group_overrides = {
+          -- this supports the same val table as vim.api.nvim_set_hl
+          -- use colors from this colorscheme by requiring vscode.colors!
+          ["@text.reference"] = { fg = c.vscLightBlue, bg = "NONE" },
+          ["@text.uri"] = { fg = c.vscOrange, bg = "NONE" },
+          ["@text.todo.unchecked"] = { fg = c.vscOrange, bg = "NONE" },
+          ["@text.todo.checked"] = { fg = c.vscOrange, bg = "NONE" },
+          ["@text.quote"] = { fg = c.vscLightBlue, bg = "NONE" },
+          ["@punctuation.special"] = { fg = c.vscYellow, bg = "NONE" },
+        }
       }
     end,
   },
@@ -244,5 +256,9 @@ return {
     config = function()
       require("dap-go").setup {}
     end,
+  },
+  {
+    "nvim-treesitter/playground",
+    lazy = false,
   }
 }
