@@ -104,6 +104,8 @@ return {
       end,
       desc = "Close other tabs and windows",
     },
+    -- Avoid yank-on-delete
+    ["d"] = { '"_d', noremap = true },
   },
   i = {
     ["jj"] = { "<esc>la", desc = "Move one symbol right" },
@@ -134,6 +136,9 @@ return {
       desc = "Fuzzy hop with pounce",
     },
     ["<leader>c"] = { ":'<,'>OSCYank<CR>", desc = "Yank to OSC52 clipboard", noremap = true },
+    -- Avoid yank-on-delete and yank-on-paste
+    ["d"] = { '"_d', noremap = true },
+    ["p"] = { '"_dP', noremap = true },
   },
   t = {
     -- setting a mapping to false will disable it
