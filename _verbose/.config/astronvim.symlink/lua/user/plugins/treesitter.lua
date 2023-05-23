@@ -16,6 +16,7 @@ return {
       "proto",
       "javascript",
       "yaml",
+      "starlark",
     },
     highlight = {
       -- `false` will disable the whole extension
