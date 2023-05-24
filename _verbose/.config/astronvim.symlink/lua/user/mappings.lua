@@ -139,6 +139,9 @@ return {
     -- Avoid yank-on-delete and yank-on-paste
     ["d"] = { '"_d', noremap = true },
     ["p"] = { '"_dP', noremap = true },
+    -- Stay in indent mode
+    ["<"] = { "<gv", desc = "unindent line" },
+    [">"] = { ">gv", desc = "indent line" },
   },
   t = {
     -- setting a mapping to false will disable it
