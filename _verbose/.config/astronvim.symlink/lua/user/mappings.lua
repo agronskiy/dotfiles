@@ -104,6 +104,8 @@ return {
       end,
       desc = "Close other tabs and windows",
     },
+    -- Avoid yank-on-edit
+    ["c"] = { '"_c', noremap = true },
   },
   i = {
     ["jj"] = { "<esc>la", desc = "Move one symbol right" },
@@ -134,8 +136,9 @@ return {
       desc = "Fuzzy hop with pounce",
     },
     ["<leader>c"] = { ":'<,'>OSCYank<CR>", desc = "Yank to OSC52 clipboard", noremap = true },
-    -- Avoid yank-on-paste (yank-on-delete remains)
+    -- Avoid yank-on-paste and yank-on-edit (yank-on-delete remains)
     ["p"] = { '"_dP', noremap = true },
+    ["c"] = { '"_c', noremap = true },
     -- Stay in indent mode
     ["<"] = { "<gv", desc = "unindent line" },
     [">"] = { ">gv", desc = "indent line" },
