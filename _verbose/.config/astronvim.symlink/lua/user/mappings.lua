@@ -111,6 +111,7 @@ return {
     ["jj"] = { "<esc>la", desc = "Move one symbol right" },
     -- Useful when editing and inside autoclosed quotes
     ["jl"] = { "<esc>A", desc = "Move to the end and continue edit" },
+    ["jh"] = { "<esc>^i", desc = "Move to the end and continue edit" },
   },
   v = {
     -- navigating wrapped lines

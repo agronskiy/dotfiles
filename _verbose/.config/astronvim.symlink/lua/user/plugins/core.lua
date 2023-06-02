@@ -12,8 +12,14 @@ return {
     end,
   },
   -- You can disable default plugins as follows:
-  -- { "max397574/better-escape.nvim", enabled = false },
   { "Darazaki/indent-o-matic", enabled = false },
+
+  {
+    "max397574/better-escape.nvim",
+    opts = {
+      mapping = { "jk" },
+    },
+  },
 
   -- NOTE: couldn't make that work in the main config part.
   -- We need it to play well with  the transparent color of the `vscode` theme, see
