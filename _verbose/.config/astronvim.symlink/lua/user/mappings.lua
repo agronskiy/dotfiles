@@ -106,6 +106,9 @@ return {
     },
     -- Avoid yank-on-edit
     ["c"] = { '"_c', noremap = true },
+    ["C"] = { '"_C', noremap = true },
+    -- Line deletion without yank (quite often used)
+    ["<leader>dd"] = { '"_dd', noremap = true },
   },
   i = {
     ["jj"] = { "<esc>la", desc = "Move one symbol right" },
@@ -136,10 +139,12 @@ return {
       end,
       desc = "Fuzzy hop with pounce",
     },
-    ["<leader>c"] = { ":'<,'>OSCYank<CR>", desc = "Yank to OSC52 clipboard", noremap = true },
+    ["<leader>c"] = { ":'<,'>OSCYank<CR>", desc = "Yank to OSC51 clipboard", noremap = true },
     -- Avoid yank-on-paste and yank-on-edit (yank-on-delete remains)
     ["p"] = { '"_dP', noremap = true },
     ["c"] = { '"_c', noremap = true },
+    -- Deletion without yank
+    ["<leader>d"] = { '"_d', noremap = true },
     -- Stay in indent mode
     ["<"] = { "<gv", desc = "unindent line" },
     [">"] = { ">gv", desc = "indent line" },
