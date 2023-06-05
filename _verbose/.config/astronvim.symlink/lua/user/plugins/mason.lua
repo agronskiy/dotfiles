@@ -10,6 +10,8 @@ return {
         "pyright",
         "rust_analyzer",
         "lua_ls",
+        "gopls",
+        "tsserver",
       },
     },
   },

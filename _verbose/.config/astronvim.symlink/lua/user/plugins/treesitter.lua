@@ -15,8 +15,11 @@ return {
       "markdown",
       "proto",
       "javascript",
+      "typescript",
+      "go",
       "yaml",
       "starlark",
+      "dockerfile",
     },
     highlight = {
       -- `false` will disable the whole extension

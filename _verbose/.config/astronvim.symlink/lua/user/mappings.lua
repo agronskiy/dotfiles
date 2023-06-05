@@ -67,18 +67,12 @@ return {
     ["j"] = { "gj" },
     -- Opens preview in the split on the right.
     ["gp"] = { "<cmd>vert winc ]<cr>", desc = "Open preview in split" },
-    -- Hop command to quickly go to uni/bi-graom
-    ["w"] = {
+    -- Hop command to quickly go to bigram
+    ["t"] = {
       function()
         require("hop").hint_words()
       end,
       desc = "Hop to word",
-    },
-    ["t"] = {
-      function()
-        require("hop").hint_char1()
-      end,
-      desc = "Hop to char",
     },
     ["f"] = {
       function()
@@ -108,7 +102,7 @@ return {
     ["c"] = { '"_c', noremap = true },
     ["C"] = { '"_C', noremap = true },
     -- Line deletion without yank (quite often used)
-    ["<leader>dd"] = { '"_dd', noremap = true },
+    ["D"] = { '"_dd', noremap = true },
   },
   i = {
     ["jj"] = { "<esc>la", desc = "Move one symbol right" },
@@ -120,19 +114,7 @@ return {
     -- navigating wrapped lines
     j = { "gj", desc = "Navigate down" },
     k = { "gk", desc = "Navigate down" },
-    -- Hop command to quickly go to bigram
-    ["w"] = {
-      function()
-        require("hop").hint_words()
-      end,
-      desc = "Hop to word",
-    },
-    ["t"] = {
-      function()
-        require("hop").hint_char1()
-      end,
-      desc = "Hop to char",
-    },
+    -- Quickly jump to fuzzy
     ["f"] = {
       function()
         require("pounce").pounce()
@@ -144,7 +126,7 @@ return {
     ["p"] = { '"_dP', noremap = true },
     ["c"] = { '"_c', noremap = true },
     -- Deletion without yank
-    ["<leader>d"] = { '"_d', noremap = true },
+    ["D"] = { '"_d', noremap = true },
     -- Stay in indent mode
     ["<"] = { "<gv", desc = "unindent line" },
     [">"] = { ">gv", desc = "indent line" },
