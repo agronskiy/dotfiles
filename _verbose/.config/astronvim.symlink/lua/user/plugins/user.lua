@@ -169,7 +169,7 @@ return {
     end,
   },
   -- Pounce allows to quickly jump to fuzzy place on visible screen
-  "rlane/pounce.nvim",
+  { "rlane/pounce.nvim" },
   -- Helm gotpl+yaml highlighter, see also `on_attach` for `yamlls`
   {
     "towolf/vim-helm",
@@ -190,7 +190,7 @@ return {
         pattern = "*",
         callback = function()
           if ((vim.v.event.operator == "y" or vim.v.event.operator == "d")
-            and vim.v.event.regname == "") then
+              and vim.v.event.regname == "") then
             vim.cmd('OSCYankRegister "')
           end
         end,

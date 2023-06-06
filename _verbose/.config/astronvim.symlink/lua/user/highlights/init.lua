@@ -1,22 +1,36 @@
+local c = require("vscode.colors").get_colors()
+
 local init = {
   -- this table overrides highlights in all themes
   PounceMatch = {
-    underline = true,
+    underline = false,
     bold = true,
-    bg = vim.api.nvim_get_hl_by_name("Normal", true).background,
-    fg = "#FF00FF",
+    fg = c.vscMediumBlue,
+    bg = c.vscCursorDark,
   },
   PounceGap = {
-    underline = true,
+    underline = false,
     bold = false,
-    bg = vim.api.nvim_get_hl_by_name("Normal", true).background,
-    fg = "#FF00FF",
+    fg = c.vscLineNumber,
+    bg = c.vscCursorDark,
   },
   PounceAccept = {
     underline = true,
     bold = true,
-    bg = vim.api.nvim_get_hl_by_name("Normal", true).background,
-    fg = "#00FFFF",
+    fg = c.vscFront,
+    bg = c.vscCursorDark,
+  },
+  PounceAcceptBest = {
+    underline = true,
+    bold = true,
+    fg = c.vscFront,
+    bg = c.vscCursorDark,
+  },
+  PounceUnmatched = {
+    underline = false,
+    bold = false,
+    fg = c.vscLineNumber,
+    bg = c.vscBack,
   },
   -- `NC` are non-current. The color corresponds to my unfocused color for
   -- e.g. tmux panes etc.
