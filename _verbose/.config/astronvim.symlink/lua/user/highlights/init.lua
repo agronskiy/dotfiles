@@ -4,7 +4,7 @@ local init = {
   -- this table overrides highlights in all themes
   PounceMatch = {
     underline = false,
-    bold = true,
+    bold = false,
     fg = c.vscMediumBlue,
     bg = c.vscCursorDark,
   },

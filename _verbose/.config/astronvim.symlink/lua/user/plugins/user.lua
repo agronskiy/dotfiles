@@ -169,7 +169,10 @@ return {
     end,
   },
   -- Pounce allows to quickly jump to fuzzy place on visible screen
-  { "rlane/pounce.nvim" },
+  {
+    "rlane/pounce.nvim",
+    dependencies = { "Mofiqul/vscode.nvim" }, -- Uses colors from the palette.
+  },
   -- Helm gotpl+yaml highlighter, see also `on_attach` for `yamlls`
   {
     "towolf/vim-helm",
