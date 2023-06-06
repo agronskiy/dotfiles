@@ -434,7 +434,6 @@
     "C_Cpp.intelliSenseEngine": "Disabled",
     "editor.inlayHints.enabled": "offUnlessPressed",
     "editor.gotoLocation.multipleDefinitions": "gotoAndPeek",
-    "workbench.colorTheme": "Default Dark+",
     "[typescript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
@@ -555,8 +554,16 @@
         "/tmp",
         "/home/alex_gronskiy_snyk_io/tmp",
         "/home/alex_gronskiy_snyk_io/tmp/lsp",
-        "/Users/agronskiy/tmp/lsp"
+        "/Users/agronskiy/tmp/lsp",
+        "/home/agronskiy/tmp/vuln-lsp",
+        "/Users/agronskiy/tmp/vuln",
+        "/Users/agronskiy/tmp/vuln-node.js-express.js-app",
+        "/home/agronskiy/tmp/vuln-lsp",
+        "/home/agronskiy/tmp/lsp",
+        "/Users/agronskiy/tmp/juice-shop",
+        "/Users/agronskiy/tmp/snyk-big-fix",
+        "/Users/agronskiy/tmp/nodejs-goof"
     ],
     "snyk.advanced.cliPath": "/Users/agronskiy/Library/Application Support/snyk-ls/snyk-macos",
-    "snyk.advanced.customEndpoint": "https://localhost:6005",
+    "snyk.advanced.customEndpoint": "https://app.dev.snyk.io/api",
 }
