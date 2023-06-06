@@ -70,6 +70,7 @@ plugins=(
     conda-zsh-completion
     fzf-tab
     zsh-autosuggestions
+    vi-mode
 )
 
 source $ZSH/oh-my-zsh.sh

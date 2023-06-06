@@ -90,5 +90,4 @@ __fzf-history-widget() {
 }
 zle     -N   __fzf-history-widget
 bindkey '^R' __fzf-history-widget
-bindkey 'jk' __fzf-history-widget
 
