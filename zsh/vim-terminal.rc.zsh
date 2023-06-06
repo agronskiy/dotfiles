@@ -1,5 +1,6 @@
 bindkey -v
-export KEYTIMEOUT=1
+# Timeout 1500ms 
+export KEYTIMEOUT=15
 
 # Change cursor shape for different vi modes.
 function zle-keymap-select {
@@ -25,6 +26,9 @@ preexec() { echo -ne '\e[6 q' ;} # Use beam shape cursor for each new prompt.
 # Opens proper editor 
 autoload edit-command-line
 zle -N edit-command-line
-bindkey -r "^i"
-bindkey -M viins '^i' edit-command-line
-bindkey -M vicmd '^i' edit-command-line
+
+bindkey -r "^o"
+bindkey -M viins '^o' edit-command-line
+bindkey -M vicmd '^o' edit-command-line
+
+bindkey -M viins 'jk' vi-cmd-mode
