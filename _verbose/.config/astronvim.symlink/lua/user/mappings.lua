@@ -102,7 +102,7 @@ return {
     ["c"] = { '"_c', noremap = true },
     ["C"] = { '"_C', noremap = true },
     -- Line deletion without yank (quite often used)
-    ["dx"] = { '"_dd', noremap = true },
+    ["XX"] = { '"_dd', noremap = true },
   },
   i = {
     ["jj"] = { "<esc>la", desc = "Move one symbol right" },
@@ -126,7 +126,7 @@ return {
     ["p"] = { '"_dP', noremap = true },
     ["c"] = { '"_c', noremap = true },
     -- Deletion without yank
-    ["x"] = { '"_x', noremap = true },
+    ["X"] = { '"_x', noremap = true },
     -- Stay in indent mode
     ["<"] = { "<gv", desc = "unindent line" },
     [">"] = { ">gv", desc = "indent line" },
