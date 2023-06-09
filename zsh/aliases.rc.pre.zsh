@@ -3,7 +3,7 @@
 alias glogg='git log --graph --abbrev-commit --decorate --format=format:"%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)"'
 
 # Colorized output
-alias cat="bat --plain"
+alias cat="bat --plain --theme='Visual Studio Dark+'"
 
 # Editor nvim = vim
 alias vim="nvim"

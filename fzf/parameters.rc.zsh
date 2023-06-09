@@ -47,7 +47,7 @@ $word'
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -TF -L=2 --color=always $realpath'
 
 # preview on cat/bat/vim/nvim (remember that here cat is aliased to bat)
-zstyle ':fzf-tab:complete:(bat|cat|vim|nvim|code):*' fzf-preview 'bat --color=always --plain $realpath'
+zstyle ':fzf-tab:complete:(bat|cat|vim|nvim|code):*' fzf-preview 'bat --color=always --theme="Visual Studio Dark+" --plain $realpath'
 
 # NOTE: uncomment below to exclude directories from autocompletion. Usefulness is questionable
 # because we can still want to navigate to the subdirectory.
@@ -81,7 +81,7 @@ _fzf_comprun() {
     cd)           $(__fzfcmd) "$@" --preview 'exa -TF -L=2 --color=always {} | head -200' ;;
     export|unset) $(__fzfcmd) "$@" --preview "eval 'echo \$'{}" ;;
     ssh)          $(__fzfcmd) "$@" --preview 'dig {}' ;;
-    cat|bat|vim|nvim|code)  $(__fzfcmd) "$@" --preview 'bat --color=always --plain {}' ;;
+    cat|bat|vim|nvim|code)  $(__fzfcmd) "$@" --preview 'bat --color=always --theme="Visual Studio Dark+" --plain {}' ;;
     *)            $(__fzfcmd) "$@" ;;
   esac
 }

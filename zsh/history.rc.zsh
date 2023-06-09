@@ -76,7 +76,7 @@ __fzf-history-widget() {
     FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --scheme=history
     --preview-window down:15:wrap --preview='printf '\''%s'\'' {} |
     sed '\''$sed_preview'\'' |
-    bat --color=always --plain -l '\''Bourne Again Shell (bash)'\'' '
+    bat --color=always --theme='\''Visual Studio Dark+'\'' --plain -l '\''Bourne Again Shell (bash)'\'' '
     ${FZF_CTRL_R_OPTS-} --query=${(qqq)LBUFFER} +m" $(__fzfcmd)) )
   local ret=$?
   if [ -n "$selected" ]; then
