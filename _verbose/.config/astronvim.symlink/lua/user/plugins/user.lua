@@ -260,8 +260,17 @@ return {
       require("dap-go").setup {}
     end,
   },
+  -- Useful for :TSHighlightUnderCursor to inspect treesitter highlight groups.
   {
     "nvim-treesitter/playground",
+    lazy = false,
+    enabled = true,
+  },
+  -- Seems that editorconfig in nvim 0.8 is not picked up, and `guess-indent.nvim`
+  -- gets messed up with it,
+  -- see https://github.com/NMAC427/guess-indent.nvim/issues/15#issuecomment-1586308382
+  {
+    "gpanders/editorconfig.nvim",
     lazy = false,
   }
 }

@@ -11,12 +11,10 @@ return {
       return opts
     end,
   },
-  -- You can disable default plugins as follows:
-  { "Darazaki/indent-o-matic", enabled = false },
-
   {
     "max397574/better-escape.nvim",
     opts = {
+      -- Removed `jj` because I have better use for it.
       mapping = { "jk" },
     },
   },
