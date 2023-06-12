@@ -70,9 +70,9 @@ return {
     -- Hop command to quickly go to bigram
     ["t"] = {
       function()
-        require("hop").hint_words()
+        require("hop").hint_char1()
       end,
-      desc = "Hop to word",
+      desc = "Hop to symbol",
     },
     ["f"] = {
       function()
@@ -115,7 +115,24 @@ return {
     -- navigating wrapped lines
     j = { "gj", desc = "Navigate down" },
     k = { "gk", desc = "Navigate down" },
-    -- Quickly jump to fuzzy
+    -- Quickly jump to fuzzy - before
+    ["t"] = {
+      function()
+        -- Logic: in visual mode, it's often beneficial to select one symbol _before_ the
+        -- end point found by `pounce.nvim`. So below is the comparison of the before/after
+        -- positions, and if the seleciton goes "forward", we set the cursor one symbol left
+        local start_pos = vim.api.nvim_win_get_cursor(0)
+        require("pounce").pounce()
+        local end_pos = vim.api.nvim_win_get_cursor(0)
+        if end_pos[1] < start_pos[1]
+          or (end_pos[1] == start_pos[1] and end_pos[2] <= start_pos[2])
+          or end_pos[2] == 0 then
+          return
+        end
+        vim.api.nvim_win_set_cursor(0, { end_pos[1], end_pos[2] - 1 })
+      end,
+      desc = "Fuzzy hop (before) with pounce",
+    },
     ["f"] = {
       function()
         require("pounce").pounce()
