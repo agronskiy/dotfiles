@@ -32,13 +32,13 @@ return {
         mappings = {
           i = {
             ["jk"] = actions.close,
-            ["<C-i>"] = layout_actions.toggle_preview,
+            ["<F2>"] = layout_actions.toggle_preview,
             ["<C-f>"] = actions.to_fuzzy_refine,
             ["jl"] = false,
             ["jj"] = false,
           },
           n = {
-            ["<C-i>"] = layout_actions.toggle_preview,
+            ["<F2>"] = layout_actions.toggle_preview,
           },
         }
       },
