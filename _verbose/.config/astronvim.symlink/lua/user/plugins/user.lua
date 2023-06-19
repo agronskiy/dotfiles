@@ -176,7 +176,8 @@ return {
   -- Helm gotpl+yaml highlighter, see also `on_attach` for `yamlls`
   {
     "towolf/vim-helm",
-    ft = "helm"
+    ft = "helm",
+    lazy = false,
   },
   -- For yanking from terminal, see
   {
