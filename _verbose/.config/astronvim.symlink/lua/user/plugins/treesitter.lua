@@ -3,23 +3,24 @@ return {
   opts = {
     -- overrides `require("treesitter").setup(...)`
     ensure_installed = {
+      -- latex and bibtex will be controlled by VimTeX plugin, don't set
       "bash",
       "cpp",
       "css",
+      "dockerfile",
+      "go",
       "html",
+      "javascript",
       "json",
       "lua",
-      "python",
-      "vim",
-      "markdown_inline",
       "markdown",
+      "markdown_inline",
       "proto",
-      "javascript",
-      "typescript",
-      "go",
-      "yaml",
+      "python",
       "starlark",
-      "dockerfile",
+      "typescript",
+      "vim",
+      "yaml",
     },
     highlight = {
       -- `false` will disable the whole extension
