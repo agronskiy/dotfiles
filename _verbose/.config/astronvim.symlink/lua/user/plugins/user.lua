@@ -13,12 +13,19 @@ return {
   -- { "max397574/better-escape.nvim", enabled = false },
   -- You can also add new plugins here as well:
   {
-    "Mofiqul/vscode.nvim",
+    "agronskiy/patched_vscode.nvim",
+    branch = "fix/update-colors-from-opts",
+    lazy = false,
     config = function()
       local c = require("vscode.colors").get_colors()
       require("vscode").setup {
         transparent = false,
-        disable_nvimtree_bg = false,
+        -- Override colors (see ./lua/vscode/colors.lua)
+        color_overrides = {
+          -- Approx of color 256 but slightly darker
+          vscLeftDark = "#282828",
+          vscCursorDarkDark = "#303030",
+        },
         -- Override highlight groups (see ./lua/vscode/theme.lua)
         group_overrides = {
           -- this supports the same val table as vim.api.nvim_set_hl
