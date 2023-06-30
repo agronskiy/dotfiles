@@ -32,14 +32,31 @@ local init = {
     fg = c.vscLineNumber,
     bg = c.vscBack,
   },
+
+  -- Group below is making to highlight the current window, together with
+  -- Gutters etc. Related to `transparent = false`, option of the `VSCode` theme.
   -- `NC` are non-current. The color corresponds to my unfocused color for
   -- e.g. tmux panes etc.
-  -- NormalNC = {
-  --   bg = inactiveBgColor,
-  -- },
-  -- WinBarNC = {
-  --   bg = inactiveBgColor,
-  -- },
+  NormalNC = {
+    bg = c.vscCursorDarkDark,
+  },
+  WinBarNC = {
+    bg = c.vscCursorDarkDark,
+  },
+  LineNr = {
+    fg = c.vscLineNumber,
+    bg = "NONE",
+  },
+  CursorLineNr = {
+    fg = c.vscPopupFront,
+    bg = "NONE",
+  },
+  SignColumn = {
+    bg = "NONE",
+  },
+  StatusLine = {
+    bg = c.vscCursorDarkDark,
+  },
   -- NormalFloat = { -- overrides the floating windows
   --   bg = activeBgColor,
   -- },
@@ -47,14 +64,14 @@ local init = {
   --   bg = activeBgColor,
   -- },
   -- TelescopeNormal = {
-  --   bg = activeBgColor,
+  --   bg = "NONE",
   -- },
   -- TelescopePromptBorder = {
   --   bg = activeBgColor,
   -- },
-  -- TelescopePromptNormal = {
-  --   bg = activeBgColor,
-  -- },
+  TelescopePromptNormal = {
+    bg = c.vscCursorDarkDark,
+  },
   -- TelescopeResultsBorder = {
   --   bg = activeBgColor,
   -- },

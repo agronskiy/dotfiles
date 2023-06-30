@@ -110,5 +110,30 @@ return {
         end
       end,
     })
+
+
+    -- TODO(agronskiy): make and autocmd so that curr window loses focus when the whole vim
+    -- loses focus.
+    -- create an augroup to easily manage autocommands
+    local auto_win_group = vim.api.nvim_create_augroup("autowinmanagement", { clear = true })
+    local utils = require("astronvim.utils")
+    NORMAL_BG = utils.get_hlgroup("Normal").bg
+    NORMAL_NC_BG = utils.get_hlgroup("NormalNC").bg
+    vim.api.nvim_create_autocmd({ "FocusLost" }, {
+      desc = "Make currwindow look inactive", -- nice description
+      group = auto_win_group,                 -- add the autocmd to the newly created augroup
+      callback = function()
+        vim.api.nvim_set_hl(0, "Normal", { bg = NORMAL_NC_BG })
+        vim.api.nvim_set_hl(0, "WinBar", { bg = NORMAL_NC_BG })
+      end,
+    })
+    vim.api.nvim_create_autocmd({ "FocusGained" }, {
+      desc = "Make currwindow look active", -- nice description
+      group = auto_win_group,               -- add the autocmd to the newly created augroup
+      callback = function()
+        vim.api.nvim_set_hl(0, "Normal", { bg = NORMAL_BG })
+        vim.api.nvim_set_hl(0, "WinBar", { bg = NORMAL_BG })
+      end,
+    })
   end,
 }

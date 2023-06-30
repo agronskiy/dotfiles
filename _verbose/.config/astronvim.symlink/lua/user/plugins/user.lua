@@ -17,7 +17,8 @@ return {
     config = function()
       local c = require("vscode.colors").get_colors()
       require("vscode").setup {
-        transparent = true,
+        transparent = false,
+        disable_nvimtree_bg = false,
         -- Override highlight groups (see ./lua/vscode/theme.lua)
         group_overrides = {
           -- this supports the same val table as vim.api.nvim_set_hl
@@ -50,6 +51,8 @@ return {
       }
     end,
   },
+  -- Allows vim to feel losing and gaining focus from tmux
+  { "sjl/vitality.vim" },
   {
     "folke/tokyonight.nvim",
     config = function()
