@@ -13,9 +13,8 @@ return {
   -- { "max397574/better-escape.nvim", enabled = false },
   -- You can also add new plugins here as well:
   {
-    "agronskiy/patched_vscode.nvim",
-    branch = "fix/update-colors-from-opts",
-    lazy = false,
+    "Mofiqul/vscode.nvim",
+    branch = "main",
     config = function()
       local c = require("vscode.colors").get_colors()
       require("vscode").setup {
