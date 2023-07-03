@@ -116,8 +116,9 @@ install_lazygit() {
     mkdir -p "$HOME/.local/bin/lazygit-install"
     LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep '"tag_name":' |  sed -E 's/.*"v*([^"]+)".*/\1/')
     cd "$HOME/.local/bin/lazygit-install" \
+    && log_info "getting https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Darwin_x86_64.tar.gz" \
     && curl -L "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Darwin_x86_64.tar.gz" -o lazygit.tar.gz \
-    && tar xf lazygit.tar.gz -C "$HOME/.local/bin" lazygit \
+    && tar -xf lazygit.tar.gz -C "$HOME/.local/bin" lazygit \
     && rm -rf lazygit.tar.gz
 }
 exists_lazygit() {
