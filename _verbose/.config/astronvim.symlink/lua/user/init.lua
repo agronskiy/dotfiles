@@ -81,6 +81,14 @@ return {
     --   },
     -- }
 
+    -- This uses systemwide python for plugins instead of the virtualenv one.
+    -- https://github.com/neovim/neovim/issues/1887#issuecomment-280653872
+    if os.getenv("VIRTUAL_ENV") then
+      vim.g.python3_host_prog = vim.fn.substitute(vim.fn.system("which -a python3 | head -n2 | tail -n1"), "\n", "", "g")
+    else
+      vim.g.python3_host_prog = vim.fn.substitute(vim.fn.system("which python3"), "\n", "", "g")
+    end
+
     -- BUILD files -> starlark type
     vim.filetype.add({
       pattern = {
@@ -112,7 +120,7 @@ return {
     })
 
 
-    -- TODO(agronskiy): make and autocmd so that curr window loses focus when the whole vim
+    -- Make and autocmd so that curr window loses focus when the whole vim
     -- loses focus.
     -- create an augroup to easily manage autocommands
     local auto_win_group = vim.api.nvim_create_augroup("autowinmanagement", { clear = true })
@@ -135,5 +143,24 @@ return {
         vim.api.nvim_set_hl(0, "WinBar", { bg = NORMAL_BG })
       end,
     })
+
+    -- Bazel keymaps, see https://github.com/alexander-born/bazel.nvim#vim-functions
+    vim.api.nvim_create_autocmd(
+      "FileType",
+      {
+        pattern = "bzl",
+        callback = function()
+          vim.keymap.set("n", "gd", vim.fn.GoToBazelDefinition,
+            { buffer = true, desc = "Goto Bazel Definition" })
+          vim.keymap.set("n", "gp", function()
+              -- Create split then go to def
+              -- https://www.reddit.com/r/neovim/comments/mbh7kp/lua_api_to_create_a_split_window/
+              vim.cmd("vsplit")
+              vim.fn.GoToBazelDefinition()
+            end,
+            { buffer = true, desc = "Goto Bazel Definition in split" })
+        end,
+      }
+    )
   end,
 }

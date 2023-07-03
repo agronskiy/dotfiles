@@ -157,7 +157,7 @@ install_lazygit() {
     LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep '"tag_name":' |  sed -E 's/.*"v*([^"]+)".*/\1/')
     cd $HOME/.local/bin/lazygit-install \
     && curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz" \
-    && sudo tar xf lazygit.tar.gz -C "$HOME/.local/bin" lazygit \
+    && $SUDO_CMD tar xf lazygit.tar.gz -C "$HOME/.local/bin" lazygit \
     && rm -rf lazygit.tar.gz
 }
 exists_lazygit() {
@@ -173,3 +173,15 @@ exists_k9s() {
     [ -x "$(command -v k9s)" ]
 }
 install_wrapper "k9s" install_k9s exists_k9s
+
+# install pynvim
+install_pynvim() {
+    sys_python=$(which -a python3 | head -n2 | tail -n1)
+    $SUDO_CMD $sys_python -m pip install pynvim 
+}
+exists_pynvim() {
+    sys_python=$(which -a python3 | head -n2 | tail -n1)
+    $sys_python -c 'import pynvim'
+}
+install_wrapper "pynvim" install_pynvim exists_pynvim
+

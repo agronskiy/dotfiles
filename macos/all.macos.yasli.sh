@@ -133,3 +133,16 @@ exists_k9s() {
     [ -x "$(command -v k9s)" ]
 }
 install_wrapper "k9s" install_k9s exists_k9s
+
+# install pynvim
+install_pynvim() {
+    sys_python=$(which -a python3 | head -n2 | tail -n1)
+    $SUDO_CMD $sys_python -m pip install pynvim 
+}
+exists_pynvim() {
+    sys_python=$(which -a python3 | head -n2 | tail -n1)
+    $sys_python -c 'import pynvim'
+}
+install_wrapper "pynvim" install_pynvim exists_pynvim
+
+

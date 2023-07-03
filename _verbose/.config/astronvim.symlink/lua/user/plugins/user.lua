@@ -282,5 +282,12 @@ return {
   {
     "gpanders/editorconfig.nvim",
     lazy = false,
-  }
+  },
+  -- Bazel integration for neovim
+  -- requires `pip install pynvim on the main system python`
+  {
+    "alexander-born/bazel.nvim",
+    lazy = false,
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+  },
 }

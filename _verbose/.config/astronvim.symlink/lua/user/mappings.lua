@@ -104,6 +104,9 @@ return {
     -- Line deletion without yank (quite often used)
     ["xx"] = { '"_dd', noremap = true },
     ["X"] = { "x", noremap = true },
+
+    -- Bazel commands
+    ["gbt"] = { vim.fn.GoToBazelTarget, desc = "Goto Bazel Target" },
   },
   i = {
     ["jj"] = { "<esc>la", desc = "Move one symbol right" },

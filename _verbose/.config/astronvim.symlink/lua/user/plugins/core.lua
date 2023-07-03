@@ -18,15 +18,12 @@ return {
       mapping = { "jk" },
     },
   },
-
-  -- NOTE: couldn't make that work in the main config part.
-  -- We need it to play well with  the transparent color of the `vscode` theme, see
-  -- `transparent = true` above
   {
-    "rcarriga/nvim-notify",
-    opts = {
-      background_colour = activeBgColor,
-    },
+    "hrsh7th/nvim-cmp",
+    dependencies = { "alexander-born/cmp-bazel" },
+    opts = function(_, opts)
+      opts.sources = require("cmp").config.sources(vim.list_extend(opts.sources, { { name = "bazel" } }))
+    end,
   },
   {
     "lewis6991/gitsigns.nvim",
