@@ -6,7 +6,7 @@ on:
       - master
 jobs:
   run-github-macos-installation:
-    runs-on: macos-latest
+    runs-on: macos-13
     steps:
       - run: echo "Will run test installation on macos."
       - name: Check out dotfiles
