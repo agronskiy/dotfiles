@@ -22,7 +22,20 @@ return {
     "hrsh7th/nvim-cmp",
     dependencies = { "alexander-born/cmp-bazel" },
     opts = function(_, opts)
-      opts.sources = require("cmp").config.sources(vim.list_extend(opts.sources, { { name = "bazel" } }))
+      local extra_sources = {
+        -- Extending to bazel autocompletions
+        { name = "bazel" },
+        -- Extending to use all buffers
+        {
+          name = "buffer",
+          option = {
+            get_bufnrs = function()
+              return vim.api.nvim_list_bufs()
+            end
+          }
+        }
+      }
+      opts.sources = vim.tbl_deep_extend("force", opts.sources, extra_sources)
     end,
   },
   {
