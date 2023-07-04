@@ -116,6 +116,8 @@ bind -r \; if '[ #{pane_index} -eq 1 ]' \
      'swap-pane -s "!" ; select-pane -t:.1' \
      'select-pane -t:.1 ; swap-pane -d -t 1 -s "!"'
 
+bind-key -T root F8 last-window
+
 # Zoom pane
 unbind z
 bind C-f resize-pane -Z
