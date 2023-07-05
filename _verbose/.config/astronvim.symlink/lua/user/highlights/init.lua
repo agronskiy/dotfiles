@@ -50,7 +50,7 @@ local init = {
   TelescopePreviewBorder = { fg = c.vscLineNumber, bg = c.vscBack },
   TelescopePreviewNormal = { bg = c.vscBack },
   TabLineFill = { fg = c.vscFront, bg = c.vscLeftMid },
-  NeoTreeNormalNC = { bg = c.vscBack },
+  Directory = { fg = c.vscBlue, bg = "NONE" },
 }
 
 return init
