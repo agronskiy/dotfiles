@@ -19,7 +19,7 @@ then
     fi
 else
     log_info "Updating brew"
-    brew update 2>&1 | log_cmd
+    brew update-reset && brew update 2>&1 | log_cmd
     if [ $? -eq 0 ] ; then
         log_success "Successfully updated brew"
     else
