@@ -17,13 +17,14 @@ then
     else
         log_fail "Failed to install brew"
     fi
-else
-    log_info "Updating brew"
-    brew update-reset && brew update 2>&1 | log_cmd
-    if [ $? -eq 0 ] ; then
-        log_success "Successfully updated brew"
-    else
-        log_fail "Failed to update brew"
-    fi
+# brew update is currently broken, TODO: retrun it back
+# else
+#     log_info "Updating brew"
+#     brew update 2>&1 | log_cmd
+#     if [ $? -eq 0 ] ; then
+#         log_success "Successfully updated brew"
+#     else
+#         log_fail "Failed to update brew"
+#     fi
 fi
 
