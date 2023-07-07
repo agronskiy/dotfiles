@@ -109,7 +109,7 @@ return {
     ["gbt"] = { vim.fn.GoToBazelTarget, desc = "Goto Bazel Target" },
 
     -- Vert split
-    ["<leader>v"] = { function() vim.cmd("vsplit") end, desc = "Open vert split" },
+    ["<leader><leader>/"] = { function() vim.cmd("vsplit") end, desc = "Open vert split" },
   },
   i = {
     ["jj"] = { "<esc>la", desc = "Move one symbol right" },

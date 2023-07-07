@@ -20,22 +20,29 @@ return {
   },
   {
     "hrsh7th/nvim-cmp",
-    dependencies = { "alexander-born/cmp-bazel" },
+    dependencies = {
+      "alexander-born/cmp-bazel",
+      "hrsh7th/cmp-buffer",
+      "hrsh7th/cmp-path",
+      "hrsh7th/cmp-nvim-lsp",
+    },
     opts = function(_, opts)
-      local extra_sources = {
-        -- Extending to bazel autocompletions
-        { name = "bazel" },
-        -- Extending to use all buffers
+      opts.sources = require("cmp").config.sources({
+        { name = "nvim_lsp", priority = 1000 },
+        { name = "luasnip", priority = 750 },
         {
           name = "buffer",
+          priority = 500,
           option = {
             get_bufnrs = function()
               return vim.api.nvim_list_bufs()
             end
           }
-        }
-      }
-      opts.sources = vim.tbl_deep_extend("force", opts.sources, extra_sources)
+
+        },
+        { name = "path", priority = 250 },
+        { name = "bazel", priority = 250 },
+      })
     end,
   },
   {
