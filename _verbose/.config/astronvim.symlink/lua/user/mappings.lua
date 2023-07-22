@@ -50,7 +50,10 @@ return {
     },
     ["ma"] = {
       function()
-        require("telescope").extensions.vim_bookmarks.all()
+        require("telescope").extensions.vim_bookmarks.all({
+          -- https://github.com/tom-anders/telescope-vim-bookmarks.nvim#customization
+          width_text = 40
+        })
       end,
       desc = "Show all bookmarks",
     },
@@ -110,7 +113,6 @@ return {
     -- Line deletion without yank (quite often used)
     ["xx"] = { '"_dd', noremap = true },
     ["X"] = { "x", noremap = true },
-
     -- Bazel commands
     ["gbt"] = { vim.fn.GoToBazelTarget, desc = "Goto Bazel Target" },
   },
