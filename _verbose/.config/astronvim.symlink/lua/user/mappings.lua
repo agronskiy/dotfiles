@@ -48,6 +48,12 @@ return {
       end,
       desc = "Search multiline",
     },
+    ["ma"] = {
+      function()
+        require("telescope").extensions.vim_bookmarks.all()
+      end,
+      desc = "Show all bookmarks",
+    },
     -- Buffer navigation
     ["<S-l>"] = {
       -- Astonvim's support is better if we just reuse

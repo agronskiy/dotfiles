@@ -68,4 +68,15 @@ return {
     }
     return vim.tbl_deep_extend("force", opts, custom_opts)
   end,
+  -- From https://astronvim.com/Recipes/custom_plugins
+  -- the first parameter is the plugin specification
+  -- the second is the table of options as set up in Lazy with the `opts` key
+  config = function(plugin, opts)
+    -- run the core AstroNvim configuration function with the options table
+    require("plugins.configs.telescope")(plugin, opts)
+
+    -- require telescope and load extensions as necessary
+    local telescope = require "telescope"
+    telescope.load_extension "vim_bookmarks"
+  end,
 }

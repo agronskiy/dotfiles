@@ -290,4 +290,16 @@ return {
     lazy = false,
     dependencies = { "nvim-treesitter/nvim-treesitter" },
   },
+
+  -- Bookmarks manipulation
+  {
+    "MattesGroeger/vim-bookmarks",
+    lazy = false,
+  },
+  -- Telescope picker for bookmarks
+  {
+    "tom-anders/telescope-vim-bookmarks.nvim",
+    lazy = false,
+    dependencies = { "MattesGroeger/vim-bookmarks" },
+  },
 }
