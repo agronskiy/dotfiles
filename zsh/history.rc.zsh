@@ -67,9 +67,9 @@ __fzf-history-widget() {
   local selected num
   setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2> /dev/null
   # Sed's below strip history ordinal information such as `12345* ` and then replace `\n` with
-  # newlines.
+  # newlines, and then `\t` with two spaces
   sed_preview='s#^[[:space:]]\{0,\}\([^[:space:]]\{1,\}[[:space:]]\{1,\}\)\{1\}#  #;s#\\n#\
-    #g'
+    #g;s#\\t#  #g'
 
   # Bat below highlights the command with bash syntax.
   selected=( $(fc -rl 1 | awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, "", cmd); if (!seen[cmd]++) print $0 }' |
