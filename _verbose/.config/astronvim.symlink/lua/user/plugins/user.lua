@@ -298,7 +298,7 @@ return {
   },
   -- Telescope picker for bookmarks
   {
-    "tom-anders/telescope-vim-bookmarks.nvim",
+    "reaz1995/telescope-vim-bookmarks.nvim",
     lazy = false,
     dependencies = { "MattesGroeger/vim-bookmarks" },
   },

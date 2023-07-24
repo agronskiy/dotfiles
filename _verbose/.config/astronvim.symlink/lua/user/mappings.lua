@@ -48,15 +48,22 @@ return {
       end,
       desc = "Search multiline",
     },
-    ["ma"] = {
+    ["mo"] = { -- `o` for `oll` :D
       function()
+        local bookmark_actions = require("telescope").extensions.vim_bookmarks.actions
         require("telescope").extensions.vim_bookmarks.all({
           -- https://github.com/tom-anders/telescope-vim-bookmarks.nvim#customization
-          width_text = 40
+          width_text = 40,
+          attach_mappings = function(_, map)
+            map("n", "dd", bookmark_actions.delete_selected_or_at_cursor)
+            map("i", "dd", bookmark_actions.delete_selected_or_at_cursor)
+            return true
+          end
         })
       end,
       desc = "Show all bookmarks",
     },
+
     -- Buffer navigation
     ["<S-l>"] = {
       -- Astonvim's support is better if we just reuse
