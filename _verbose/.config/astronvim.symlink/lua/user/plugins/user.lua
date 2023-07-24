@@ -263,13 +263,17 @@ return {
       vim.g.vimtex_view_skim_activate = 1
     end,
   },
-  {
-    "leoluz/nvim-dap-go",
-    lazy = false,
-    config = function()
-      require("dap-go").setup {}
-    end,
-  },
+
+  -- Commented out because it interferes with the `.vscode/launch.json` files.
+  -- {
+  --   "leoluz/nvim-dap-go",
+  --   lazy = false,
+  --   config = function()
+  --     require("dap-go").setup {}
+  --   end,
+  -- },
+
+
   -- Useful for :TSHighlightUnderCursor to inspect treesitter highlight groups.
   {
     "nvim-treesitter/playground",

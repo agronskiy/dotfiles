@@ -54,10 +54,10 @@ return {
         --         }
         --     ]
         -- }
-        codelldb = function(config)
-          require("dap.ext.vscode").load_launchjs(nil, { codelldb = { "rust", "cpp" } })
-          require("mason-nvim-dap").default_setup(config)
-        end,
+        -- codelldb = function(config)
+        --   require("dap.ext.vscode").load_launchjs(nil, { codelldb = { "rust", "cpp" } })
+        --   require("mason-nvim-dap").default_setup(config)
+        -- end,
       },
     },
   },

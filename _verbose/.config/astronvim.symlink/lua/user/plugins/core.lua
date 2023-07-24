@@ -98,7 +98,6 @@ return {
       return opts
     end,
   },
-
   {
     "stevearc/aerial.nvim",
     opts = {
