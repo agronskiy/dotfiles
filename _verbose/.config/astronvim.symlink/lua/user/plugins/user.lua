@@ -306,4 +306,14 @@ return {
     lazy = false,
     dependencies = { "MattesGroeger/vim-bookmarks" },
   },
+  -- This is a better quickfix
+  {
+    "kevinhwang91/nvim-bqf",
+    ft = "qf",
+    opts = {
+      preview = {
+        winblend = 0,
+      },
+    },
+  },
 }

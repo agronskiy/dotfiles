@@ -51,6 +51,8 @@ local init = {
   TelescopePreviewNormal = { bg = c.vscBack },
   TabLineFill = { fg = c.vscFront, bg = c.vscLeftMid },
   Directory = { fg = c.vscBlue, bg = "NONE" },
+  -- Preview for nvim-bqf
+  -- BqfPreviewFloat = { bg = c.vscBack },
 }
 
 return init

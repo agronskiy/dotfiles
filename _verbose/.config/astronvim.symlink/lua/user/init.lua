@@ -96,6 +96,15 @@ return {
       },
     })
 
+    -- Cause quickfix to close after choosing
+    vim.api.nvim_create_autocmd(
+      "FileType", {
+        pattern = { "qf" },
+        callback = function()
+          vim.api.nvim_buf_set_keymap(0, "n", "<cr>", "<cr>:cclose<cr>", {})
+        end
+      })
+
     -- Create specific bindings for TeX
     vim.api.nvim_create_augroup("mytex", { clear = true })
     vim.api.nvim_create_autocmd({ "BufEnter", "VimEnter", "FileType" }, {

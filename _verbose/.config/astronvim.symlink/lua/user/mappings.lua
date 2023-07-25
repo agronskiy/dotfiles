@@ -48,6 +48,8 @@ return {
       end,
       desc = "Search multiline",
     },
+    ["<leader>qq"] = { ":copen<cr>", desc = "Open quickfix" },
+
     ["mo"] = { -- `o` for `oll` :D
       function()
         local bookmark_actions = require("telescope").extensions.vim_bookmarks.actions
