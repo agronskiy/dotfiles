@@ -48,7 +48,15 @@ return {
       end,
       desc = "Search multiline",
     },
-    ["<leader>qq"] = { ":copen<cr>", desc = "Open quickfix" },
+    ["qq"] = { ":copen<cr>", desc = "Open quickfix" },
+    ["qj"] = { ":colder<cr>", desc = "Open older quickfix" },
+    ["qk"] = { ":cnewer<cr>", desc = "Open newer quickfix" },
+    ["qh"] = {
+      function()
+        require("telescope.builtin").quickfixhistory()
+      end,
+      desc = "Open quickfix",
+    },
 
     ["mo"] = { -- `o` for `oll` :D
       function()

@@ -312,6 +312,7 @@ return {
     ft = "qf",
     opts = {
       preview = {
+        win_height = 35,
         winblend = 0,
       },
     },
