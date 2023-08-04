@@ -82,6 +82,10 @@ unbind o
 bind -r o select-pane -t :.+  # Just redefined o to allow cycling
 
 # Copy and mouse 
+
+bind-key -T prefix v copy-mode  # v for Vim mode 
+bind-key -T copy-mode-vi Esc send-keys -X cancel
+
 # turn on moving around with mouse
 setw -g mouse on
 bind -T copy-mode-vi y send-keys -X copy-pipe  # Only copy, no cancel
