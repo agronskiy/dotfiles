@@ -12,6 +12,7 @@ return {
         "lua_ls",
         "gopls",
         "tsserver",
+        "terraformls",
       },
     },
   },

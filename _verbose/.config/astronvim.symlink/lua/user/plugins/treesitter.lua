@@ -18,6 +18,7 @@ return {
       "proto",
       "python",
       "starlark",
+      "terraform",
       "typescript",
       "vim",
       "yaml",
