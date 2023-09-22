@@ -102,7 +102,7 @@ zstyle ':fzf-tab:complete:(_git-checkout-local-branches|git-checkout):*' fzf-pre
   'git log --graph --color=always --abbrev-commit --decorate \
 --format=format:\
 "%C(bold blue)%h%C(reset) - \
-%C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset) %C(dim white)- %an%C(reset)%n\
+%C(bold green)(%as)%C(reset)%C(auto)%d%C(reset) %C(dim white)- %an%C(reset)%n\
           %C(white)%s%C(reset) " \
 $word'
 
