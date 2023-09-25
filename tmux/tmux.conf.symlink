@@ -64,7 +64,6 @@ set -g allow-rename off
 set -g automatic-rename off
 setw -g allow-rename off
 setw -g automatic-rename off
-set-hook -g after-new-window 'command-prompt -I "#{window_name}" "rename-window '%%'"'
 
 # Start windows and panes at 1, not 0
 set -g base-index 1
@@ -84,7 +83,7 @@ bind -r o select-pane -t :.+  # Just redefined o to allow cycling
 # Copy and mouse 
 
 bind-key -T prefix v copy-mode  # v for Vim mode 
-bind-key -T copy-mode-vi Esc send-keys -X cancel
+bind-key -T copy-mode-vi Escape send-keys -X cancel
 
 # turn on moving around with mouse
 setw -g mouse on
@@ -120,7 +119,12 @@ bind -r \; if '[ #{pane_index} -eq 1 ]' \
      'swap-pane -s "!" ; select-pane -t:.1' \
      'select-pane -t:.1 ; swap-pane -d -t 1 -s "!"'
 
-bind-key -T root F8 last-window
+# I usually operate pairs of windows, 1) 'some_name' 2) '[term]', and `F8` allows to
+# switch between the two.
+bind-key -T root F8 if '[ #{window_name} = "[term]" ]' \
+     'previous-window' \
+     'next-window'
+
 
 # Zoom pane
 unbind z
@@ -153,9 +157,15 @@ setw -g history-limit 50000000
 
 # Window/session management
 bind C-c new-session
-bind c new-window -c "#{pane_current_path}"
-bind x kill-pane
-bind X kill-window
+# Creation of ordinary window
+bind c \
+    new-window -c "#{pane_current_path}" -n '' \;\
+    command-prompt -I "#{window_name}" "rename-window '%%'"
+# Creation of a terminal window
+bind t \
+    new-window -c "#{pane_current_path}" -n '[term]'
+bind -r x kill-pane
+bind -r X kill-window
 bind Q confirm-before -p "kill-session #S? (y/n)" kill-session
 
 # Visual stuff
