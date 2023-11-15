@@ -232,6 +232,20 @@ return {
     end,
     ft = { "markdown" }
   },
+  -- Markdown TOC generator by :TOC
+  {
+    "mzlogin/vim-markdown-toc",
+    config = function()
+      -- https://github.com/mzlogin/vim-markdown-toc#options
+      vim.g.vmt_fence_text = "TOC"
+      vim.g.vmt_fence_closing_text = "/TOC"
+      vim.g.vmt_fence_hidden_markdown_style = "GFM"
+
+      vim.keymap.set("n", "<leader>lv", "<Plug>MarkdownPreviewToggle",
+        { noremap = true, desc = "Toggle markdown preview" })
+    end,
+    ft = { "markdown" }
+  },
   -- Allows to preview in floating window
   {
     "rmagatti/goto-preview",
@@ -317,4 +331,5 @@ return {
       },
     },
   },
+
 }
