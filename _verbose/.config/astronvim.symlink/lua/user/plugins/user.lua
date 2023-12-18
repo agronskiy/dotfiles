@@ -190,24 +190,38 @@ return {
   },
   -- For yanking from terminal, see
   {
-    "ojroques/vim-oscyank",
+    "ojroques/nvim-osc52",
     lazy = false,
     config = function()
-      -- Should be accompanied by a setting clipboard in tmux.conf, also see
-      -- https://github.com/ojroques/vim-oscyank#the-plugin-does-not-work-with-tmux
-      vim.g.oscyank_term = "default"
-      vim.g.oscyank_max_length = 0
-      -- Below autocmd is for copying to OSC52 for any yank operation,
-      -- see https://github.com/ojroques/vim-oscyank#copying-from-a-register
-      vim.api.nvim_create_autocmd("TextYankPost", {
-        pattern = "*",
-        callback = function()
-          if ((vim.v.event.operator == "y" or vim.v.event.operator == "d")
-              and vim.v.event.regname == "") then
-            vim.cmd('OSCYankRegister "')
-          end
-        end,
-      })
+      require("osc52").setup {
+        max_length = 0,          -- Maximum length of selection (0 for no limit)
+        silent = false,          -- Disable message on successful copy
+        trim = false,            -- Trim surrounding whitespaces before copy
+        tmux_passthrough = true, -- Use tmux passthrough (requires tmux: set -g allow-passthrough on)
+      }
+      local function copy()
+        if ((vim.v.event.operator == "y" or vim.v.event.operator == "d")
+          and vim.v.event.regname == "") then
+          require("osc52").copy_register("")
+        end
+      end
+
+      vim.api.nvim_create_autocmd("TextYankPost", { callback = copy })
+      -- -- Should be accompanied by a setting clipboard in tmux.conf, also see
+      -- -- https://github.com/ojroques/vim-oscyank#the-plugin-does-not-work-with-tmux
+      -- vim.g.oscyank_term = "default"
+      -- vim.g.oscyank_max_length = 0
+      -- -- Below autocmd is for copying to OSC52 for any yank operation,
+      -- -- see https://github.com/ojroques/vim-oscyank#copying-from-a-register
+      -- vim.api.nvim_create_autocmd("TextYankPost", {
+      --   pattern = "*",
+      --   callback = function()
+      --     if ((vim.v.event.operator == "y" or vim.v.event.operator == "d")
+      --       and vim.v.event.regname == "") then
+      --       vim.cmd('OSCYankRegister "')
+      --     end
+      --   end,
+      -- })
     end,
   },
   -- Allowing seamless navigation btw tmux and vim
@@ -332,4 +346,59 @@ return {
     },
   },
 
+  -- Obsidian plugins
+  {
+    "epwalsh/obsidian.nvim",
+    tag = "*", -- recommended, use latest release instead of latest commit
+    requires = {
+      -- Required.
+      "nvim-lua/plenary.nvim",
+    },
+    -- ft = "markdown",
+    -- Replace the above line with this if you only want to load obsidian.nvim for markdown files in your vault:
+    event = {
+      -- If you want to use the home shortcut '~' here you need to call 'vim.fn.expand'.
+      -- E.g. "BufReadPre " .. vim.fn.expand "~" .. "/my-vault/**.md"
+      "BufNewFile " .. vim.fn.expand "~" .. "/obsidian-main/**.md",
+      "BufReadPre " .. vim.fn.expand "~" .. "/obsidian-main/**.md",
+    },
+    config = function()
+      -- Configuration available here https://github.com/epwalsh/obsidian.nvim#configuration-options
+      require("obsidian").setup({
+        workspaces = {
+          {
+            name = "Main",
+            path = "~/obsidian-main/Main",
+          },
+        },
+        -- Optional, alternatively you can customize the frontmatter data.
+        note_frontmatter_func = function(note)
+          -- This is equivalent to the default frontmatter function.
+          local out = { tags = note.tags }
+          -- `note.metadata` contains any manually added fields in the frontmatter.
+          -- So here we just make sure those fields are kept in the frontmatter.
+          if note.metadata ~= nil and not vim.tbl_isempty(note.metadata) then
+            for k, v in pairs(note.metadata) do
+              out[k] = v
+            end
+          end
+          return out
+        end,
+        -- Optional, completion of wiki links, local markdown links, and tags using nvim-cmp.
+        completion = {
+          -- Set to false to disable completion.
+          nvim_cmp = false,
+        }
+      })
+    end,
+  },
+  {
+    "oflisback/obsidian-bridge.nvim",
+    dependencies = { "nvim-telescope/telescope.nvim" },
+    config = function() require("obsidian-bridge").setup() end,
+    event = {
+      "BufNewFile " .. vim.fn.expand "~" .. "/obsidian-main/**.md",
+      "BufReadPre " .. vim.fn.expand "~" .. "/obsidian-main/**.md", },
+    lazy = true,
+  }
 }

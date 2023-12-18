@@ -57,7 +57,6 @@ return {
       end,
       desc = "Open quickfix",
     },
-
     ["mo"] = { -- `o` for `oll` :D
       function()
         local bookmark_actions = require("telescope").extensions.vim_bookmarks.actions
@@ -73,7 +72,6 @@ return {
       end,
       desc = "Show all bookmarks",
     },
-
     -- Buffer navigation
     ["<S-l>"] = {
       -- Astonvim's support is better if we just reuse
@@ -167,7 +165,6 @@ return {
       end,
       desc = "Fuzzy hop with pounce",
     },
-    ["<leader>c"] = { ":'<,'>OSCYank<CR>", desc = "Yank to OSC51 clipboard", noremap = true },
     -- Avoid yank-on-paste and yank-on-edit (yank-on-delete remains)
     ["p"] = { '"_dP', noremap = true },
     ["c"] = { '"_c', noremap = true },
