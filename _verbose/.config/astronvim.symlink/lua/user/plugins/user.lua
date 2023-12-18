@@ -43,7 +43,7 @@ return {
   {
     "ruifm/gitlinker.nvim",
     lazy = false,
-    dependencies = { "nvim-lua/plenary.nvim" },
+    dependencies = { "nvim-lua/plenary.nvim", "ojroques/nvim-osc52" },
     config = function()
       require("gitlinker").setup {
         opts = {
@@ -51,7 +51,7 @@ return {
             -- yank to unnamed register
             vim.api.nvim_command('let @" = \'' .. url .. "\'")
             -- copy to the system clipboard using OSC52
-            vim.cmd('OSCYankRegister "')
+            require("osc52").copy_register("")
           end,
         },
       }
@@ -207,21 +207,6 @@ return {
       end
 
       vim.api.nvim_create_autocmd("TextYankPost", { callback = copy })
-      -- -- Should be accompanied by a setting clipboard in tmux.conf, also see
-      -- -- https://github.com/ojroques/vim-oscyank#the-plugin-does-not-work-with-tmux
-      -- vim.g.oscyank_term = "default"
-      -- vim.g.oscyank_max_length = 0
-      -- -- Below autocmd is for copying to OSC52 for any yank operation,
-      -- -- see https://github.com/ojroques/vim-oscyank#copying-from-a-register
-      -- vim.api.nvim_create_autocmd("TextYankPost", {
-      --   pattern = "*",
-      --   callback = function()
-      --     if ((vim.v.event.operator == "y" or vim.v.event.operator == "d")
-      --       and vim.v.event.regname == "") then
-      --       vim.cmd('OSCYankRegister "')
-      --     end
-      --   end,
-      -- })
     end,
   },
   -- Allowing seamless navigation btw tmux and vim
