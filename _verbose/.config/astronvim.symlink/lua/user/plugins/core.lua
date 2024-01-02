@@ -2,15 +2,6 @@
 local activeBgColor = "#1c1c1c"
 
 return {
-  -- customize alpha options
-  {
-    "goolord/alpha-nvim",
-    opts = function(_, opts)
-      -- customize the dashboard header
-      opts.section.header.val = { "" }
-      return opts
-    end,
-  },
   {
     "max397574/better-escape.nvim",
     opts = {
@@ -36,9 +27,8 @@ return {
           option = {
             get_bufnrs = function()
               return vim.api.nvim_list_bufs()
-            end
-          }
-
+            end,
+          },
         },
         { name = "path", priority = 250 },
         { name = "bazel", priority = 250 },
@@ -102,11 +92,13 @@ return {
     "stevearc/aerial.nvim",
     opts = {
       keymaps = {
-        ["<CR>"] = { callback = function()
-          require("aerial").select()
-          vim.cmd("AerialClose")
-        end },
-      }
-    }
+        ["<CR>"] = {
+          callback = function()
+            require("aerial").select()
+            vim.cmd("AerialClose")
+          end,
+        },
+      },
+    },
   },
 }

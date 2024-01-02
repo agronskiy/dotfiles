@@ -12,12 +12,17 @@ return {
   -- You can disable default plugins as follows:
   -- { "max397574/better-escape.nvim", enabled = false },
   -- You can also add new plugins here as well:
+  -- customize alpha options
+  {
+    "goolord/alpha-nvim",
+    enabled = false,
+  },
   {
     "Mofiqul/vscode.nvim",
     branch = "main",
     config = function()
       local c = require("vscode.colors").get_colors()
-      require("vscode").setup {
+      require("vscode").setup({
         transparent = false,
         -- Override colors (see ./lua/vscode/colors.lua)
         color_overrides = {
@@ -35,8 +40,8 @@ return {
           ["@text.todo.checked"] = { fg = c.vscOrange, bg = "NONE" },
           ["@text.quote"] = { fg = c.vscLightBlue, bg = "NONE" },
           ["@punctuation.special"] = { fg = c.vscYellow, bg = "NONE" },
-        }
-      }
+        },
+      })
     end,
   },
   -- Allows git links for lines and selections
@@ -45,16 +50,16 @@ return {
     lazy = false,
     dependencies = { "nvim-lua/plenary.nvim", "ojroques/nvim-osc52" },
     config = function()
-      require("gitlinker").setup {
+      require("gitlinker").setup({
         opts = {
           action_callback = function(url)
             -- yank to unnamed register
-            vim.api.nvim_command('let @" = \'' .. url .. "\'")
+            vim.api.nvim_command("let @\" = '" .. url .. "'")
             -- copy to the system clipboard using OSC52
             require("osc52").copy_register("")
           end,
         },
-      }
+      })
     end,
   },
   -- Allows vim to feel losing and gaining focus from tmux
@@ -125,12 +130,12 @@ return {
                 bg_gutter = "none",
                 float = {
                   bg_border = "none",
-                }
-              }
+                },
+              },
             },
             lotus = {},
             dragon = {},
-            all = {}
+            all = {},
           },
         },
         overrides = function(colors)
@@ -146,7 +151,7 @@ return {
   {
     "EdenEast/nightfox.nvim",
     config = function()
-      require("nightfox").setup {
+      require("nightfox").setup({
         options = {
           -- Compiled file's destination location
           transparent = true,   -- Disable setting background
@@ -174,7 +179,7 @@ return {
             -- ...
           },
         },
-      }
+      })
     end,
   },
   -- Pounce allows to quickly jump to fuzzy place on visible screen
@@ -193,15 +198,14 @@ return {
     "ojroques/nvim-osc52",
     lazy = false,
     config = function()
-      require("osc52").setup {
-        max_length = 0,          -- Maximum length of selection (0 for no limit)
-        silent = false,          -- Disable message on successful copy
-        trim = false,            -- Trim surrounding whitespaces before copy
-        tmux_passthrough = true, -- Use tmux passthrough (requires tmux: set -g allow-passthrough on)
-      }
+      require("osc52").setup({
+        max_length = 0, -- Maximum length of selection (0 for no limit)
+        silent = false, -- Disable message on successful copy
+        trim = false,   -- Trim surrounding whitespaces before copy
+        -- tmux_passthrough = true, -- Use tmux passthrough (requires tmux: set -g allow-passthrough on)
+      })
       local function copy()
-        if ((vim.v.event.operator == "y" or vim.v.event.operator == "d")
-          and vim.v.event.regname == "") then
+        if (vim.v.event.operator == "y" or vim.v.event.operator == "d") and vim.v.event.regname == "" then
           require("osc52").copy_register("")
         end
       end
@@ -226,10 +230,14 @@ return {
       vim.g.mkdp_browserfunc = ""
       vim.g.mkdp_echo_preview_url = 1
 
-      vim.keymap.set("n", "<leader>lv", "<Plug>MarkdownPreviewToggle",
-        { noremap = true, desc = "Toggle markdown preview" })
+      vim.keymap.set(
+        "n",
+        "<leader>lv",
+        "<Plug>MarkdownPreviewToggle",
+        { noremap = true, desc = "Toggle markdown preview" }
+      )
     end,
-    ft = { "markdown" }
+    ft = { "markdown" },
   },
   -- Markdown TOC generator by :TOC
   {
@@ -240,26 +248,34 @@ return {
       vim.g.vmt_fence_closing_text = "/TOC"
       vim.g.vmt_fence_hidden_markdown_style = "GFM"
 
-      vim.keymap.set("n", "<leader>lv", "<Plug>MarkdownPreviewToggle",
-        { noremap = true, desc = "Toggle markdown preview" })
+      vim.keymap.set(
+        "n",
+        "<leader>lv",
+        "<Plug>MarkdownPreviewToggle",
+        { noremap = true, desc = "Toggle markdown preview" }
+      )
     end,
-    ft = { "markdown" }
+    ft = { "markdown" },
   },
   -- Allows to preview in floating window
   {
     "rmagatti/goto-preview",
     lazy = false,
     config = function()
-      require("goto-preview").setup {}
-      vim.keymap.set("n", "gf", "<cmd>lua require('goto-preview').goto_preview_definition()<CR>",
-        { noremap = true, desc = "Open preview in a float window" })
-    end
+      require("goto-preview").setup({})
+      vim.keymap.set(
+        "n",
+        "gf",
+        "<cmd>lua require('goto-preview').goto_preview_definition()<CR>",
+        { noremap = true, desc = "Open preview in a float window" }
+      )
+    end,
   },
   -- Hop allows to quickly jump ti different places in the screen
   {
     "phaazon/hop.nvim",
     config = function()
-      require("hop").setup {}
+      require("hop").setup({})
     end,
   },
   {
@@ -285,7 +301,6 @@ return {
   --     require("dap-go").setup {}
   --   end,
   -- },
-
 
   -- Useful for :TSHighlightUnderCursor to inspect treesitter highlight groups.
   {
@@ -344,8 +359,10 @@ return {
     event = {
       -- If you want to use the home shortcut '~' here you need to call 'vim.fn.expand'.
       -- E.g. "BufReadPre " .. vim.fn.expand "~" .. "/my-vault/**.md"
-      "BufNewFile " .. vim.fn.expand "~" .. "/obsidian-main/**.md",
-      "BufReadPre " .. vim.fn.expand "~" .. "/obsidian-main/**.md",
+      "BufNewFile "
+      .. vim.fn.expand("~")
+      .. "/obsidian-main/**.md",
+      "BufReadPre " .. vim.fn.expand("~") .. "/obsidian-main/**.md",
     },
     config = function()
       -- Configuration available here https://github.com/epwalsh/obsidian.nvim#configuration-options
@@ -373,17 +390,20 @@ return {
         completion = {
           -- Set to false to disable completion.
           nvim_cmp = false,
-        }
+        },
       })
     end,
   },
   {
     "oflisback/obsidian-bridge.nvim",
     dependencies = { "nvim-telescope/telescope.nvim" },
-    config = function() require("obsidian-bridge").setup() end,
+    config = function()
+      require("obsidian-bridge").setup()
+    end,
     event = {
-      "BufNewFile " .. vim.fn.expand "~" .. "/obsidian-main/**.md",
-      "BufReadPre " .. vim.fn.expand "~" .. "/obsidian-main/**.md", },
+      "BufNewFile " .. vim.fn.expand("~") .. "/obsidian-main/**.md",
+      "BufReadPre " .. vim.fn.expand("~") .. "/obsidian-main/**.md",
+    },
     lazy = true,
-  }
+  },
 }
