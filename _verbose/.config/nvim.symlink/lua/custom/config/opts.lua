@@ -17,11 +17,12 @@ vim.o.foldcolumn = vim.fn.has "nvim-0.9" == 1 and "1" or nil
 vim.o.history = 100                         -- number of commands to remember in a history table
 vim.o.ignorecase = true                     -- case insensitive searching
 vim.o.infercase = true                      -- infer cases in keyword completion
-vim.o.laststatus = 3                        -- global statusline
+vim.o.statuscolumn = "%l %s"
 vim.o.linebreak = true                      -- wrap lines at 'breakat'
 vim.o.mouse = "a"                           -- enable mouse support
 vim.o.number = true                         -- show numberline
-vim.o.preserveindent = true                 -- preserve indent structure as much as possible
+vim.o.numberwidth = 2
+vim.o.preserveindent = false                -- preserve indent structure as much as possible
 vim.o.pumheight = 10                        -- height of the pop up menu
 vim.o.shiftwidth = 2                        -- number of space inserted for indentation
 vim.o.showmode = false                      -- disable showing modes in command line
@@ -34,12 +35,11 @@ vim.o.undofile = true                       -- enable persistent undo
 vim.o.virtualedit = "block"                 -- allow going past end of line in visual block mode
 vim.o.writebackup = false                   -- disable making a backup before overwriting a file
 vim.o.autoindent = false
-vim.o.relativenumber = false                -- sets vim.opt.relativenumber
 vim.o.cmdheight = 2
 vim.o.colorcolumn = "80,100,120"
-vim.o.spell = false       -- sets vim.opt.spell
-vim.o.signcolumn = "auto" -- sets vim.opt.signcolumn to auto
-vim.o.wrap = true         -- sets vim.opt.wrap
+vim.o.spell = false      -- sets vim.opt.spell
+vim.o.signcolumn = "yes" -- sets vim.opt.signcolumn to auto
+vim.o.wrap = true        -- sets vim.opt.wrap
 
 
 -- Set highlight on search
