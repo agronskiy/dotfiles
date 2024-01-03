@@ -283,5 +283,10 @@ return {
         end,
         { desc = "Toggle Explorer Focus" })
     end
-  }
+  },
+  {
+    "windwp/nvim-autopairs",
+    event = "InsertEnter",
+    opts = {} -- this is equalent to setup({}) function
+  },
 }

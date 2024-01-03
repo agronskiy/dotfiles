@@ -25,7 +25,6 @@ vim.o.preserveindent = true                 -- preserve indent structure as much
 vim.o.pumheight = 10                        -- height of the pop up menu
 vim.o.shiftwidth = 2                        -- number of space inserted for indentation
 vim.o.showmode = false                      -- disable showing modes in command line
-vim.o.showtabline = 2                       -- always display tabline
 vim.o.smartcase = true                      -- case sensitive searching
 vim.o.splitbelow = true                     -- splitting a new window below the current one
 vim.o.splitright = true                     -- splitting a new window at the right of the current one

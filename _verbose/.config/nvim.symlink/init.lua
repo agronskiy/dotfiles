@@ -461,9 +461,6 @@ local border_opts = {
 }
 cmp.setup({
   preselect = cmp.PreselectMode.None,
-  formatting = {
-    fields = { "kind", "abbr", "menu" },
-  },
   sources = cmp.config.sources {
     { name = "nvim_lsp", priority = 1000 },
     { name = "buffer", priority = 500 },
@@ -607,5 +604,53 @@ vim.api.nvim_create_autocmd(
   }
 )
 
+vim.api.nvim_create_autocmd("BufEnter", {
+  desc = "Quit if more than one window is open and only sidebar windows are list",
+  group = vim.api.nvim_create_augroup("auto_quit", { clear = true }),
+  callback = function()
+    local wins = vim.api.nvim_tabpage_list_wins(0)
+    -- Both neo-tree and aerial will auto-quit if there is only a single window left
+    if #wins <= 1 then return end
+    local sidebar_fts = { aerial = true,["neo-tree"] = true }
+    for _, winid in ipairs(wins) do
+      if vim.api.nvim_win_is_valid(winid) then
+        local bufnr = vim.api.nvim_win_get_buf(winid)
+        local filetype = vim.api.nvim_get_option_value("filetype", { buf = bufnr })
+        -- If any visible windows are not sidebars, early return
+        if not sidebar_fts[filetype] then
+          return
+          -- If the visible window is a sidebar
+        else
+          -- only count filetypes once, so remove a found sidebar from the detection
+          sidebar_fts[filetype] = nil
+        end
+      end
+    end
+    if #vim.api.nvim_list_tabpages() > 1 then
+      vim.cmd.tabclose()
+    else
+      vim.cmd.qall()
+    end
+  end,
+})
+
+vim.api.nvim_create_autocmd("BufWinEnter", {
+  desc = "Make q close help, man, quickfix, dap floats",
+  group = vim.api.nvim_create_augroup("q_close_windows", { clear = true }),
+  callback = function(args)
+    local buftype = vim.api.nvim_get_option_value("buftype", { buf = args.buf })
+    if vim.tbl_contains({ "help", "nofile", "quickfix" }, buftype) and vim.fn.maparg("q", "n") == "" then
+      vim.keymap.set("n", "q", "<cmd>close<cr>", {
+        desc = "Close window",
+        buffer = args.buf,
+        silent = true,
+        nowait = true,
+      })
+    end
+  end,
+})
+
+
 require("custom.util.opts")
 require("custom.util.keymappings")
+require("custom.util.highlights")
