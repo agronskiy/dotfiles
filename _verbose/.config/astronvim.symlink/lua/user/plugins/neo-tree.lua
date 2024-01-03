@@ -6,17 +6,17 @@ return {
       source_selector = {
         winbar = true,
         content_layout = "center",
-        sources = {                    -- table
+        sources = { -- table
           {
-            source = "filesystem",     -- string
+            source = "filesystem", -- string
             display_name = "  Files " -- string | nil
           },
           {
-            source = "buffers",         -- string
+            source = "buffers", -- string
             display_name = "  Buffers" -- string | nil
           },
           {
-            source = "git_status",   -- string
+            source = "git_status", -- string
             display_name = "  Git " -- string | nil
           },
         },
@@ -46,9 +46,6 @@ return {
         },
       },
     }
-    -- This is a small hack until AstroNvim updates the defaults for neo-tree, currently it contains
-    -- an outdated `source_selector.tab_labels`, which generates a warning, so we forcefully delete it here.
-    opts.source_selector.tab_labels = nil
     return vim.tbl_deep_extend("force", opts, custom_opts)
   end
 }
