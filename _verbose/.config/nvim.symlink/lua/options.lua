@@ -60,3 +60,6 @@ vim.o.timeoutlen = 300
 
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
+
+
+vim.g.editorconfig = true

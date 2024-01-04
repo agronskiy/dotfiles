@@ -16,7 +16,7 @@ return {
       -- Autocompletion
       { "alexander-born/cmp-bazel" },
       { "hrsh7th/nvim-cmp" },
-      { "hrsh7th/cmp-buffer" },
+      { 'hrsh7th/cmp-buffer' },
       { "hrsh7th/cmp-path" },
       { "saadparwaiz1/cmp_luasnip" },
       { "hrsh7th/cmp-nvim-lsp" },
@@ -250,6 +250,29 @@ return {
               ["<C-k>"] = actions.move_selection_previous,
             },
             n = { q = actions.close },
+          },
+        },
+        pickers = {
+          find_files = {
+            preview = {
+              hide_on_startup = true, -- long paths friendly
+            }
+          },
+          oldfiles = {
+            preview = {
+              hide_on_startup = true, -- long paths friendly
+            }
+          },
+          lsp_references = {
+            fname_width = 80,
+          },
+          lsp_document_symbols = {
+            fname_width = 80,
+            symbol_width = 35,
+          },
+          lsp_workspace_symbols = {
+            fname_width = 80,
+            symbol_width = 35,
           },
         },
       }
@@ -541,5 +564,11 @@ return {
     event = "InsertEnter",
     opts = {} -- this is equalent to setup({}) function
   },
-
+  -- Seems that editorconfig in nvim 0.8 is not picked up, and `guess-indent.nvim`
+  -- gets messed up with it,
+  -- see https://github.com/NMAC427/guess-indent.nvim/issues/15#issuecomment-1586308382
+  {
+    "gpanders/editorconfig.nvim",
+    lazy = false,
+  },
 }

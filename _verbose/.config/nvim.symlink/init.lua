@@ -20,6 +20,7 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+require("options")
 require("lazy").setup("plugins", {
   defaults = { lazy = false },
   performance = {
@@ -29,9 +30,7 @@ require("lazy").setup("plugins", {
     },
   },
 })
-
 require("general")
-require("autocmds")
-require("opts")
-require("keymappings")
 require("highlights")
+require("autocmds")
+require("mappings")

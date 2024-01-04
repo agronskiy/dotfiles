@@ -5,7 +5,7 @@ vim.defer_fn(function()
   require("nvim-treesitter.configs").setup {
     -- Add languages to be installed here that you want installed for treesitter
     ensure_installed = { "c", "cpp", "go", "lua", "python", "rust", "tsx", "javascript", "typescript", "vimdoc", "vim",
-      "bash" },
+      "bash", },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
@@ -89,8 +89,11 @@ require("neodev").setup()
 
 local lsp_zero = require("lsp-zero")
 lsp_zero.on_attach(function(client, bufnr)
-  lsp_zero.default_keymaps({ buffer = bufnr })
-  lsp_zero.buffer_autoformat()
+  lsp_zero.default_keymaps({ buffer = bufnr, preserve_mappings = false })
+  lsp_zero.buffer_autoformat(client, bufnr)
+  -- Open preview in split
+  -- Additional keymaps
+  vim.keymap.set("n", "gp", "<cmd>vert winc ]<cr>", { desc = "Open preview in split" })
 end)
 
 require("mason").setup({})
