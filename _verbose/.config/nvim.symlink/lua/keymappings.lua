@@ -15,7 +15,7 @@ local function find_git_root()
 
   -- Find the Git root directory from the current file's path
   local git_root = vim.fn.systemlist("git -C " .. vim.fn.escape(current_dir, " ") .. " rev-parse --show-toplevel")
-      [1]
+    [1]
   if vim.v.shell_error ~= 0 then
     print "Not a git repository. Searching on current working directory"
     return cwd
@@ -91,8 +91,8 @@ vim.keymap.set("v", "t", function()
     require("pounce").pounce()
     local end_pos = vim.api.nvim_win_get_cursor(0)
     if end_pos[1] < start_pos[1]
-        or (end_pos[1] == start_pos[1] and end_pos[2] <= start_pos[2])
-        or end_pos[2] == 0 then
+      or (end_pos[1] == start_pos[1] and end_pos[2] <= start_pos[2])
+      or end_pos[2] == 0 then
       return
     end
     vim.api.nvim_win_set_cursor(0, { end_pos[1], end_pos[2] - 1 })
@@ -107,14 +107,18 @@ vim.keymap.set("i", "jl", "<esc>A", { desc = "Move to the end and continue edit"
 vim.keymap.set("i", "jh", "<esc>^i", { desc = "Move to the end and continue edit" })
 
 -- Buffer navigation
-local function nav(n)
-  local current = vim.api.nvim_get_current_buf()
-  for i, v in ipairs(vim.t.bufs) do
-    if current == v then
-      vim.cmd.b(vim.t.bufs[(i + n - 1) % #vim.t.bufs + 1])
-      break
+vim.keymap.set("n", "<S-l>", function() require("bufferline.commands").cycle(1) end, { desc = "Move right" })
+vim.keymap.set("n", "<S-h>", function() require("bufferline.commands").cycle(-1) end, { desc = "Move left" })
+
+-- `F` for `Focus`: it moves to the leftmost split and leaves only it, closing all the other
+-- buffer. Useful for a round of exploration in the code.
+vim.keymap.set("n", "<leader>F",
+  function()
+    for _ = 1, 7 do
+      vim.cmd("wincmd h")
     end
-  end
-end
-vim.keymap.set("n", "<S-l>", function() nav(vim.v.count > 0 and vim.v.count or 1) end, { desc = "Move right" })
-vim.keymap.set("n", "<S-h>", function() nav(-(vim.v.count > 0 and vim.v.count or 1)) end, { desc = "Move left" })
+    require("bufferline.commands").close_others()
+    vim.cmd("only")
+  end,
+  { desc = "Close other tabs and windows" }
+)

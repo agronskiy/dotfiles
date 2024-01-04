@@ -138,9 +138,9 @@ cmp.setup({
     behavior = cmp.ConfirmBehavior.Replace,
     select = false,
   },
-  view = {
-    entries = { name = "custom", selection_order = "near_cursor" }
-  },
+  -- view = {
+  --   entries = { name = "custom", selection_order = "near_cursor" }
+  -- },
   window = {
     completion = cmp.config.window.bordered(border_opts),
     documentation = cmp.config.window.bordered(border_opts),
@@ -149,10 +149,6 @@ cmp.setup({
     format = lspkind.cmp_format(),
   },
   mapping = cmp.mapping.preset.insert({
-    ["<Up>"] = cmp.mapping.select_prev_item { behavior = cmp.SelectBehavior.Select },
-    ["<Down>"] = cmp.mapping.select_next_item { behavior = cmp.SelectBehavior.Select },
-    ["<C-p>"] = cmp.mapping.select_prev_item { behavior = cmp.SelectBehavior.Insert },
-    ["<C-n>"] = cmp.mapping.select_next_item { behavior = cmp.SelectBehavior.Insert },
     ["<C-k>"] = cmp.mapping.select_prev_item { behavior = cmp.SelectBehavior.Insert },
     ["<C-j>"] = cmp.mapping.select_next_item { behavior = cmp.SelectBehavior.Insert },
     ["<C-u>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
@@ -181,16 +177,23 @@ cmp.setup({
 })
 -- `:` cmdline setup
 cmp.setup.cmdline(":", {
-  mapping = cmp.mapping.preset.cmdline(),
-  sources = cmp.config.sources({
-      { name = "path" } },
+  mapping = cmp.mapping.preset.cmdline({
+    ["<C-k>"] = cmp.mapping { c = cmp.mapping.select_prev_item() },
+    ["<C-j>"] = cmp.mapping { c = cmp.mapping.select_next_item() },
+  }),
+  sources = cmp.config.sources(
+    { { name = "path" } },
     { {
       name = "cmdline",
       option = {
         ignore_cmds = { "Man", "!" }
       }
-    }
-    })
+    } }),
+  formatting = {
+    fields = { "abbr" },
+    format = lspkind.cmp_format(),
+    expandable_indicator = false,
+  },
 })
 -- `/` cmdline setup.
 cmp.setup.cmdline("/", {
