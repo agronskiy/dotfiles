@@ -3,20 +3,13 @@ return {
 
   -- Detect tabstop and shiftwidth automatically
   "tpope/vim-sleuth",
-  { "folke/neodev.nvim",    opts = {} },
+  { "folke/neodev.nvim", opts = {} },
   {
-    "VonHeikemen/lsp-zero.nvim",
-    branch = "v3.x",
+    "hrsh7th/nvim-cmp",
     dependencies = {
-      -- LSP Support
-      { "neovim/nvim-lspconfig" },
-      { "williamboman/mason.nvim" },
-      { "williamboman/mason-lspconfig.nvim" },
-
-      -- Autocompletion
       { "alexander-born/cmp-bazel" },
       { "hrsh7th/nvim-cmp" },
-      { 'hrsh7th/cmp-buffer' },
+      { "hrsh7th/cmp-buffer" },
       { "hrsh7th/cmp-path" },
       { "saadparwaiz1/cmp_luasnip" },
       { "hrsh7th/cmp-nvim-lsp" },
@@ -24,10 +17,150 @@ return {
       { "hrsh7th/cmp-cmdline" },
       { "onsails/lspkind.nvim" },
 
+    },
+    event = "User FileOpened",
+    config = function()
+      local cmp = require("cmp")
+      local lspkind = require("lspkind")
+      local function has_words_before()
+        local line, col = (unpack or table.unpack)(vim.api.nvim_win_get_cursor(0))
+        return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match "%s" == nil
+      end
+      local border_opts = {
+        border = "rounded",
+        winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
+      }
+      cmp.setup({
+        preselect = cmp.PreselectMode.None,
+        sources = cmp.config.sources {
+          { name = "nvim_lsp", priority = 1000 },
+          { name = "nvim_lua", priority = 1000 },
+          { name = "buffer", priority = 500 },
+          { name = "path", priority = 250 },
+        },
+        duplicates = {
+          nvim_lsp = 1,
+          luasnip = 1,
+          cmp_tabnine = 1,
+          buffer = 1,
+          path = 1,
+        },
+        confirm_opts = {
+          behavior = cmp.ConfirmBehavior.Replace,
+          select = false,
+        },
+        -- view = {
+        --   entries = { name = "custom", selection_order = "near_cursor" }
+        -- },
+        window = {
+          completion = cmp.config.window.bordered(border_opts),
+          documentation = cmp.config.window.bordered(border_opts),
+        },
+        formatting = {
+          format = lspkind.cmp_format(),
+        },
+        mapping = cmp.mapping.preset.insert({
+          ["<C-k>"] = cmp.mapping.select_prev_item { behavior = cmp.SelectBehavior.Insert },
+          ["<C-j>"] = cmp.mapping.select_next_item { behavior = cmp.SelectBehavior.Insert },
+          ["<C-u>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
+          ["<C-d>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
+          ["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
+          ["<C-y>"] = cmp.config.disable,
+          ["<C-e>"] = cmp.mapping { i = cmp.mapping.abort(), c = cmp.mapping.close() },
+          ["<CR>"] = cmp.mapping.confirm { select = false },
+          ["<Tab>"] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_next_item()
+            elseif has_words_before() then
+              cmp.complete()
+            else
+              fallback()
+            end
+          end, { "i", "s" }),
+          ["<S-Tab>"] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_prev_item()
+            else
+              fallback()
+            end
+          end, { "i", "s" }),
+        }),
+      })
+      -- `:` cmdline setup
+      cmp.setup.cmdline(":", {
+        mapping = cmp.mapping.preset.cmdline({
+          ["<C-k>"] = cmp.mapping { c = cmp.mapping.select_prev_item() },
+          ["<C-j>"] = cmp.mapping { c = cmp.mapping.select_next_item() },
+        }),
+        sources = cmp.config.sources(
+          { { name = "path" } },
+          { {
+            name = "cmdline",
+            option = {
+              ignore_cmds = { "Man", "!" }
+            }
+          } }),
+        formatting = {
+          fields = { "abbr" },
+          format = lspkind.cmp_format(),
+          expandable_indicator = false,
+        },
+      })
+      -- `/` cmdline setup.
+      cmp.setup.cmdline("/", {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = {
+          { name = "buffer" }
+        }
+      })
+    end
+
+  },
+  {
+    "VonHeikemen/lsp-zero.nvim",
+    branch = "v3.x",
+    event = "User FileOpened",
+    dependencies = {
+      -- LSP Support
+      { "neovim/nvim-lspconfig" },
+      { "williamboman/mason.nvim" },
+      { "williamboman/mason-lspconfig.nvim" },
+
+      -- Autocompletion
+      { "hrsh7th/nvim-cmp" },
+
       -- Snippets
       { "L3MON4D3/LuaSnip" },
       { "rafamadriz/friendly-snippets" },
-    }
+    },
+    config = function()
+      local lsp_zero = require("lsp-zero")
+      lsp_zero.on_attach(function(client, bufnr)
+        lsp_zero.default_keymaps({ buffer = bufnr, preserve_mappings = false })
+        lsp_zero.buffer_autoformat(client, bufnr)
+        -- Open preview in split
+        -- Additional keymaps
+        vim.keymap.set("n", "gp", "<cmd>vert winc ]<cr>", { desc = "Open preview in split" })
+        vim.keymap.set("n", "gf", require("goto-preview").goto_preview_definition,
+          { noremap = true, desc = "Open preview in a float window" })
+      end)
+
+      require("mason").setup({})
+      require("mason-lspconfig").setup({
+        ensure_installed = {
+          "clangd",
+          "pyright",
+          "rust_analyzer",
+          "lua_ls",
+          "gopls",
+          "tsserver",
+          "terraformls",
+        },
+        handlers = {
+          lsp_zero.default_setup,
+        }
+      })
+    end
   },
   {
     "max397574/better-escape.nvim",
@@ -113,6 +246,7 @@ return {
   },
   {
     "jose-elias-alvarez/null-ls.nvim",
+    event = "User FileOpened",
     opts = function(_, config)
       -- config variable is the default configuration table for the setup function call
       local null_ls = require "null-ls"
@@ -144,22 +278,21 @@ return {
       return config -- return final config table
     end,
   },
-  {
-    "jay-babu/mason-null-ls.nvim",
-    -- overrides `require("mason-null-ls").setup(...)`
-    opts = {
-      ensure_installed = {
-        "buildifier",
-        -- "prettier",
-        -- "stylua",
-      },
-      -- ensure_installed = { "prettier", "stylua" },
-    },
-  },
+  -- {
+  --   "jay-babu/mason-null-ls.nvim",
+  --   opts = {
+  --     ensure_installed = {
+  --       "buildifier",
+  --       -- "prettier",
+  --       -- "stylua",
+  --     },
+  --   },
+  -- },
   {
     -- Set lualine as statusline
     "nvim-lualine/lualine.nvim",
     -- See `:help lualine.txt`
+    event = "User FileOpened",
     opts = {
       options = {
         icons_enabled = false,
@@ -286,12 +419,78 @@ return {
   {
     -- Highlight, edit, and navigate code
     "nvim-treesitter/nvim-treesitter",
+    cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
+    event = "User FileOpened",
     dependencies = {
       "nvim-treesitter/nvim-treesitter-textobjects",
     },
+    opts = {
+      -- Add languages to be installed here that you want installed for treesitter
+      ensure_installed = { "c", "cpp", "go", "lua", "python", "rust", "tsx", "javascript", "typescript", "vimdoc", "vim",
+        "bash", },
+
+      -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
+      auto_install = false,
+
+      highlight = { enable = true },
+      indent = { enable = true },
+      incremental_selection = {
+        enable = true,
+        keymaps = {
+          init_selection = "<c-space>",
+          node_incremental = "<c-space>",
+          scope_incremental = "<c-s>",
+          node_decremental = "<M-space>",
+        },
+      },
+      textobjects = {
+        select = {
+          enable = true,
+          lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
+          keymaps = {
+            -- You can use the capture groups defined in textobjects.scm
+            ["aa"] = "@parameter.outer",
+            ["ia"] = "@parameter.inner",
+            ["af"] = "@function.outer",
+            ["if"] = "@function.inner",
+            ["ac"] = "@class.outer",
+            ["ic"] = "@class.inner",
+          },
+        },
+        move = {
+          enable = true,
+          set_jumps = true, -- whether to set jumps in the jumplist
+          goto_next_start = {
+            ["]m"] = "@function.outer",
+            ["]]"] = "@class.outer",
+          },
+          goto_next_end = {
+            ["]M"] = "@function.outer",
+            ["]["] = "@class.outer",
+          },
+          goto_previous_start = {
+            ["[m"] = "@function.outer",
+            ["[["] = "@class.outer",
+          },
+          goto_previous_end = {
+            ["[M"] = "@function.outer",
+            ["[]"] = "@class.outer",
+          },
+        },
+        swap = {
+          enable = true,
+          swap_next = {
+            ["<leader>a"] = "@parameter.inner",
+          },
+          swap_previous = {
+            ["<leader>A"] = "@parameter.inner",
+          },
+        },
+      },
+    },
     build = ":TSUpdate",
   },
-  { "akinsho/bufferline.nvim",    version = "*", dependencies = "nvim-tree/nvim-web-devicons", opts = {} },
+  { "akinsho/bufferline.nvim", version = "*", dependencies = "nvim-tree/nvim-web-devicons", opts = {} },
   { "nvim-tree/nvim-web-devicons" },
   {
     "Mofiqul/vscode.nvim",
@@ -351,7 +550,6 @@ return {
   {
     "towolf/vim-helm",
     ft = "helm",
-    lazy = false,
   },
   -- For yanking from terminal, see
   {
@@ -374,7 +572,7 @@ return {
     end,
   },
   -- Allowing seamless navigation btw tmux and vim
-  { "christoomey/vim-tmux-navigator" },
+  -- { "christoomey/vim-tmux-navigator" },
   -- Markdown renderer
   -- CAVEAT: might need `yarn` to be installed. Might need to manually go to the directory
   -- `~/.local/share/nvim/site/pack/packer/start/markdown-preview.nvim/` and run `yarn install`
@@ -417,19 +615,10 @@ return {
     end,
     ft = { "markdown" },
   },
-  -- Allows to preview in floating window
+  -- Allows to preview in floating window, loaded in `zero_lsp.on_attach`
   {
     "rmagatti/goto-preview",
-    lazy = false,
-    config = function()
-      require("goto-preview").setup({})
-      vim.keymap.set(
-        "n",
-        "gf",
-        "<cmd>lua require('goto-preview').goto_preview_definition()<CR>",
-        { noremap = true, desc = "Open preview in a float window" }
-      )
-    end,
+    opts = {},
   },
   {
     "lervag/vimtex",
@@ -457,20 +646,18 @@ return {
   -- Useful for :TSHighlightUnderCursor to inspect treesitter highlight groups.
   {
     "nvim-treesitter/playground",
-    lazy = false,
-    enabled = true,
+    cmd = "TSHighlightUnderCursor",
   },
   -- Bazel integration for neovim
   -- requires `pip install pynvim on the main system python`
   {
     "alexander-born/bazel.nvim",
-    lazy = false,
+    ft = { "bzl" },
     dependencies = { "nvim-treesitter/nvim-treesitter" },
   },
   -- Bookmarks manipulation
   {
     "MattesGroeger/vim-bookmarks",
-    lazy = false,
   },
   -- Telescope picker for bookmarks
   {
@@ -512,10 +699,10 @@ return {
         source_selector = {
           winbar = true,
           content_layout = "center",
-          sources = { -- table
+          sources = {                -- table
             {
               source = "filesystem", -- string
-              display_name = "  Files " -- string | nil
+              display_name = nil     -- string | nil
             },
           },
         },

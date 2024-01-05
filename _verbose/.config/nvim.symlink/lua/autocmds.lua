@@ -1,3 +1,15 @@
+vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile", "BufWritePre" }, {
+  desc = "Autocmd for file events",
+  group = vim.api.nvim_create_augroup("file_user_events", { clear = true }),
+  callback = function(args)
+    local current_file = vim.fn.resolve(vim.fn.expand "%")
+    if not (current_file == "" or vim.api.nvim_get_option_value("buftype", { buf = args.buf }) == "nofile") then
+      vim.api.nvim_exec_autocmds("User", { pattern = "FileOpened", modeline = false })
+    end
+  end,
+})
+
+
 -- Cause quickfix to close after choosing
 vim.api.nvim_create_autocmd(
   "FileType", {
@@ -35,22 +47,22 @@ vim.api.nvim_create_autocmd({ "BufEnter", "VimEnter", "FileType" }, {
 -- loses focus.
 -- create an augroup to easily manage autocommands
 local auto_win_group = vim.api.nvim_create_augroup("autowinmanagement", { clear = true })
-local NORMAL_BG = vim.api.nvim_get_hl(0, { name = "Normal", link = false }).bg
-local NORMAL_NC_BG = vim.api.nvim_get_hl(0, { name = "NormalNC", link = false }).bg
+local normal_bg = vim.api.nvim_get_hl(0, { name = "Normal", link = false }).bg
+local normal_nc_bg = vim.api.nvim_get_hl(0, { name = "NormalNC", link = false }).bg
 vim.api.nvim_create_autocmd({ "FocusLost" }, {
   desc = "Make currwindow look inactive", -- nice description
   group = auto_win_group,                 -- add the autocmd to the newly created augroup
   callback = function()
-    vim.api.nvim_set_hl(0, "Normal", { bg = NORMAL_NC_BG })
-    vim.api.nvim_set_hl(0, "WinBar", { bg = NORMAL_NC_BG })
+    vim.api.nvim_set_hl(0, "Normal", { bg = normal_nc_bg })
+    vim.api.nvim_set_hl(0, "WinBar", { bg = normal_nc_bg })
   end,
 })
 vim.api.nvim_create_autocmd({ "FocusGained" }, {
   desc = "Make currwindow look active", -- nice description
   group = auto_win_group,               -- add the autocmd to the newly created augroup
   callback = function()
-    vim.api.nvim_set_hl(0, "Normal", { bg = NORMAL_BG })
-    vim.api.nvim_set_hl(0, "WinBar", { bg = NORMAL_BG })
+    vim.api.nvim_set_hl(0, "Normal", { bg = normal_bg })
+    vim.api.nvim_set_hl(0, "WinBar", { bg = normal_bg })
   end,
 })
 

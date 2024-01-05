@@ -15,7 +15,6 @@ return {
   -- customize alpha options
   {
     "goolord/alpha-nvim",
-    enabled = false,
   },
   {
     "Mofiqul/vscode.nvim",

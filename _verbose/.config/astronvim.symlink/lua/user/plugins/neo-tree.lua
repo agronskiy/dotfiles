@@ -46,6 +46,9 @@ return {
         },
       },
     }
+    -- This is a small hack until AstroNvim updates the defaults for neo-tree, currently it contains
+    -- an outdated `source_selector.tab_labels`, which generates a warning, so we forcefully delete it here.
+    opts.source_selector.tab_labels = nil
     return vim.tbl_deep_extend("force", opts, custom_opts)
   end
 }
