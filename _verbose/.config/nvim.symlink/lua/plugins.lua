@@ -3,7 +3,11 @@ return {
 
   -- Detect tabstop and shiftwidth automatically
   "tpope/vim-sleuth",
-  { "folke/neodev.nvim", opts = {} },
+  {
+    "folke/neodev.nvim",
+    opts = {},
+    event = "VimEnter",
+  },
   {
     "hrsh7th/nvim-cmp",
     dependencies = {
@@ -18,7 +22,7 @@ return {
       { "onsails/lspkind.nvim" },
 
     },
-    event = "User FileOpened",
+    event = { "CmdlineEnter", "InsertEnter" },
     config = function()
       local cmp = require("cmp")
       local lspkind = require("lspkind")
@@ -35,7 +39,13 @@ return {
         sources = cmp.config.sources {
           { name = "nvim_lsp", priority = 1000 },
           { name = "nvim_lua", priority = 1000 },
-          { name = "buffer", priority = 500 },
+          { name = "buffer",
+            option = {
+              get_bufnrs = function()
+                return vim.api.nvim_list_bufs()
+              end
+            },
+            priority = 500 },
           { name = "path", priority = 250 },
         },
         duplicates = {
@@ -91,6 +101,22 @@ return {
         mapping = cmp.mapping.preset.cmdline({
           ["<C-k>"] = cmp.mapping { c = cmp.mapping.select_prev_item() },
           ["<C-j>"] = cmp.mapping { c = cmp.mapping.select_next_item() },
+          ["<Tab>"] = cmp.mapping { c = function(fallback)
+            if cmp.visible() then
+              cmp.select_next_item()
+            elseif has_words_before() then
+              cmp.complete()
+            else
+              fallback()
+            end
+          end },
+          ["<S-Tab>"] = cmp.mapping { c = function(fallback)
+            if cmp.visible() then
+              cmp.select_prev_item()
+            else
+              fallback()
+            end
+          end },
         }),
         sources = cmp.config.sources(
           { { name = "path" } },
@@ -110,7 +136,14 @@ return {
       cmp.setup.cmdline("/", {
         mapping = cmp.mapping.preset.cmdline(),
         sources = {
-          { name = "buffer" }
+          {
+            name = "buffer",
+            option = {
+              get_bufnrs = function()
+                return vim.api.nvim_list_bufs()
+              end
+            }
+          }
         }
       })
     end
@@ -125,7 +158,7 @@ return {
       { "neovim/nvim-lspconfig" },
       { "williamboman/mason.nvim" },
       { "williamboman/mason-lspconfig.nvim" },
-
+      { "rmagatti/goto-preview" },
       -- Autocompletion
       { "hrsh7th/nvim-cmp" },
 
@@ -174,6 +207,7 @@ return {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     "lewis6991/gitsigns.nvim",
     enabled = vim.fn.executable "git" == 1,
+    event = "User FileOpened",
     opts = {
       current_line_blame = true,
       -- See `:help gitsigns.txt`
@@ -218,9 +252,11 @@ return {
       end,
     },
   },
+
   {
     "lukas-reineke/indent-blankline.nvim",
     main = "ibl",
+    event = "VimEnter", -- Workaround: if do later, some highlights are not working
     opts = {
       indent = { char = "▏" },
       scope = { show_start = false, show_end = false },
@@ -292,11 +328,15 @@ return {
     -- Set lualine as statusline
     "nvim-lualine/lualine.nvim",
     -- See `:help lualine.txt`
+    dependencies = {
+      { "dokwork/lualine-ex" },
+      { "nvim-lua/plenary.nvim" },
+    },
     event = "User FileOpened",
     opts = {
       options = {
         icons_enabled = false,
-        theme = "onedark",
+        theme = "vscode",
         component_separators = "|",
         section_separators = "",
         disabled_filetypes = {
@@ -312,10 +352,27 @@ return {
           winbar = 500
         }
       },
+      sections = {
+        lualine_a = { "mode" },
+        lualine_b = { "branch", "diff", "diagnostics" },
+        lualine_c = { "ex.relative_filename" },
+        lualine_x = { "ex.lsp.null_ls", "ex.lsp.all" },
+        lualine_y = { "progress" },
+        lualine_z = { "location" }
+      },
+      inactive_sections = {
+        lualine_a = {},
+        lualine_b = {},
+        lualine_c = { "filename" },
+        lualine_x = { "location" },
+        lualine_y = {},
+        lualine_z = {}
+      },
     },
   },
   {
     "numToStr/Comment.nvim",
+    event = "User FileOpened",
     opts = {
       ---LHS of operator-pending mappings in NORMAL and VISUAL mode
       toggler = {
@@ -334,6 +391,7 @@ return {
     dependencies = {
       "nvim-lua/plenary.nvim",
       { "nvim-telescope/telescope-fzf-native.nvim", enabled = vim.fn.executable "make" == 1, build = "make" },
+      { "reaz1995/telescope-vim-bookmarks.nvim" },
     },
     cmd = "Telescope",
     opts = function()
@@ -413,84 +471,100 @@ return {
     config = function(_, opts)
       -- Enable telescope fzf native, if installed
       require("telescope").setup(opts)
-      pcall(require("telescope").load_extension, "fzf")
+      pcall(require("telescope").load_extension, "fzf") -- might be unavailable, hence pcall
     end,
   },
   {
     -- Highlight, edit, and navigate code
     "nvim-treesitter/nvim-treesitter",
     cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
-    event = "User FileOpened",
+    event = "VimEnter",
     dependencies = {
       "nvim-treesitter/nvim-treesitter-textobjects",
     },
-    opts = {
-      -- Add languages to be installed here that you want installed for treesitter
-      ensure_installed = { "c", "cpp", "go", "lua", "python", "rust", "tsx", "javascript", "typescript", "vimdoc", "vim",
-        "bash", },
-
-      -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
-      auto_install = false,
-
-      highlight = { enable = true },
-      indent = { enable = true },
-      incremental_selection = {
-        enable = true,
-        keymaps = {
-          init_selection = "<c-space>",
-          node_incremental = "<c-space>",
-          scope_incremental = "<c-s>",
-          node_decremental = "<M-space>",
-        },
-      },
-      textobjects = {
-        select = {
-          enable = true,
-          lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
-          keymaps = {
-            -- You can use the capture groups defined in textobjects.scm
-            ["aa"] = "@parameter.outer",
-            ["ia"] = "@parameter.inner",
-            ["af"] = "@function.outer",
-            ["if"] = "@function.inner",
-            ["ac"] = "@class.outer",
-            ["ic"] = "@class.inner",
-          },
-        },
-        move = {
-          enable = true,
-          set_jumps = true, -- whether to set jumps in the jumplist
-          goto_next_start = {
-            ["]m"] = "@function.outer",
-            ["]]"] = "@class.outer",
-          },
-          goto_next_end = {
-            ["]M"] = "@function.outer",
-            ["]["] = "@class.outer",
-          },
-          goto_previous_start = {
-            ["[m"] = "@function.outer",
-            ["[["] = "@class.outer",
-          },
-          goto_previous_end = {
-            ["[M"] = "@function.outer",
-            ["[]"] = "@class.outer",
-          },
-        },
-        swap = {
-          enable = true,
-          swap_next = {
-            ["<leader>a"] = "@parameter.inner",
-          },
-          swap_previous = {
-            ["<leader>A"] = "@parameter.inner",
-          },
-        },
-      },
-    },
     build = ":TSUpdate",
+    config = function()
+      local setup_fn = function()
+        require("nvim-treesitter.configs").setup {
+          -- Add languages to be installed here that you want installed for treesitter
+          ensure_installed = { "c", "cpp", "go", "lua", "python", "rust", "tsx", "javascript", "typescript", "vimdoc", "vim",
+            "bash", },
+
+          -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
+          auto_install = false,
+
+          highlight = { enable = true },
+          indent = { enable = true },
+          incremental_selection = {
+            enable = true,
+            keymaps = {
+              init_selection = "<c-space>",
+              node_incremental = "<c-space>",
+              scope_incremental = "<c-s>",
+              node_decremental = "<M-space>",
+            },
+          },
+          textobjects = {
+            select = {
+              enable = true,
+              lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
+              keymaps = {
+                -- You can use the capture groups defined in textobjects.scm
+                ["aa"] = "@parameter.outer",
+                ["ia"] = "@parameter.inner",
+                ["af"] = "@function.outer",
+                ["if"] = "@function.inner",
+                ["ac"] = "@class.outer",
+                ["ic"] = "@class.inner",
+              },
+            },
+            move = {
+              enable = true,
+              set_jumps = true, -- whether to set jumps in the jumplist
+              goto_next_start = {
+                ["]m"] = "@function.outer",
+                ["]]"] = "@class.outer",
+              },
+              goto_next_end = {
+                ["]M"] = "@function.outer",
+                ["]["] = "@class.outer",
+              },
+              goto_previous_start = {
+                ["[m"] = "@function.outer",
+                ["[["] = "@class.outer",
+              },
+              goto_previous_end = {
+                ["[M"] = "@function.outer",
+                ["[]"] = "@class.outer",
+              },
+            },
+            swap = {
+              enable = true,
+              swap_next = {
+                ["<leader>a"] = "@parameter.inner",
+              },
+              swap_previous = {
+                ["<leader>A"] = "@parameter.inner",
+              },
+            },
+          },
+        }
+      end
+      vim.defer_fn(setup_fn, 0)
+    end
   },
-  { "akinsho/bufferline.nvim", version = "*", dependencies = "nvim-tree/nvim-web-devicons", opts = {} },
+  {
+    "akinsho/bufferline.nvim",
+    event = "User FileOpened",
+    version = "*",
+    dependencies = "nvim-tree/nvim-web-devicons",
+    opts = {
+      options = {
+        show_buffer_icons = false,
+        show_buffer_close_icons = false,
+      }
+    },
+  },
   { "nvim-tree/nvim-web-devicons" },
   {
     "Mofiqul/vscode.nvim",
@@ -524,7 +598,7 @@ return {
   -- Allows git links for lines and selections
   {
     "ruifm/gitlinker.nvim",
-    lazy = false,
+    event = "User FileOpened",
     dependencies = { "nvim-lua/plenary.nvim", "ojroques/nvim-osc52" },
     config = function()
       require("gitlinker").setup({
@@ -544,6 +618,7 @@ return {
   -- Pounce allows to quickly jump to fuzzy place on visible screen
   {
     "rlane/pounce.nvim",
+    event = "User FileOpened",
     dependencies = { "Mofiqul/vscode.nvim" }, -- Uses colors from the palette.
   },
   -- Helm gotpl+yaml highlighter, see also `on_attach` for `yamlls`
@@ -554,11 +629,11 @@ return {
   -- For yanking from terminal, see
   {
     "ojroques/nvim-osc52",
-    lazy = false,
+    event = "User FileOpened",
     config = function()
       require("osc52").setup({
         max_length = 0, -- Maximum length of selection (0 for no limit)
-        silent = false, -- Disable message on successful copy
+        silent = true,  -- Disable message on successful copy
         trim = false,   -- Trim surrounding whitespaces before copy
         -- tmux_passthrough = true, -- Use tmux passthrough (requires tmux: set -g allow-passthrough on)
       })
@@ -567,12 +642,11 @@ return {
           require("osc52").copy_register("")
         end
       end
-
       vim.api.nvim_create_autocmd("TextYankPost", { callback = copy })
     end,
   },
   -- Allowing seamless navigation btw tmux and vim
-  -- { "christoomey/vim-tmux-navigator" },
+  { "christoomey/vim-tmux-navigator" },
   -- Markdown renderer
   -- CAVEAT: might need `yarn` to be installed. Might need to manually go to the directory
   -- `~/.local/share/nvim/site/pack/packer/start/markdown-preview.nvim/` and run `yarn install`
@@ -617,10 +691,6 @@ return {
   },
   -- Allows to preview in floating window, loaded in `zero_lsp.on_attach`
   {
-    "rmagatti/goto-preview",
-    opts = {},
-  },
-  {
     "lervag/vimtex",
     event = "BufRead",
     config = function()
@@ -632,16 +702,31 @@ return {
       vim.g.vimtex_view_skim_sync = 1
       -- Value 1 allows change focus to skim after command `:VimtexView` is given
       vim.g.vimtex_view_skim_activate = 1
+
+      -- Create specific bindings for TeX
+      local mytex_group = vim.api.nvim_create_augroup("mytex", { clear = true })
+      vim.api.nvim_create_autocmd({ "BufEnter", "VimEnter", "FileType" }, {
+        desc = "Bindings for LaTeX",
+        group = mytex_group,
+        pattern = "tex",
+        callback = function()
+          if vim.bo.filetype == "tex" then
+            vim.api.nvim_buf_set_keymap(0, "n", "<leader>lv", "<cmd>VimtexView<cr>", {})
+            vim.api.nvim_buf_set_keymap(0, "n", "<leader>lc", "<cmd>VimtexCompile<cr>", {})
+
+            -- Set vim servername for callbacks from Skim (for inverse search). Setup of the
+            -- Skim->Preferences->Synk is thus:
+            --   Command:   nvr
+            --   Arguments: --servername `cat /tmp/curnvimserver.txt` +"%line" "%file"
+            local nvim_server_file = "/tmp/curnvimserver.txt"
+            local servername = vim.v.servername
+            local cmd = vim.fn.printf("echo %s > %s", servername, nvim_server_file)
+            vim.fn.system(cmd)
+          end
+        end,
+      })
     end,
   },
-  -- Commented out because it interferes with the `.vscode/launch.json` files.
-  -- {
-  --   "leoluz/nvim-dap-go",
-  --   lazy = false,
-  --   config = function()
-  --     require("dap-go").setup {}
-  --   end,
-  -- },
 
   -- Useful for :TSHighlightUnderCursor to inspect treesitter highlight groups.
   {
@@ -662,7 +747,6 @@ return {
   -- Telescope picker for bookmarks
   {
     "reaz1995/telescope-vim-bookmarks.nvim",
-    lazy = false,
     dependencies = { "MattesGroeger/vim-bookmarks" },
   },
   -- This is a better quickfix
@@ -678,6 +762,7 @@ return {
   },
   {
     "mrjones2014/smart-splits.nvim",
+    event = "WinEnter",
     opts = {
       ignored_filetypes = { "nofile", "quickfix", "qf", "prompt" },
       ignored_buftypes = { "nofile" },
@@ -692,59 +777,53 @@ return {
       "MunifTanjim/nui.nvim",
       -- "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
     },
-    opts = function(_, opts)
-      local custom_opts = {
-        close_if_last_window = true,
-        default_source = "filesystem",
-        source_selector = {
-          winbar = true,
-          content_layout = "center",
-          sources = {                -- table
-            {
-              source = "filesystem", -- string
-              display_name = nil     -- string | nil
-            },
-          },
-        },
-        window = {
-          position = "right",
-          width = 55,
-          mappings = {
-            ["<S-h>"] = "prev_source",
-            ["<S-l>"] = "next_source",
-          },
-        },
-        filesystem = {
-          filtered_items = {
-            visible = true,
-            hide_dotfiles = true,
-          },
-        },
-        event_handlers = {
-          {
-            -- https://github.com/nvim-neo-tree/neo-tree.nvim/wiki/Recipes#auto-close-on-open-file
-            event = "file_opened",
-            handler = function(_) -- argument is `file_path`
-              --auto close
-              require("neo-tree").close_all()
-            end
-          },
-        },
-      }
-      return vim.tbl_deep_extend("force", opts, custom_opts)
-    end,
-    config = function(_, opts)
-      require("neo-tree").setup(opts)
-      vim.keymap.set("n", "<leader>e", "<cmd>Neotree toggle<cr>", { desc = "Toggle explorer" })
-      vim.keymap.set("n", "<leader>o", function()
+    keys = {
+      { "<leader>e", "<cmd>Neotree toggle<cr>", desc = "Explorer NeoTree (root dir)", remap = true },
+      {
+        "<leader>o",
+        function()
           if vim.bo.filetype == "neo-tree" then
             vim.cmd.wincmd "p"
           else
             vim.cmd.Neotree "focus"
           end
-        end,
-        { desc = "Toggle Explorer Focus" })
-    end
+        end
+        ,
+        desc = "Explorer NeoTree (toggle)",
+        remap = true
+      },
+    },
+    opts = {
+      close_if_last_window = true,
+      default_source = "filesystem",
+      sources = { "filesystem", "buffers", "git_status", "document_symbols" },
+      window = {
+        position = "right",
+        width = 55,
+        mappings = {
+          ["<S-h>"] = "prev_source",
+          ["<S-l>"] = "next_source",
+        },
+      },
+      filesystem = {
+        filtered_items = {
+          visible = true,
+          hide_dotfiles = true,
+        },
+        follow_current_file = { enabled = true },
+        use_libuv_file_watcher = true,
+      },
+      event_handlers = {
+        {
+          -- https://github.com/nvim-neo-tree/neo-tree.nvim/wiki/Recipes#auto-close-on-open-file
+          event = "file_opened",
+          handler = function(_) -- argument is `file_path`
+            --auto close
+            require("neo-tree").close_all()
+          end
+        },
+      },
+    }
   },
   {
     "windwp/nvim-autopairs",
@@ -756,6 +835,6 @@ return {
   -- see https://github.com/NMAC427/guess-indent.nvim/issues/15#issuecomment-1586308382
   {
     "gpanders/editorconfig.nvim",
-    lazy = false,
+    event = "User FileOpened",
   },
 }

@@ -17,11 +17,11 @@ vim.o.foldcolumn = vim.fn.has "nvim-0.9" == 1 and "1" or nil
 vim.o.history = 100                         -- number of commands to remember in a history table
 vim.o.ignorecase = true                     -- case insensitive searching
 vim.o.infercase = true                      -- infer cases in keyword completion
-vim.o.statuscolumn = "%l %s"
+-- vim.o.statuscolumn = "%l %s"
 vim.o.linebreak = true                      -- wrap lines at 'breakat'
 vim.o.mouse = "a"                           -- enable mouse support
 vim.o.number = true                         -- show numberline
-vim.o.numberwidth = 2
+vim.o.numberwidth = 1
 vim.o.preserveindent = false                -- preserve indent structure as much as possible
 vim.o.pumheight = 10                        -- height of the pop up menu
 vim.o.shiftwidth = 2                        -- number of space inserted for indentation

@@ -52,7 +52,6 @@ vim.keymap.set("n", "<leader>fw", require("telescope.builtin").live_grep, { desc
 vim.keymap.set("n", "<leader>fo", require("telescope.builtin").oldfiles, { desc = "Find history" })
 vim.keymap.set("n", "<leader>fW", ":LiveGrepGitRoot<cr>", { desc = "Search by grep in git" })
 vim.keymap.set("n", "<leader>ld", require("telescope.builtin").diagnostics, { desc = "Seach diagnostics" })
-vim.keymap.set("n", "<leader>fo", require("telescope.builtin").resume, { desc = "[S]earch [R]esume" })
 vim.keymap.set("n", ";", ":")
 
 
@@ -99,11 +98,13 @@ vim.keymap.set({ "n", "v" }, "f", require("pounce").pounce, { desc = "Fuzzy hop 
 -- Useful for editing
 vim.keymap.set("i", "jj", "<esc>la", { desc = "Move one symbol right" })
 vim.keymap.set("i", "jl", "<esc>A", { desc = "Move to the end and continue edit" })
-vim.keymap.set("i", "jh", "<esc>^i", { desc = "Move to the end and continue edit" })
+vim.keymap.set("i", "jh", "<esc>^i", { desc = "Move to the begin and continue edit" })
 
 -- Buffer navigation
 vim.keymap.set("n", "<S-l>", function() require("bufferline.commands").cycle(1) end, { desc = "Move right" })
 vim.keymap.set("n", "<S-h>", function() require("bufferline.commands").cycle(-1) end, { desc = "Move left" })
+vim.keymap.set("n", "<leader>c", function() require("bufferline.commands").unpin_and_close() end,
+  { desc = "Close buffer" })
 
 -- `F` for `Focus`: it moves to the leftmost split and leaves only it, closing all the other
 -- buffer. Useful for a round of exploration in the code.
@@ -117,3 +118,13 @@ vim.keymap.set("n", "<leader>F",
   end,
   { desc = "Close other tabs and windows" }
 )
+
+-- Avoid yank-on-edit
+vim.keymap.set({ "n", "v" }, "c", '"_c', { noremap = true })
+vim.keymap.set("n", "C", '"_C', { noremap = true })
+-- Line deletion without yank (quite often used)
+vim.keymap.set("n", "xx", '"_dd', { noremap = true })
+vim.keymap.set("v", "x", '"_x', { noremap = true })
+vim.keymap.set("n", "X", "x", { noremap = true })
+-- Avoid yank-on-paste
+vim.keymap.set("v", "p", '"_dP', { noremap = true })

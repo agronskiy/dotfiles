@@ -19,30 +19,6 @@ vim.api.nvim_create_autocmd(
     end
   })
 
--- Create specific bindings for TeX
-vim.api.nvim_create_augroup("mytex", { clear = true })
-vim.api.nvim_create_autocmd({ "BufEnter", "VimEnter", "FileType" }, {
-  desc = "Bindings for LaTeX",
-  group = "mytex",
-  pattern = "tex",
-  callback = function()
-    if vim.bo.filetype == "tex" then
-      vim.api.nvim_buf_set_keymap(0, "n", "<leader>lv", "<cmd>VimtexView<cr>", {})
-      vim.api.nvim_buf_set_keymap(0, "n", "<leader>lc", "<cmd>VimtexCompile<cr>", {})
-
-      -- Set vim servername for callbacks from Skim (for inverse search). Setup of the
-      -- Skim->Preferences->Synk is thus:
-      --   Command:   nvr
-      --   Arguments: --servername `cat /tmp/curnvimserver.txt` +"%line" "%file"
-      local nvim_server_file = "/tmp/curnvimserver.txt"
-      local servername = vim.v.servername
-      local cmd = vim.fn.printf("echo %s > %s", servername, nvim_server_file)
-      vim.fn.system(cmd)
-    end
-  end,
-})
-
-
 -- Make and autocmd so that curr window loses focus when the whole vim
 -- loses focus.
 -- create an augroup to easily manage autocommands
@@ -140,4 +116,22 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   end,
   group = highlight_group,
   pattern = "*",
+})
+
+-- Credit of:
+-- https://github.com/creativenull/dotfiles/blob/9ae60de4f926436d5682406a5b801a3768bbc765/config/nvim/init.lua#L70-L86
+-- When editing a file, always jump to the last known cursor position.
+-- Don't do it when the position is invalid, when inside an event handler
+-- (happens when dropping a file on gvim) and for a commit message (it's
+-- likely a different one than last time).
+vim.api.nvim_create_autocmd("BufReadPost", {
+  group = vim.api.nvim_create_augroup("restore_file_position", { clear = true }),
+  callback = function(args)
+    local valid_line = vim.fn.line([['"]]) >= 1 and vim.fn.line([['"]]) < vim.fn.line("$")
+    local not_commit = vim.b[args.buf].filetype ~= "commit"
+
+    if valid_line and not_commit then
+      vim.cmd([[normal! g`"]])
+    end
+  end,
 })
