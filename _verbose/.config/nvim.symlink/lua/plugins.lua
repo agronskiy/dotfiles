@@ -19,6 +19,8 @@ return {
       { "hrsh7th/cmp-nvim-lsp" },
       { "hrsh7th/cmp-nvim-lua" },
       { "hrsh7th/cmp-cmdline" },
+      { "hrsh7th/cmp-nvim-lsp-signature-help" },
+      { "ray-x/cmp-treesitter" },
       { "onsails/lspkind.nvim" },
 
     },
@@ -39,6 +41,8 @@ return {
         sources = cmp.config.sources {
           { name = "nvim_lsp", priority = 1000 },
           { name = "nvim_lua", priority = 1000 },
+          { name = "nvim_lsp_signature_help" },
+          { name = "treesitter" },
           { name = "buffer",
             option = {
               get_bufnrs = function()
@@ -152,7 +156,7 @@ return {
   {
     "VonHeikemen/lsp-zero.nvim",
     branch = "v3.x",
-    event = "User FileOpened",
+    event = "VeryLazy",
     dependencies = {
       -- LSP Support
       { "neovim/nvim-lspconfig" },
@@ -282,7 +286,7 @@ return {
   },
   {
     "jose-elias-alvarez/null-ls.nvim",
-    event = "User FileOpened",
+    event = "VeryLazy",
     opts = function(_, config)
       -- config variable is the default configuration table for the setup function call
       local null_ls = require "null-ls"
@@ -327,14 +331,24 @@ return {
     dependencies = {
       { "dokwork/lualine-ex" },
       { "nvim-lua/plenary.nvim" },
+      { "WhoIsSethDaniel/lualine-lsp-progress.nvim" },
     },
-    event = "User FileOpened",
+    event = "VeryLazy",
     config = function()
+      local function encoding()
+        local ret, _ = (vim.bo.fenc or vim.go.enc):gsub("^utf%-8$", "")
+        return ret
+      end
+      -- fileformat: Don't display if &ff is unix.
+      local function fileformat()
+        local ret, _ = vim.bo.fileformat:gsub("^unix$", "")
+        return ret
+      end
       local function ts_enabled()
         if vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()] == nil then
-          return
+          return ""
         end
-        return "[TS]"
+        return "TS"
       end
       local function list_lsp_and_null_ls()
         local buf_clients = vim.lsp.get_active_clients()
@@ -361,12 +375,39 @@ return {
         if buf_client_names == nil then
           return "no lsp"
         end
-        return table.concat(buf_client_names, ",")
+        return table.concat(buf_client_names, ", ")
       end
+
+      local c = require("vscode.colors").get_colors()
       local opts = {
         options = {
           icons_enabled = false,
-          theme = "vscode",
+          theme = {
+            normal = {
+              a = { fg = c.vscNone, bg = c.vscPopupHighlightBlue },
+              b = { fg = c.vscNone, bg = c.vscCursorDark },
+              c = { fg = c.vscNone, bg = c.vscCursorDarkDark },
+            },
+            visual = {
+              a = { fg = c.vscNone, bg = c.vscOrange },
+              b = { fg = c.vscNone, bg = c.vscCursorDark },
+              c = { fg = c.scNone, bg = c.vscCursorDarkDark },
+            },
+            inactive = {
+              a = { fg = c.vscNone, bg = c.vscCursorDarkDark },
+              b = { fg = c.vscNone, bg = c.vscCursorDarkDark },
+            },
+            replace = {
+              a = { fg = c.vscNone, bg = c.vscDiffRedDark },
+              b = { fg = c.vscNone, bg = c.vscCursorDark },
+              c = { fg = c.vscNone, bg = c.vscCursorDarkDark },
+            },
+            insert = {
+              a = { fg = c.vscNone, bg = c.vscDiffGreenDark },
+              b = { fg = c.vscNone, bg = c.vscCursorDark },
+              c = { fg = c.vscNone, bg = c.vscCursorDarkDark },
+            },
+          },
           component_separators = { left = "│", right = "│" },
           section_separators = { left = "", right = "" },
           disabled_filetypes = {
@@ -387,10 +428,56 @@ return {
             { "diff" },
             { "diagnostics" },
           },
-          lualine_c = { "ex.relative_filename" },
+          lualine_c = {
+            { "ex.relative_filename", max_length = -1 },
+            { fileformat },
+            { encoding },
+          },
           lualine_x = {
-            { ts_enabled },
-            { list_lsp_and_null_ls }
+            {
+              "lsp_progress",
+              colors = {
+                percentage = c.vscPink,
+                title = c.vscPink,
+                message = c.vscPink,
+                spinner = c.vscPink,
+                lsp_client_name = c.vscPink,
+                use = true,
+              },
+              separators = {
+                component = " ",
+                progress = " | ",
+                message = { pre = "(", post = ")" },
+                percentage = { pre = "", post = "%% " },
+                title = { pre = "", post = ": " },
+                lsp_client_name = { pre = "[", post = "]" },
+                spinner = { pre = "", post = "" },
+              },
+              -- never show status for this list of servers;
+              -- can be useful if your LSP server does not emit
+              -- status messages
+              -- hide = { "null-ls", "pyright" },
+              -- by default this is false. If set to true will
+              -- only show the status of LSP servers attached
+              -- to the currently active buffer
+              only_show_attached = true,
+              display_components = { "lsp_client_name", "spinner", { "title", "percentage", "message" } },
+              timer = {
+                progress_enddelay = 500,
+                spinner = 500,
+                lsp_client_name_enddelay = 1000,
+                attached_delay = 3000,
+              },
+              spinner_symbols = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" },
+              message = { initializing = "Initializing…", commenced = "In Progress", completed = "Completed" },
+              max_message_length = 30,
+
+            },
+            { list_lsp_and_null_ls },
+            {
+              ts_enabled,
+              color = { fg = c.vscGreen }
+            },
           },
           lualine_y = { "progress" },
           lualine_z = { "location" }
@@ -507,7 +594,7 @@ return {
     -- Highlight, edit, and navigate code
     "nvim-treesitter/nvim-treesitter",
     cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
-    event = "VimEnter",
+    event = "VeryLazy",
     dependencies = {
       "nvim-treesitter/nvim-treesitter-textobjects",
     },
@@ -585,7 +672,6 @@ return {
   {
     "akinsho/bufferline.nvim",
     event = "User FileOpened",
-    version = "*",
     dependencies = "nvim-tree/nvim-web-devicons",
     opts = {
       options = {
@@ -865,5 +951,25 @@ return {
   {
     "gpanders/editorconfig.nvim",
     event = "User FileOpened",
+  },
+  {
+    "akinsho/toggleterm.nvim",
+    opts = {
+      border = "single",
+      -- like `size`, width and height can be a number or function which is passed the current terminal
+      width = function()
+        return math.ceil(vim.o.columns * 0.87)
+      end,
+      height = function()
+        return math.ceil(vim.o.lines * 0.85)
+      end,
+      direction = "float",
+    },
+    config = function(_, opts)
+      require("toggleterm").setup(opts)
+      vim.keymap.set("n", "<leader>tf", "<cmd>ToggleTerm direction=float<cr>", { desc = "ToggleTerm float" })
+      vim.keymap.set("n", "<leader>tv", "<cmd>ToggleTerm size=80 direction=vertical<cr>", { desc = "ToggleTerm vert" })
+      vim.keymap.set({ "n", "t" }, "<F7>", "<cmd>ToggleTerm<cr>", { desc = "ToggleTerm" })
+    end
   },
 }

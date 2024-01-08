@@ -128,3 +128,11 @@ vim.keymap.set("v", "x", '"_x', { noremap = true })
 vim.keymap.set("n", "X", "x", { noremap = true })
 -- Avoid yank-on-paste
 vim.keymap.set("v", "p", '"_dP', { noremap = true })
+
+vim.keymap.set("n", "<leader>yp", function()
+    local path = vim.fn.expand("%:p")
+    vim.api.nvim_command("let @\" = '" .. path .. "'")
+    require("osc52").copy_register("")
+    vim.notify('Copied "' .. path .. '" to the clipboard!')
+  end,
+  { desc = "Yank current filepath" })
