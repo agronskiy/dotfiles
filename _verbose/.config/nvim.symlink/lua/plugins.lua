@@ -314,16 +314,12 @@ return {
       return config -- return final config table
     end,
   },
-  -- {
-  --   "jay-babu/mason-null-ls.nvim",
-  --   opts = {
-  --     ensure_installed = {
-  --       "buildifier",
-  --       -- "prettier",
-  --       -- "stylua",
-  --     },
-  --   },
-  -- },
+  {
+    "jay-babu/mason-null-ls.nvim",
+    opts = {
+      ensure_installed = { "buildifier" },
+    },
+  },
   {
     -- Set lualine as statusline
     "nvim-lualine/lualine.nvim",
@@ -333,42 +329,75 @@ return {
       { "nvim-lua/plenary.nvim" },
     },
     event = "User FileOpened",
-    opts = {
-      options = {
-        icons_enabled = false,
-        theme = "vscode",
-        component_separators = "|",
-        section_separators = "",
-        disabled_filetypes = {
-          statusline = { "NvimTree", "neo%-tree", "dashboard", "Outline", "aerial" },
-          winbar = {},
+    config = function()
+      local function ts_enabled()
+        if vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()] == nil then
+          return
+        end
+        return "[TS]"
+      end
+      local function list_lsp_and_null_ls()
+        local buf_clients = vim.lsp.get_active_clients()
+        local null_ls_installed, null_ls = pcall(require, "null-ls")
+        local buf_client_names = {}
+        local seen = {}
+        for _, client in pairs(buf_clients) do
+          if client.name == "null-ls" then
+            if null_ls_installed then
+              for _, source in ipairs(null_ls.get_source({ filetype = vim.bo.filetype })) do
+                if not seen[source.name] == true then
+                  table.insert(buf_client_names, source.name)
+                  seen[source.name] = true
+                end
+              end
+            end
+          else
+            if not seen[client.name] then
+              table.insert(buf_client_names, client.name)
+              seen[client.name] = true
+            end
+          end
+        end
+        if buf_client_names == nil then
+          return "no lsp"
+        end
+        return table.concat(buf_client_names, ",")
+      end
+      local opts = {
+        options = {
+          icons_enabled = false,
+          theme = "vscode",
+          component_separators = { left = "│", right = "│" },
+          section_separators = { left = "", right = "" },
+          disabled_filetypes = {
+            statusline = { "NvimTree", "neo%-tree", "dashboard", "Outline", "aerial" },
+            winbar = {},
+          },
+          ignore_focus = {},
+          always_divide_middle = true,
+          globalstatus = true,
+          refresh = {
+            statusline = 100,
+          }
         },
-        ignore_focus = {},
-        always_divide_middle = true,
-        globalstatus = true,
-        refresh = {
-          statusline = 500,
-          tabline = 500,
-          winbar = 500
-        }
-      },
-      sections = {
-        lualine_a = { "mode" },
-        lualine_b = { "branch", "diff", "diagnostics" },
-        lualine_c = { "ex.relative_filename" },
-        lualine_x = { "ex.lsp.null_ls", "ex.lsp.all" },
-        lualine_y = { "progress" },
-        lualine_z = { "location" }
-      },
-      inactive_sections = {
-        lualine_a = {},
-        lualine_b = {},
-        lualine_c = { "filename" },
-        lualine_x = { "location" },
-        lualine_y = {},
-        lualine_z = {}
-      },
-    },
+        sections = {
+          lualine_a = { "mode" },
+          lualine_b = {
+            { "branch" },
+            { "diff" },
+            { "diagnostics" },
+          },
+          lualine_c = { "ex.relative_filename" },
+          lualine_x = {
+            { ts_enabled },
+            { list_lsp_and_null_ls }
+          },
+          lualine_y = { "progress" },
+          lualine_z = { "location" }
+        },
+      }
+      require("lualine").setup(opts)
+    end
   },
   {
     "numToStr/Comment.nvim",
