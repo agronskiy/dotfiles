@@ -385,13 +385,13 @@ return {
           theme = {
             normal = {
               a = { fg = c.vscNone, bg = c.vscPopupHighlightBlue },
-              b = { fg = c.vscNone, bg = c.vscCursorDark },
+              b = { fg = c.vscNone, bg = c.vscLeftDark },
               c = { fg = c.vscNone, bg = c.vscCursorDarkDark },
             },
             visual = {
-              a = { fg = c.vscNone, bg = c.vscOrange },
-              b = { fg = c.vscNone, bg = c.vscCursorDark },
-              c = { fg = c.scNone, bg = c.vscCursorDarkDark },
+              a = { fg = c.vscBack, bg = c.vscOrange },
+              b = { fg = c.vscNone, bg = c.vscLeftDark },
+              c = { fg = c.vscNone, bg = c.vscCursorDarkDark },
             },
             inactive = {
               a = { fg = c.vscNone, bg = c.vscCursorDarkDark },
@@ -399,12 +399,12 @@ return {
             },
             replace = {
               a = { fg = c.vscNone, bg = c.vscDiffRedDark },
-              b = { fg = c.vscNone, bg = c.vscCursorDark },
+              b = { fg = c.vscNone, bg = c.vscLeftDark },
               c = { fg = c.vscNone, bg = c.vscCursorDarkDark },
             },
             insert = {
-              a = { fg = c.vscNone, bg = c.vscDiffGreenDark },
-              b = { fg = c.vscNone, bg = c.vscCursorDark },
+              a = { fg = c.vscNone, bg = c.vscDiffGreenLight },
+              b = { fg = c.vscNone, bg = c.vscLeftDark },
               c = { fg = c.vscNone, bg = c.vscCursorDarkDark },
             },
           },
@@ -424,7 +424,10 @@ return {
         sections = {
           lualine_a = { "mode" },
           lualine_b = {
-            { "branch" },
+            {
+              "branch",
+              color = { fg = c.vscPink, gui = "bold" }
+            },
             { "diff" },
             { "diagnostics" },
           },
@@ -476,7 +479,7 @@ return {
             { list_lsp_and_null_ls },
             {
               ts_enabled,
-              color = { fg = c.vscGreen }
+              color = { fg = c.vscGreen, gui = "bold" },
             },
           },
           lualine_y = { "progress" },
