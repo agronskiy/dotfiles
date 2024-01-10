@@ -675,9 +675,14 @@ return {
   {
     "akinsho/bufferline.nvim",
     event = "User FileOpened",
-    dependencies = "nvim-tree/nvim-web-devicons",
+    dependencies = {
+      { "nvim-tree/nvim-web-devicons" },
+      { "famiu/bufdelete.nvim" },
+    },
     opts = {
       options = {
+        max_name_length = 35,
+        truncate_names = false,
         show_buffer_icons = false,
         show_buffer_close_icons = false,
       }

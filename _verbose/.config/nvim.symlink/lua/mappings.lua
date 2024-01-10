@@ -103,7 +103,7 @@ vim.keymap.set("i", "jh", "<esc>^i", { desc = "Move to the begin and continue ed
 -- Buffer navigation
 vim.keymap.set("n", "<S-l>", function() require("bufferline.commands").cycle(1) end, { desc = "Move right" })
 vim.keymap.set("n", "<S-h>", function() require("bufferline.commands").cycle(-1) end, { desc = "Move left" })
-vim.keymap.set("n", "<leader>c", function() require("bufferline.commands").unpin_and_close() end,
+vim.keymap.set("n", "<leader>c", function() require("bufdelete").bufdelete(0, true) end,
   { desc = "Close buffer" })
 
 -- `F` for `Focus`: it moves to the leftmost split and leaves only it, closing all the other
