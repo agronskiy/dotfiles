@@ -163,7 +163,7 @@ bind c \
     command-prompt -I "#{window_name}" "rename-window '%%'"
 # Creation of a terminal window
 bind t \
-    new-window -c "#{pane_current_path}" -n '[term]'
+    new-window -a -c "#{pane_current_path}" -n "[term]"
 bind -r x kill-pane
 bind -r X kill-window
 bind Q confirm-before -p "kill-session #S? (y/n)" kill-session
