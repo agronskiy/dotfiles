@@ -228,6 +228,9 @@ bind-key -T off F12  \
     set -u window-status-current-style \;\
     refresh-client -S
 
+# Better support for the gain/lose focus events in vim
+set-option -g focus-events
+
 # Allow clipboard with OSC-52 work, see https://github.com/tmux/tmux/wiki/Clipboard
 # https://github.com/ojroques/nvim-osc52?tab=readme-ov-file#configuration-for-tmux
 set -s set-clipboard on

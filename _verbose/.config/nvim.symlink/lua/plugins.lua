@@ -327,14 +327,13 @@ return {
   {
     -- Set lualine as statusline
     "nvim-lualine/lualine.nvim",
-    -- See `:help lualine.txt`
     dependencies = {
       { "dokwork/lualine-ex" },
       { "nvim-lua/plenary.nvim" },
       { "WhoIsSethDaniel/lualine-lsp-progress.nvim" },
     },
     event = "VeryLazy",
-    config = function()
+    config = function(_, opts)
       local function encoding()
         local ret, _ = (vim.bo.fenc or vim.go.enc):gsub("^utf%-8$", "")
         return ret
@@ -348,10 +347,10 @@ return {
         if vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()] == nil then
           return ""
         end
-        return "TS"
+        return "⚡︎TS"
       end
       local function list_lsp_and_null_ls()
-        local buf_clients = vim.lsp.get_active_clients()
+        local buf_clients = vim.lsp.get_active_clients { bufnr = vim.api.nvim_get_current_buf() }
         local null_ls_installed, null_ls = pcall(require, "null-ls")
         local buf_client_names = {}
         local seen = {}
@@ -379,9 +378,9 @@ return {
       end
 
       local c = require("vscode.colors").get_colors()
-      local opts = {
+      local custom_opts = {
         options = {
-          icons_enabled = false,
+          icons_enabled = true,
           theme = {
             normal = {
               a = { fg = c.vscNone, bg = c.vscPopupHighlightBlue },
@@ -432,7 +431,7 @@ return {
             { "diagnostics" },
           },
           lualine_c = {
-            { "ex.relative_filename", max_length = -1 },
+            { "ex.relative_filename", max_length = -1, color = { fg = c.vscGray } },
             { fileformat },
             { encoding },
           },
@@ -464,7 +463,7 @@ return {
               -- only show the status of LSP servers attached
               -- to the currently active buffer
               only_show_attached = true,
-              display_components = { "lsp_client_name", "spinner", { "title", "percentage", "message" } },
+              display_components = { "spinner", { "title", "percentage", "message" } },
               timer = {
                 progress_enddelay = 500,
                 spinner = 500,
@@ -486,7 +485,7 @@ return {
           lualine_z = { "location" }
         },
       }
-      require("lualine").setup(opts)
+      require("lualine").setup(vim.tbl_deep_extend("force", opts, custom_opts))
     end
   },
   {
@@ -678,15 +677,28 @@ return {
     dependencies = {
       { "nvim-tree/nvim-web-devicons" },
       { "famiu/bufdelete.nvim" },
+      { "Mofiqul/vscode.nvim" },
     },
-    opts = {
-      options = {
-        max_name_length = 35,
-        truncate_names = false,
-        show_buffer_icons = false,
-        show_buffer_close_icons = false,
+    config = function(_, opts)
+      local c = require("vscode.colors").get_colors()
+      local custom_opts = {
+        highlights = {
+          fill = {
+            bg = c.vscGreen,
+          },
+          buffer_visible = {
+            fg = c.vscFront,
+          },
+        },
+        options = {
+          max_name_length = 35,
+          truncate_names = false,
+          show_buffer_icons = true,
+          show_buffer_close_icons = false,
+        }
       }
-    },
+      require("bufferline").setup(vim.tbl_deep_extend("force", opts, custom_opts))
+    end
   },
   { "nvim-tree/nvim-web-devicons" },
   {
@@ -962,6 +974,7 @@ return {
   },
   {
     "akinsho/toggleterm.nvim",
+    event = "User FileOpened",
     opts = {
       border = "single",
       -- like `size`, width and height can be a number or function which is passed the current terminal
@@ -972,6 +985,7 @@ return {
         return math.ceil(vim.o.lines * 0.85)
       end,
       direction = "float",
+      float_opts = { border = "rounded" },
     },
     config = function(_, opts)
       require("toggleterm").setup(opts)

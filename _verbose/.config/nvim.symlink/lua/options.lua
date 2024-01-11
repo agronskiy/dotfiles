@@ -58,8 +58,4 @@ vim.o.smartcase = true
 vim.o.updatetime = 250
 vim.o.timeoutlen = 300
 
--- NOTE: You should make sure your terminal supports this
-vim.o.termguicolors = true
-
-
 vim.g.editorconfig = true
