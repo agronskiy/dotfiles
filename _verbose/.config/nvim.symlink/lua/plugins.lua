@@ -186,15 +186,31 @@ return {
       require("mason-lspconfig").setup({
         ensure_installed = {
           "clangd",
+          "gopls",
+          "helm_ls",
+          "lua_ls",
           "pyright",
           "rust_analyzer",
-          "lua_ls",
-          "gopls",
-          "tsserver",
           "terraformls",
+          "tsserver",
+          "yamlls"
         },
         handlers = {
           lsp_zero.default_setup,
+          helm_ls = function()
+            -- I want to avoid yamlls schema check
+            require("lspconfig").helm_ls.setup({
+              settings = {
+                ["helm-ls"] = {
+                  yamlls = {
+                    config = {
+                      schemas = {},
+                    }
+                  }
+                }
+              }
+            })
+          end
         }
       })
     end
@@ -605,8 +621,21 @@ return {
       local setup_fn = function()
         require("nvim-treesitter.configs").setup {
           -- Add languages to be installed here that you want installed for treesitter
-          ensure_installed = { "c", "cpp", "go", "lua", "python", "rust", "tsx", "javascript", "typescript", "vimdoc", "vim",
-            "bash", },
+          ensure_installed = {
+            "c",
+            "cpp",
+            "go",
+            "lua",
+            "python",
+            "rust",
+            "tsx",
+            "javascript",
+            "typescript",
+            "vimdoc",
+            "vim",
+            "bash",
+            "yaml"
+          },
 
           -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
           auto_install = false,
