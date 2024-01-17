@@ -302,6 +302,9 @@ return {
   },
   {
     "jose-elias-alvarez/null-ls.nvim",
+    dependencies = {
+      { "jay-babu/mason-null-ls.nvim" },
+    },
     event = "VeryLazy",
     opts = function(_, config)
       -- config variable is the default configuration table for the setup function call
@@ -336,8 +339,13 @@ return {
   },
   {
     "jay-babu/mason-null-ls.nvim",
+    event = "User FileOpened",
     opts = {
       ensure_installed = { "buildifier" },
+    },
+    dependencies = {
+      "williamboman/mason.nvim",
+      "nvimtools/none-ls.nvim",
     },
   },
   {
