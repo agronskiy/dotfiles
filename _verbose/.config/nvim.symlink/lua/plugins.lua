@@ -324,8 +324,8 @@ return {
         -- null_ls.builtins.diagnostics.pycodestyle,
         -- null_ls.builtins.diagnostics.pydocstyle,
         -- null_ls.builtins.diagnostics.pylint,
-        null_ls.builtins.formatting.black,
-        null_ls.builtins.formatting.isort,
+        -- null_ls.builtins.formatting.black,
+        -- null_ls.builtins.formatting.isort,
         null_ls.builtins.formatting.latexindent,
         -- bazel, also see `polish` below for `filetypes`
         null_ls.builtins.diagnostics.buildifier,
@@ -1031,4 +1031,20 @@ return {
       vim.keymap.set({ "n", "t" }, "<F7>", "<cmd>ToggleTerm<cr>", { desc = "ToggleTerm" })
     end
   },
+  {
+    "stevearc/conform.nvim",
+    event = "User FileOpened",
+    opts = {
+      format_on_save = {
+        -- These options will be passed to conform.format()
+        timeout_ms = 500,
+        lsp_fallback = true,
+      },
+      formatters_by_ft = {
+        lua = { "stylua" },
+        -- Conform will run multiple formatters sequentially
+        python = { "isort", "black" },
+      },
+    },
+  }
 }
