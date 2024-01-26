@@ -4,7 +4,6 @@
 
 vim.o.breakindent = true                    -- wrap indent to match  line start
 vim.o.clipboard = "unnamedplus"             -- connection to the system clipboard
-vim.o.cmdheight = 0                         -- hide command line unless needed
 vim.o.completeopt = "menu,menuone,noselect" -- Options for insert mode completion
 vim.o.copyindent = true                     -- copy the previous indentation on autoindenting
 vim.o.cursorline = true                     -- highlight the text line of the cursor
@@ -35,7 +34,7 @@ vim.o.undofile = true                       -- enable persistent undo
 vim.o.virtualedit = "block"                 -- allow going past end of line in visual block mode
 vim.o.writebackup = false                   -- disable making a backup before overwriting a file
 vim.o.autoindent = false
-vim.o.cmdheight = 1
+vim.o.cmdheight = 2
 vim.o.colorcolumn = "80,100,120"
 vim.o.spell = false      -- sets vim.opt.spell
 vim.o.signcolumn = "yes" -- sets vim.opt.signcolumn to auto
