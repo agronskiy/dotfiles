@@ -326,13 +326,13 @@ return {
         -- null_ls.builtins.diagnostics.pylint,
         -- null_ls.builtins.formatting.black,
         -- null_ls.builtins.formatting.isort,
-        null_ls.builtins.formatting.latexindent,
+        -- null_ls.builtins.formatting.latexindent,
         -- bazel, also see `polish` below for `filetypes`
         null_ls.builtins.diagnostics.buildifier,
         -- Set a formatter
         -- null_ls.builtins.formatting.stylua,
         -- null_ls.builtins.formatting.prettier,
-        null_ls.builtins.formatting.buildifier,
+        -- null_ls.builtins.formatting.buildifier,
       }
       return config -- return final config table
     end,
@@ -341,7 +341,7 @@ return {
     "jay-babu/mason-null-ls.nvim",
     event = "User FileOpened",
     opts = {
-      ensure_installed = { "buildifier" },
+      ensure_installed = { "buildifier", "mypy" },
     },
     dependencies = {
       "williamboman/mason.nvim",
@@ -1044,7 +1044,8 @@ return {
         lua = { "stylua" },
         -- Conform will run multiple formatters sequentially
         python = { "isort", "black" },
-        -- bzl = { "buildifier" },
+        bzl = { "buildifier" },
+        tex = { "latexindent" },
       },
     },
   }
