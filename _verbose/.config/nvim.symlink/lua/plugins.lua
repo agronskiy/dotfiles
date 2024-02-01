@@ -203,9 +203,7 @@ return {
               settings = {
                 ["helm-ls"] = {
                   yamlls = {
-                    config = {
-                      schemas = {},
-                    }
+                    enabled = false,
                   }
                 }
               }
