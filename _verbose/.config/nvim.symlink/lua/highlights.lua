@@ -53,6 +53,13 @@ local highlights = {
   Directory = { fg = c.vscBlue, bg = "NONE" },
   -- Preview for nvim-bqf
   -- BqfPreviewFloat = { bg = c.vscBack },
+
+  -- `vim-illuminate` highlights
+  IlluminatedWord = { bg = c.vscLeftMid },
+  IlluminatedCurWord = { bg = c.vscLeftMid },
+  IlluminatedWordText = { bg = c.vscLeftMid },
+  IlluminatedWordRead = { bg = c.vscLeftMid },
+  IlluminatedWordWrite = { bg = c.vscLeftMid },
 }
 
 for group, spec in pairs(highlights) do

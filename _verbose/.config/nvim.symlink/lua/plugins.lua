@@ -1047,5 +1047,12 @@ return {
         tex = { "latexindent" },
       },
     },
+  },
+  {
+    "RRethy/vim-illuminate",
+    event = "User FileOpened",
+    config = function(_, opts)
+      require("illuminate").configure({})
+    end,
   }
 }
