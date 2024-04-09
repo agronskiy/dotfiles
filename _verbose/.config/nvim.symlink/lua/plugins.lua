@@ -162,7 +162,7 @@ return {
       { "neovim/nvim-lspconfig" },
       { "williamboman/mason.nvim" },
       { "williamboman/mason-lspconfig.nvim" },
-      { "rmagatti/goto-preview" },
+      { "rmagatti/goto-preview", opts = {} },
       -- Autocompletion
       { "hrsh7th/nvim-cmp" },
 
@@ -197,6 +197,18 @@ return {
         },
         handlers = {
           lsp_zero.default_setup,
+          clangd = function()
+            require("lspconfig").clangd.setup {
+              cmd = {
+                "clangd",
+                "--query-driver=*",
+                "--malloc-trim",
+                "-j=64",
+                "--background-index",
+                "--suggest-missing-includes",
+              },
+            }
+          end,
           helm_ls = function()
             -- I want to avoid yamlls schema check
             require("lspconfig").helm_ls.setup({
@@ -339,7 +351,11 @@ return {
     "jay-babu/mason-null-ls.nvim",
     event = "User FileOpened",
     opts = {
-      ensure_installed = { "buildifier", "mypy" },
+      -- CAVEAT: to ensure some decent mypy is installed together with `mason`, typically
+      -- under ~/.local/share/nvim/mason/{bin,packages}, add `mypy` here. However, if you need to use `mypy` installed
+      -- into your venv (e.g. if it uses nontrivial plugins or specific verison), make sure you
+      -- remove `mypy` from here.
+      ensure_installed = { "buildifier" },
     },
     dependencies = {
       "williamboman/mason.nvim",

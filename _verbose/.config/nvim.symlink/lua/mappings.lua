@@ -51,7 +51,7 @@ vim.keymap.set("n", "<leader>fc", require("telescope.builtin").grep_string, { de
 vim.keymap.set("n", "<leader>fw", require("telescope.builtin").live_grep, { desc = "[S]earch by [G]rep" })
 vim.keymap.set("n", "<leader>fo", require("telescope.builtin").oldfiles, { desc = "Find history" })
 vim.keymap.set("n", "<leader>fW", ":LiveGrepGitRoot<cr>", { desc = "Search by grep in git" })
-vim.keymap.set("n", "<leader>ld", require("telescope.builtin").diagnostics, { desc = "Seach diagnostics" })
+vim.keymap.set("n", "<leader>lD", require("telescope.builtin").diagnostics, { desc = "Seach diagnostics" })
 vim.keymap.set("n", "<leader>lr", require("telescope.builtin").lsp_references, { desc = "Find references" })
 vim.keymap.set("n", ";", ":")
 
