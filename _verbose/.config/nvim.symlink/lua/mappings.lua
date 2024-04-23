@@ -15,7 +15,7 @@ local function find_git_root()
 
   -- Find the Git root directory from the current file's path
   local git_root = vim.fn.systemlist("git -C " .. vim.fn.escape(current_dir, " ") .. " rev-parse --show-toplevel")
-    [1]
+      [1]
   if vim.v.shell_error ~= 0 then
     print "Not a git repository. Searching on current working directory"
     return cwd
@@ -86,8 +86,8 @@ vim.keymap.set("v", "t", function()
     require("pounce").pounce()
     local end_pos = vim.api.nvim_win_get_cursor(0)
     if end_pos[1] < start_pos[1]
-      or (end_pos[1] == start_pos[1] and end_pos[2] <= start_pos[2])
-      or end_pos[2] == 0 then
+        or (end_pos[1] == start_pos[1] and end_pos[2] <= start_pos[2])
+        or end_pos[2] == 0 then
       return
     end
     vim.api.nvim_win_set_cursor(0, { end_pos[1], end_pos[2] - 1 })

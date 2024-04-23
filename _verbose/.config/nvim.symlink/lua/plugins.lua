@@ -40,8 +40,8 @@ return {
       cmp.setup({
         preselect = cmp.PreselectMode.None,
         sources = cmp.config.sources {
-          { name = "nvim_lsp", priority = 1000 },
-          { name = "nvim_lua", priority = 1000 },
+          { name = "nvim_lsp",               priority = 1000 },
+          { name = "nvim_lua",               priority = 1000 },
           { name = "nvim_lsp_signature_help" },
           { name = "treesitter" },
           { name = "buffer",
@@ -163,7 +163,7 @@ return {
       { "neovim/nvim-lspconfig" },
       { "williamboman/mason.nvim" },
       { "williamboman/mason-lspconfig.nvim" },
-      { "rmagatti/goto-preview", opts = {} },
+      { "rmagatti/goto-preview",            opts = {} },
       -- Autocompletion
       { "hrsh7th/nvim-cmp" },
 
@@ -198,6 +198,22 @@ return {
         },
         handlers = {
           lsp_zero.default_setup,
+          pyright = function()
+            require("lspconfig").pyright.setup({
+              root_dir = vim.loop.cwd,
+              flags = { debounce_text_changes = 300 },
+              settings = {
+                python = {
+                  analysis = {
+                    autoSearchPaths = true,
+                    diagnosticMode = "openFilesOnly",
+                    useLibraryCodeForTypes = true,
+                    typeCheckingMode = "basic",
+                  },
+                },
+              },
+            })
+          end,
           clangd = function()
             require("lspconfig").clangd.setup {
               cmd = {
@@ -233,7 +249,7 @@ return {
     },
   },
   -- Useful plugin to show you pending keybinds.
-  { "folke/which-key.nvim", opts = {} },
+  { "folke/which-key.nvim",       opts = {} },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     "lewis6991/gitsigns.nvim",
@@ -326,12 +342,10 @@ return {
       -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
       config.sources = {
         -- bash
-        null_ls.builtins.code_actions.shellcheck,
-        null_ls.builtins.diagnostics.shellcheck,
         -- python
         -- null_ls.builtins.diagnostics.flake8,
         -- null_ls.builtins.diagnostics.pyproject_flake8,
-        null_ls.builtins.diagnostics.mypy,
+        -- null_ls.builtins.diagnostics.mypy,
         -- null_ls.builtins.diagnostics.pycodestyle,
         -- null_ls.builtins.diagnostics.pydocstyle,
         -- null_ls.builtins.diagnostics.pylint,
