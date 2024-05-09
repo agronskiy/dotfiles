@@ -169,10 +169,9 @@ return {
           height = 25,
           post_open_hook = function(bufnr, winnr)
             local bo = vim.bo[bufnr]
-            bo.buflisted = true
-            bo.modifiable = false
             vim.keymap.set("c", "vs",
               function()
+                bo.buflisted = true
                 vim.cmd("vsplit")
                 require("goto-preview").close_all_win()
               end,
