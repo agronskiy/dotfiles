@@ -40,8 +40,8 @@ return {
       cmp.setup({
         preselect = cmp.PreselectMode.None,
         sources = cmp.config.sources {
-          { name = "nvim_lsp", priority = 1000 },
-          { name = "nvim_lua", priority = 1000 },
+          { name = "nvim_lsp",               priority = 1000 },
+          { name = "nvim_lua",               priority = 1000 },
           { name = "nvim_lsp_signature_help" },
           { name = "treesitter" },
           { name = "buffer",
@@ -178,7 +178,7 @@ return {
               end,
               { noremap = true, desc = "Open preview in a float window", buffer = bufnr }
             )
-            vim.keymap.set("n", "q", "<cmd>q<cr>", { buffer = bufnr })
+            vim.keymap.set("n", "q", "<cmd>q<cr>", { buffer = bufnr, nowait = true })
           end,
           post_close_hook = function(bufnr, winnr)
             vim.keymap.del("n", "q", { buffer = bufnr })
@@ -270,7 +270,7 @@ return {
     },
   },
   -- Useful plugin to show you pending keybinds.
-  { "folke/which-key.nvim", opts = {} },
+  { "folke/which-key.nvim",       opts = {} },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     "lewis6991/gitsigns.nvim",
