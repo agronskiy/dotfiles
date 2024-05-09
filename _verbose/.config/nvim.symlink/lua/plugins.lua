@@ -163,7 +163,23 @@ return {
       { "neovim/nvim-lspconfig" },
       { "williamboman/mason.nvim" },
       { "williamboman/mason-lspconfig.nvim" },
-      { "rmagatti/goto-preview",            opts = {} },
+      {
+        "rmagatti/goto-preview",
+        opts = {
+          height = 25,
+          post_open_hook = function(bufnr, winnr)
+            vim.keymap.set("c", "vs",
+              function()
+                local bo = vim.bo[bufnr]
+                bo.buflisted = true
+                vim.cmd("vsplit")
+                require("goto-preview").close_all_win()
+              end,
+              { noremap = true, desc = "Open preview in a float window", buffer = bufnr }
+            )
+          end
+        }
+      },
       -- Autocompletion
       { "hrsh7th/nvim-cmp" },
 

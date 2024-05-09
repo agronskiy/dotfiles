@@ -40,6 +40,7 @@ local highlights = {
   WinBarNC = { bg = c.vscLeftDark },
   LineNr = { fg = c.vscLineNumber, bg = "NONE" },
   CursorLineNr = { fg = c.vscPopupFront, bg = "NONE" },
+  NormalFloat = { bg = c.vscBack }, -- Added it for goto-preview
   SignColumn = { bg = "NONE" },
   TelescopeBorder = { fg = c.vscLineNumber, bg = c.vscBack },
   TelescopeNormal = { bg = c.vscBack },
@@ -60,6 +61,7 @@ local highlights = {
   IlluminatedWordText = { bg = c.vscLeftMid },
   IlluminatedWordRead = { bg = c.vscLeftMid },
   IlluminatedWordWrite = { bg = c.vscLeftMid },
+
 }
 
 for group, spec in pairs(highlights) do

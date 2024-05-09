@@ -120,6 +120,15 @@ vim.keymap.set("n", "<leader>F",
   { desc = "Close other tabs and windows" }
 )
 
+-- Similar, `Z` for `Zen` focuses on the current window
+vim.keymap.set("n", "<leader>Z",
+  function()
+    require("bufferline.commands").close_others()
+    vim.cmd("only")
+  end,
+  { desc = "Close other tabs and windows" }
+)
+
 -- Avoid yank-on-edit
 vim.keymap.set({ "n", "v" }, "c", '"_c', { noremap = true })
 vim.keymap.set("n", "C", '"_C', { noremap = true })
