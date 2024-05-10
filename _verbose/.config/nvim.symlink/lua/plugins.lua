@@ -178,6 +178,14 @@ return {
               { noremap = true, desc = "Open preview in a float window", buffer = bufnr }
             )
             vim.keymap.set("n", "q", "<cmd>q<cr>", { buffer = bufnr, nowait = true })
+
+            -- Setting this window's highlight
+            -- Here, we create a separate highlight namespace to make `goto-preview`
+            -- floating window look dark (they will be activated in the hook)
+            local c = require("vscode.colors").get_colors()
+            local preview_namespace = vim.api.nvim_create_namespace("GotoPreviewCustom")
+            vim.api.nvim_set_hl(preview_namespace, "NormalFloat", { bg = c.vscBack })
+            vim.api.nvim_win_set_hl_ns(winnr, preview_namespace)
           end,
           post_close_hook = function(bufnr, winnr)
             vim.keymap.del("n", "q", { buffer = bufnr })
