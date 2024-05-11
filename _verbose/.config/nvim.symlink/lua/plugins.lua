@@ -31,11 +31,12 @@ return {
       local lspkind = require("lspkind")
       local function has_words_before()
         local line, col = (unpack or table.unpack)(vim.api.nvim_win_get_cursor(0))
-        return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match "%s" == nil
+        return col ~= 0 and
+            vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match "%s" == nil
       end
       local border_opts = {
         border = "rounded",
-        winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
+        winhighlight = "Normal:NormalFloat,FloatBorder:MyCmpFloatBorder,CursorLine:PmenuSel,Search:None",
       }
       cmp.setup({
         preselect = cmp.PreselectMode.None,
@@ -1085,7 +1086,8 @@ return {
     config = function(_, opts)
       require("toggleterm").setup(opts)
       vim.keymap.set("n", "<leader>tf", "<cmd>ToggleTerm direction=float<cr>", { desc = "ToggleTerm float" })
-      vim.keymap.set("n", "<leader>tv", "<cmd>ToggleTerm size=80 direction=vertical<cr>", { desc = "ToggleTerm vert" })
+      vim.keymap.set("n", "<leader>tv", "<cmd>ToggleTerm size=80 direction=vertical<cr>",
+        { desc = "ToggleTerm vert" })
       vim.keymap.set({ "n", "t" }, "<F7>", "<cmd>ToggleTerm<cr>", { desc = "ToggleTerm" })
     end
   },
@@ -1134,4 +1136,10 @@ return {
       { "<leader>tl", "<cmd>LazyGit<cr>", desc = "LazyGit" }
     }
   },
+  -- shows colors
+  {
+    "norcalli/nvim-colorizer.lua",
+    event = 'User FileOpened',
+    opts = {}
+  }
 }

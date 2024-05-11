@@ -61,6 +61,8 @@ local highlights = {
   IlluminatedWordRead = { bg = c.vscLeftMid },
   IlluminatedWordWrite = { bg = c.vscLeftMid },
 
+  -- For cmp
+  MyCmpFloatBorder = { fg = c.vscLeftLight, bg = c.vscLeftDark },
 }
 
 for group, spec in pairs(highlights) do
