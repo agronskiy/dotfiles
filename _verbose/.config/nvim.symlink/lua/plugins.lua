@@ -168,6 +168,9 @@ return {
         "rmagatti/goto-preview",
         opts = {
           height = 25,
+          border = { '╭', '─', '╮', '│', '╯', '─', '╰', '│' },
+          -- resizing_mappings = true,  -- This binds to buffer and thus remains with buffer
+          -- after closing the window
           post_open_hook = function(bufnr, winnr)
             local bo = vim.bo[bufnr]
             vim.keymap.set("c", "vs",
