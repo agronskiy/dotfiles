@@ -150,3 +150,13 @@ vim.keymap.set("n", "<leader>yp",
 
 -- Opening quickfix
 vim.keymap.set("n", "qq", ":copen<cr>", { desc = "Open quickfix" })
+
+-- Command to copy relative path, credit of
+-- https://www.reddit.com/r/neovim/comments/u221as/how_can_i_copy_the_current_buffers_relative_path/
+vim.api.nvim_create_user_command("CpRelPath",
+  function()
+    local path = vim.fn.fnamemodify(vim.fn.expand("%"), ":.")
+    vim.api.nvim_call_function("setreg", { "+", path })
+    vim.notify('Copied "' .. path .. '" to the clipboard')
+  end, {}
+)
