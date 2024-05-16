@@ -23,6 +23,8 @@ return {
       { "hrsh7th/cmp-nvim-lsp-signature-help" },
       { "ray-x/cmp-treesitter" },
       { "onsails/lspkind.nvim" },
+      { "kristijanhusak/vim-dadbod-completion" },
+      { "kristijanhusak/vim-dadbod-ui" },
 
     },
     event = { "CmdlineEnter", "InsertEnter" },
@@ -36,7 +38,7 @@ return {
       end
       local border_opts = {
         border = "rounded",
-        winhighlight = "Normal:NormalFloat,FloatBorder:MyCmpFloatBorder,CursorLine:PmenuSel,Search:None",
+        winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
       }
       cmp.setup({
         preselect = cmp.PreselectMode.None,
@@ -281,7 +283,14 @@ return {
     },
   },
   -- Useful plugin to show you pending keybinds.
-  { "folke/which-key.nvim",       opts = {} },
+  {
+    "folke/which-key.nvim",
+    opts = {
+      window = {
+        border = "single",
+      }
+    }
+  },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     "lewis6991/gitsigns.nvim",
@@ -811,7 +820,7 @@ return {
         -- Override colors (see ./lua/vscode/colors.lua)
         color_overrides = {
           -- Approx of color 256 but slightly darker
-          vscLeftDark = "#282828",
+          vscLeftDark = "#282828", -- We use it for `NormalNC`/`WinBarNC`, see `highlights.lua`
           vscCursorDarkDark = "#303030",
         },
         -- Override highlight groups (see ./lua/vscode/theme.lua)
@@ -1144,5 +1153,16 @@ return {
     "norcalli/nvim-colorizer.lua",
     event = 'User FileOpened',
     opts = {}
+  },
+  {
+    "tpope/vim-dadbod",
+    cmd = {
+      "DB",
+      "DBUI",
+      "DBUIToggle"
+    },
+    dependencies = {
+      "tpope/vim-dispatch",
+    }
   }
 }

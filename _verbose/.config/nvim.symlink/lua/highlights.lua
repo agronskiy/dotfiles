@@ -40,6 +40,7 @@ local highlights = {
   WinBarNC = { bg = c.vscLeftDark },
   LineNr = { fg = c.vscLineNumber, bg = "NONE" },
   CursorLineNr = { fg = c.vscPopupFront, bg = "NONE" },
+  FloatBorder = { fg = c.vscLeftLight, bg = c.vscLeftDark },
   SignColumn = { bg = "NONE" },
   TelescopeBorder = { fg = c.vscLineNumber, bg = c.vscBack },
   TelescopeNormal = { bg = c.vscBack },
@@ -60,9 +61,6 @@ local highlights = {
   IlluminatedWordText = { bg = c.vscLeftMid },
   IlluminatedWordRead = { bg = c.vscLeftMid },
   IlluminatedWordWrite = { bg = c.vscLeftMid },
-
-  -- For cmp
-  MyCmpFloatBorder = { fg = c.vscLeftLight, bg = c.vscLeftDark },
 }
 
 for group, spec in pairs(highlights) do
