@@ -36,8 +36,7 @@ end
 vim.api.nvim_create_user_command("LiveGrepGitRoot", live_grep_git_root, {})
 
 -- See `:help telescope.builtin`
-vim.keymap.set("n", "<leader>fb", require("telescope.builtin").buffers, { desc = "Find existing buffers" })
-
+vim.keymap.set("n", "<leader>fj", require("telescope.builtin").buffers, { desc = "Find existing buffers" })
 vim.keymap.set("n", "<leader>ss", require("telescope.builtin").builtin, { desc = "[S]earch [S]elect Telescope" })
 vim.keymap.set("n", "<leader>fs", function()
     require("telescope.builtin").current_buffer_fuzzy_find({
@@ -46,10 +45,17 @@ vim.keymap.set("n", "<leader>fs", function()
   end,
   { desc = "Search current buffer" })
 vim.keymap.set("n", "<leader>fF", require("telescope.builtin").git_files, { desc = "Search git files" })
-vim.keymap.set("n", "<leader>ff", require("telescope.builtin").find_files, { desc = "[S]earch [F]iles" })
+-- vim.keymap.set("n", "<leader>ff", require("telescope.builtin").find_files, { desc = "[S]earch [F]iles" })
 vim.keymap.set("n", "<leader>fc", require("telescope.builtin").grep_string, { desc = "[S]earch current [W]ord" })
 vim.keymap.set("n", "<leader>fw", require("telescope.builtin").live_grep, { desc = "[S]earch by [G]rep" })
 vim.keymap.set("n", "<leader>fo", require("telescope.builtin").oldfiles, { desc = "Find history" })
+vim.keymap.set('n', '<leader>ff', function()
+  require('telescope').extensions['recent-files'].recent_files({
+    preview = {
+      hide_on_startup = true, -- long paths friendly
+    }
+  })
+end, { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>fW", ":LiveGrepGitRoot<cr>", { desc = "Search by grep in git" })
 vim.keymap.set("n", "<leader>lD", require("telescope.builtin").diagnostics, { desc = "Seach diagnostics" })
 vim.keymap.set("n", "<leader>lr", require("telescope.builtin").lsp_references, { desc = "Find references" })
