@@ -175,15 +175,15 @@ return {
           -- after closing the window
           post_open_hook = function(bufnr, winnr)
             local bo = vim.bo[bufnr]
-            vim.keymap.set("c", "vs",
+            vim.keymap.set("n", "s",
               function()
                 bo.buflisted = true
                 vim.cmd("vsplit")
                 require("goto-preview").close_all_win()
               end,
-              { noremap = true, desc = "Open preview in a float window", buffer = bufnr }
+              { noremap = true, desc = "Open preview in a float window", buffer = bufnr, nowait = true }
             )
-            vim.keymap.set("n", "q", "<cmd>q<cr>", { buffer = bufnr, nowait = true })
+            vim.keymap.set("n", "q", require('goto-preview').close_all_win, { buffer = bufnr, nowait = true })
 
             -- Setting this window's highlight
             -- Here, we create a separate highlight namespace to make `goto-preview`
@@ -195,6 +195,7 @@ return {
           end,
           post_close_hook = function(bufnr, winnr)
             vim.keymap.del("n", "q", { buffer = bufnr })
+            vim.keymap.del("n", "s", { buffer = bufnr })
           end
         }
       },
