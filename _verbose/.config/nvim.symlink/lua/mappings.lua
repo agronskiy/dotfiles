@@ -35,6 +35,12 @@ end
 
 vim.api.nvim_create_user_command("LiveGrepGitRoot", live_grep_git_root, {})
 
+-- Vertical split
+vim.keymap.set({ "n", "v" }, "<leader>vs", function()
+    vim.cmd("vsplit")
+  end,
+  { desc = "Vertical split" }
+)
 -- See `:help telescope.builtin`
 vim.keymap.set("n", "<leader>fj", require("telescope.builtin").buffers, { desc = "Find existing buffers" })
 vim.keymap.set("n", "<leader>ss", require("telescope.builtin").builtin, { desc = "[S]earch [S]elect Telescope" })
@@ -105,13 +111,22 @@ vim.keymap.set("i", "jj", "<esc>la", { desc = "Move one symbol right" })
 vim.keymap.set("i", "jl", "<esc>A", { desc = "Move to the end and continue edit" })
 vim.keymap.set("i", "jh", "<esc>^i", { desc = "Move to the begin and continue edit" })
 
--- Buffer navigation
+-- Buffer navigation and manipulation
 vim.keymap.set("n", "<S-l>", function() require("bufferline.commands").cycle(1) end, { desc = "Move right" })
 vim.keymap.set("n", "<S-h>", function() require("bufferline.commands").cycle(-1) end, { desc = "Move left" })
 vim.keymap.set("n", "<leader>c", function() require("bufdelete").bufdelete(0, true) end,
   { desc = "Close buffer" })
+-- Delete all invisible buffers ([b]uffer-[o]nly)
+vim.keymap.set("n", "<leader>bo", function()
+  local bufinfos = vim.fn.getbufinfo({ buflisted = true })
+  vim.tbl_map(function(bufinfo)
+    if bufinfo.changed == 0 and (not bufinfo.windows or #bufinfo.windows == 0) then
+      require("bufdelete").bufdelete(bufinfo.bufnr, true)
+    end
+  end, bufinfos)
+end, { desc = 'Keep only visible buffers' })
 
--- `F` for `Focus`: it moves to the leftmost split and leaves only it, closing all the other
+-- `F` for `Focus`: it moves to the leftmost split and keeps only it, closing all the other
 -- buffer. Useful for a round of exploration in the code.
 vim.keymap.set("n", "<leader>F",
   function()
@@ -121,16 +136,16 @@ vim.keymap.set("n", "<leader>F",
     require("bufferline.commands").close_others()
     vim.cmd("only")
   end,
-  { desc = "Close other tabs and windows" }
+  { desc = "Move left and focus" }
 )
 
--- Similar, `Z` for `Zen` focuses on the current window
+-- Similar, `Z` for `Zen` focuses on the current window, closes all other buffers
 vim.keymap.set("n", "<leader>Z",
   function()
     require("bufferline.commands").close_others()
     vim.cmd("only")
   end,
-  { desc = "Close other tabs and windows" }
+  { desc = "Focus on current" }
 )
 
 -- Avoid yank-on-edit
@@ -143,24 +158,25 @@ vim.keymap.set("n", "X", "x", { noremap = true })
 -- Avoid yank-on-paste
 vim.keymap.set("v", "p", '"_dP', { noremap = true })
 
-vim.keymap.set("n", "<leader>yp",
+vim.keymap.set("n", "<leader>yf",
   function()
     local path = vim.fn.expand("%:p")
     vim.api.nvim_command("let @\" = '" .. path .. "'")
     require("osc52").copy_register("")
     vim.notify('Copied "' .. path .. '" to the clipboard!')
   end,
-  { desc = "Yank current filepath" })
-
--- Opening quickfix
-vim.keymap.set("n", "qq", ":copen<cr>", { desc = "Open quickfix" })
+  { desc = "Yank current [f]ull filepath" })
 
 -- Command to copy relative path, credit of
 -- https://www.reddit.com/r/neovim/comments/u221as/how_can_i_copy_the_current_buffers_relative_path/
-vim.api.nvim_create_user_command("CpRelPath",
+vim.keymap.set("n", "<leader>yr",
   function()
     local path = vim.fn.fnamemodify(vim.fn.expand("%"), ":.")
-    vim.api.nvim_call_function("setreg", { "+", path })
-    vim.notify('Copied "' .. path .. '" to the clipboard')
-  end, {}
-)
+    vim.api.nvim_command("let @\" = '" .. path .. "'")
+    require("osc52").copy_register("")
+    vim.notify('Copied "' .. path .. '" to the clipboard!')
+  end,
+  { desc = "Yank current [r]elative filepath" })
+
+-- Opening quickfix
+vim.keymap.set("n", "qq", ":copen<cr>", { desc = "Open quickfix" })

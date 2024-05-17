@@ -175,7 +175,7 @@ return {
           -- after closing the window
           post_open_hook = function(bufnr, winnr)
             local bo = vim.bo[bufnr]
-            vim.keymap.set("n", "s",
+            vim.keymap.set("n", "<leader>vs",
               function()
                 bo.buflisted = true
                 vim.cmd("vsplit")
@@ -195,7 +195,7 @@ return {
           end,
           post_close_hook = function(bufnr, winnr)
             vim.keymap.del("n", "q", { buffer = bufnr })
-            vim.keymap.del("n", "s", { buffer = bufnr })
+            vim.keymap.del("n", "<leader>vs", { buffer = bufnr })
           end
         }
       },
