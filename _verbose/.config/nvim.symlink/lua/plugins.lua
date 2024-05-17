@@ -605,7 +605,6 @@ return {
       "nvim-lua/plenary.nvim",
       { "nvim-telescope/telescope-fzf-native.nvim", enabled = vim.fn.executable "make" == 1, build = "make" },
       { "reaz1995/telescope-vim-bookmarks.nvim" },
-      'mollerhoj/telescope-recent-files.nvim',
     },
     cmd = "Telescope",
     opts = function()
@@ -696,7 +695,6 @@ return {
       -- Enable telescope fzf native, if installed
       require("telescope").setup(opts)
       pcall(require("telescope").load_extension, "fzf") -- might be unavailable, hence pcall
-      pcall(require("telescope").load_extension, "recent-files")
     end,
   },
   {
