@@ -20,3 +20,10 @@ vim.filetype.add({
     [".*BUILD.*"] = "bzl",
   },
 })
+
+-- AVRO to json
+vim.filetype.add({
+  pattern = {
+    [".*avsc"] = "json",
+  },
+})

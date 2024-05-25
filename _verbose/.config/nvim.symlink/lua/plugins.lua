@@ -412,7 +412,8 @@ return {
       -- under ~/.local/share/nvim/mason/{bin,packages}, add `mypy` here. However, if you need to use `mypy` installed
       -- into your venv (e.g. if it uses nontrivial plugins or specific verison), make sure you
       -- remove `mypy` from here.
-      ensure_installed = { "buildifier" },
+      -- `fixjson`: used by json formatters (see conform.nvim)
+      ensure_installed = { "buildifier", "fixjson", },
     },
     dependencies = {
       "williamboman/mason.nvim",
@@ -1128,6 +1129,7 @@ return {
         python = { "isort", "black" },
         bzl = { "buildifier" },
         tex = { "latexindent" },
+        json = { "fixjson" },
       },
     },
   },
@@ -1165,14 +1167,18 @@ return {
     opts = {}
   },
   {
-    "tpope/vim-dadbod",
-    cmd = {
-      "DB",
-      "DBUI",
-      "DBUIToggle"
-    },
-    dependencies = {
-      "tpope/vim-dispatch",
-    }
-  },
-}
+    "roobert/search-replace.nvim",
+    event = "User FileOpened",
+    config = function()
+      require("search-replace").setup({
+        -- optionally override defaults
+        default_replace_single_buffer_options = "gcI",
+        default_replace_multi_buffer_options = "egcI",
+      })
+      vim.api.nvim_set_keymap("n", "<leader>rO", "<CMD>SearchReplaceMultiBufferOpen<CR>", {})
+      vim.api.nvim_set_keymap("v", "<leader>rS", "<CMD>SearchReplaceMultiBufferSelections<CR>", {})
+      vim.api.nvim_set_keymap("n", "<leader>ro", "<CMD>SearchReplaceSingleBufferOpen<CR>", {})
+      vim.api.nvim_set_keymap("v", "<leader>rs", "<CMD>SearchReplaceSingleBufferSelections<CR>", {})
+      vim.o.inccommand = "split"
+    end,
+  } }
