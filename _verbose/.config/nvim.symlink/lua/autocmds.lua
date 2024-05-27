@@ -15,7 +15,6 @@ vim.api.nvim_create_autocmd(
   "FileType", {
     pattern = { "qf" },
     callback = function()
-      vim.api.nvim_buf_set_keymap(0, 'n', '<leader>r', function() require("replacer").run() end, { silent = true })
       vim.api.nvim_buf_set_keymap(0, "n", "<cr>", "<cr>:cclose<cr>", {})
     end
   })

@@ -25,7 +25,6 @@ return {
       { "onsails/lspkind.nvim" },
       { "kristijanhusak/vim-dadbod-completion" },
       { "kristijanhusak/vim-dadbod-ui" },
-
     },
     event = { "CmdlineEnter", "InsertEnter" },
     config = function()
@@ -288,7 +287,7 @@ return {
     "folke/which-key.nvim",
     opts = {
       window = {
-        border = "single",
+        border = "rounded",
       }
     }
   },
@@ -1166,19 +1165,4 @@ return {
     event = 'User FileOpened',
     opts = {}
   },
-  {
-    "roobert/search-replace.nvim",
-    event = "User FileOpened",
-    config = function()
-      require("search-replace").setup({
-        -- optionally override defaults
-        default_replace_single_buffer_options = "gcI",
-        default_replace_multi_buffer_options = "egcI",
-      })
-      vim.api.nvim_set_keymap("n", "<leader>rO", "<CMD>SearchReplaceMultiBufferOpen<CR>", {})
-      vim.api.nvim_set_keymap("v", "<leader>rS", "<CMD>SearchReplaceMultiBufferSelections<CR>", {})
-      vim.api.nvim_set_keymap("n", "<leader>ro", "<CMD>SearchReplaceSingleBufferOpen<CR>", {})
-      vim.api.nvim_set_keymap("v", "<leader>rs", "<CMD>SearchReplaceSingleBufferSelections<CR>", {})
-      vim.o.inccommand = "split"
-    end,
-  } }
+}

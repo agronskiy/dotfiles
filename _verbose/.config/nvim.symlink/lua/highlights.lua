@@ -38,9 +38,10 @@ local highlights = {
   -- e.g. tmux panes etc.
   NormalNC = { bg = c.vscLeftDark },
   WinBarNC = { bg = c.vscLeftDark },
+  NormalFloat = { bg = c.vscCursorDarkDark },
   LineNr = { fg = c.vscLineNumber, bg = "NONE" },
   CursorLineNr = { fg = c.vscPopupFront, bg = "NONE" },
-  FloatBorder = { fg = c.vscLeftLight, bg = c.vscLeftDark },
+  FloatBorder = { fg = c.vscLeftLight, bg = c.vscCursorDarkDark },
   SignColumn = { bg = "NONE" },
   TelescopeBorder = { fg = c.vscLineNumber, bg = c.vscBack },
   TelescopeNormal = { bg = c.vscBack },
