@@ -19,7 +19,6 @@ vim.api.nvim_create_autocmd(
     end
   })
 
-
 -- Make and autocmd so that curr window loses focus when the whole vim
 -- loses focus.
 -- create an augroup to easily manage autocommands

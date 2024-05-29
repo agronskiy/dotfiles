@@ -23,7 +23,14 @@ vim.filetype.add({
 
 -- AVRO to json
 vim.filetype.add({
-  pattern = {
-    [".*avsc"] = "json",
+  extension = {
+    ["avsc"] = "json",
+  },
+})
+
+-- `"pyrightconfig.json"` is actually jsonc
+vim.filetype.add({
+  filename = {
+    ["pyrightconfig.json"] = "jsonc",
   },
 })
