@@ -399,7 +399,7 @@ return {
         -- Set a formatter
         -- null_ls.builtins.formatting.stylua,
         -- null_ls.builtins.formatting.prettier,
-        -- null_ls.builtins.formatting.buildifier,
+        null_ls.builtins.formatting.buildifier,
       }
       return config -- return final config table
     end,
@@ -1129,7 +1129,7 @@ return {
         lua = { "stylua" },
         -- Conform will run multiple formatters sequentially
         python = { "isort", "black" },
-        bzl = { "buildifier" },
+        -- bzl = { "buildifier" },
         tex = { "latexindent" },
         json = { "fixjson" },
       },
