@@ -37,6 +37,9 @@ local highlights = {
   -- `NC` are non-current. The color corresponds to my unfocused color for
   -- e.g. tmux panes etc.
   NormalNC = { bg = c.vscLeftDark },
+  WinSeparator = { fg = c.vscLineNumber, bg = c.vscLeftDark },
+  -- `FoldColumn` is the the leftmost column
+  FoldColumn = { bg = "NONE" },
   WinBarNC = { bg = c.vscLeftDark },
   NormalFloat = { bg = c.vscCursorDarkDark },
   LineNr = { fg = c.vscLineNumber, bg = "NONE" },
