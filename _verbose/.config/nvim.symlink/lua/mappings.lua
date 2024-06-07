@@ -116,15 +116,18 @@ vim.keymap.set("n", "<S-l>", function() require("bufferline.commands").cycle(1) 
 vim.keymap.set("n", "<S-h>", function() require("bufferline.commands").cycle(-1) end, { desc = "Move left" })
 vim.keymap.set("n", "<leader>c", function() require("bufdelete").bufdelete(0, true) end,
   { desc = "Close buffer" })
--- Delete all invisible buffers ([b]uffer-[o]nly)
-vim.keymap.set("n", "<leader>bo", function()
+
+local delete_all_invisible = function()
   local bufinfos = vim.fn.getbufinfo({ buflisted = true })
   vim.tbl_map(function(bufinfo)
     if bufinfo.changed == 0 and (not bufinfo.windows or #bufinfo.windows == 0) then
       require("bufdelete").bufdelete(bufinfo.bufnr, true)
     end
   end, bufinfos)
-end, { desc = 'Keep only visible buffers' })
+end
+
+-- Delete all invisible buffers ([b]uffer-[o]nly)
+vim.keymap.set("n", "<leader>bo", delete_all_invisible, { desc = 'Keep only visible buffers' })
 
 -- `F` for `Focus`: it moves to the leftmost split and keeps only it, closing all the other
 -- buffer. Useful for a round of exploration in the code.
@@ -133,8 +136,8 @@ vim.keymap.set("n", "<leader>F",
     for _ = 1, 7 do
       vim.cmd("wincmd h")
     end
-    require("bufferline.commands").close_others()
     vim.cmd("only")
+    delete_all_invisible()
   end,
   { desc = "Move left and focus" }
 )
@@ -142,8 +145,8 @@ vim.keymap.set("n", "<leader>F",
 -- Similar, `Z` for `Zen` focuses on the current window, closes all other buffers
 vim.keymap.set("n", "<leader>Z",
   function()
-    require("bufferline.commands").close_others()
     vim.cmd("only")
+    delete_all_invisible()
   end,
   { desc = "Focus on current" }
 )
