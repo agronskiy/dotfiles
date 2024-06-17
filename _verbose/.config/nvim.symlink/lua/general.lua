@@ -25,6 +25,9 @@ vim.filetype.add({
 vim.filetype.add({
   extension = {
     ["avsc"] = "json",
+    ["tfstate"] = "json",
+    ["tf"] = "terraform",
+    ["hcl"] = "terraform",
   },
 })
 

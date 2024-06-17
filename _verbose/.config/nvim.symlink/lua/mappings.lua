@@ -42,34 +42,37 @@ vim.keymap.set({ "n", "v" }, "<leader>vs", function()
   { desc = "Vertical split" }
 )
 -- See `:help telescope.builtin`
-vim.keymap.set("n", "<leader>fj", require("telescope.builtin").buffers, { desc = "Find existing buffers" })
-vim.keymap.set("n", "<leader>ss", require("telescope.builtin").builtin, { desc = "[S]earch [S]elect Telescope" })
+vim.keymap.set("n", "<leader>fj", function()
+    require("telescope.builtin").buffers({ sort_lastused = true, ignore_current_buffer = true })
+  end,
+  { desc = "find existing buffers" })
+vim.keymap.set("n", "<leader>ss", require("telescope.builtin").builtin, { desc = "[s]earch [s]elect telescope" })
 vim.keymap.set("n", "<leader>fs", function()
     require("telescope.builtin").current_buffer_fuzzy_find({
       layout_strategy = "horizontal",
     })
   end,
-  { desc = "Search current buffer" })
-vim.keymap.set("n", "<leader>fF", require("telescope.builtin").git_files, { desc = "Search git files" })
-vim.keymap.set("n", "<leader>ff", require("telescope.builtin").find_files, { desc = "[S]earch [F]iles" })
-vim.keymap.set("n", "<leader>fc", require("telescope.builtin").grep_string, { desc = "[S]earch current [W]ord" })
-vim.keymap.set("n", "<leader>fw", require("telescope.builtin").live_grep, { desc = "[S]earch by [G]rep" })
-vim.keymap.set("n", "<leader>fh", require("telescope.builtin").oldfiles, { desc = "Find history" })
+  { desc = "search current buffer" })
+vim.keymap.set("n", "<leader>fF", require("telescope.builtin").git_files, { desc = "search git files" })
+vim.keymap.set("n", "<leader>ff", require("telescope.builtin").find_files, { desc = "find files" })
+vim.keymap.set("n", "<leader>fc", require("telescope.builtin").grep_string, { desc = "fearch current word" })
+vim.keymap.set("n", "<leader>fw", require("telescope.builtin").live_grep, { desc = "fearch word" })
+vim.keymap.set("n", "<leader>fh", require("telescope.builtin").oldfiles, { desc = "find in opened files" })
 vim.keymap.set("n", "<leader>fo", function()
     require("telescope.builtin").oldfiles({ cwd_only = true })
   end,
-  { desc = "Find local history" }
+  { desc = "find local history" }
 )
-vim.keymap.set("n", "<leader>fW", ":LiveGrepGitRoot<cr>", { desc = "Search by grep in git" })
-vim.keymap.set("n", "<leader>lD", require("telescope.builtin").diagnostics, { desc = "Seach diagnostics" })
-vim.keymap.set("n", "<leader>lr", require("telescope.builtin").lsp_references, { desc = "Find references" })
+vim.keymap.set("n", "<leader>fw", ":livegrepgitroot<cr>", { desc = "search by grep in git" })
+vim.keymap.set("n", "<leader>ld", require("telescope.builtin").diagnostics, { desc = "seach diagnostics" })
+vim.keymap.set("n", "<leader>lr", require("telescope.builtin").lsp_references, { desc = "find references" })
 vim.keymap.set("n", ";", ":")
 
 
--- [[ Basic Keymaps ]]
+-- [[ basic keymaps ]]
 
--- Keymaps for better default experience
--- See `:help vim.keymap.set()`
+-- keymaps for better default experience
+-- see `:help vim.keymap.set()`
 vim.keymap.set({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
 
 -- Remap for dealing with word wrap
@@ -87,11 +90,11 @@ vim.keymap.set("v", "<", "<gv", { desc = "unindent line" })
 vim.keymap.set("v", ">", ">gv", { desc = "indent line" })
 
 
--- Pounce
-vim.keymap.set("v", "t", function()
-    -- Logic: in visual mode, it's often beneficial to select one symbol _before_ the
-    -- end point found by `pounce.nvim`. So below is the comparison of the before/after
-    -- positions, and if the seleciton goes "forward", we set the cursor one symbol left
+-- Pounce: jumping to arbitrary place in the visible screen.
+vim.keymap.set({ "o", "v" }, "f",
+  function()
+    -- Logic: in visual mode, it's often beneficial to select up to the end of word found by
+    -- `pounce.nvim`.
     local start_pos = vim.api.nvim_win_get_cursor(0)
     require("pounce").pounce()
     local end_pos = vim.api.nvim_win_get_cursor(0)
@@ -100,11 +103,21 @@ vim.keymap.set("v", "t", function()
         or end_pos[2] == 0 then
       return
     end
-    vim.api.nvim_win_set_cursor(0, { end_pos[1], end_pos[2] - 1 })
+    -- At this point, if we are in the middle of word, we want to move to the end.
+    -- Get the current line
+    local line = vim.api.nvim_get_current_line()
+    -- Get the character under the cursor, and if it's alphanumeric or `[-_]`, meaning we're inside
+    -- of a word, we move to the end.
+    local char = string.sub(line, end_pos[2] + 1, end_pos[2] + 1)
+    local is_alphanumeric = char:match('%w') ~= nil
+    local is_score = char == '-' or char == '_'
+    if is_alphanumeric or is_score then
+      vim.api.nvim_feedkeys('e', 'n', false)
+    end
   end,
   { desc = "Fuzzy hop (before) with pounce" }
 )
-vim.keymap.set({ "n", "v" }, "f", require("pounce").pounce, { desc = "Fuzzy hop with pounce" })
+vim.keymap.set({ "n" }, "f", require("pounce").pounce, { desc = "Fuzzy hop with pounce" })
 
 -- Useful for editing
 vim.keymap.set("i", "jj", "<esc>la", { desc = "Move one symbol right" })

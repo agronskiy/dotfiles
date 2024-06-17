@@ -3,12 +3,39 @@ return {
 
   -- Detect tabstop and shiftwidth automatically
   "tpope/vim-sleuth",
+  -- Lua configuration
   {
     "folke/neodev.nvim",
     opts = {},
     event = "VimEnter",
   },
-  -- nvim-cmp handles the complesion
+  -- Series of nice `mini*` plugins that enhance the experience
+  {
+    'echasnovski/mini.ai',
+    opts = {},
+  },
+  -- shows colors
+  {
+    "echasnovski/mini.hipatterns",
+    event = 'User FileOpened',
+    config = function()
+      local hipatterns = require('mini.hipatterns')
+      hipatterns.setup({
+        highlighters = {
+          w_i_p_p   = { pattern = '%f[%w]()[Ww][Ii][Pp][Pp]()%f[%W]', group = 'MiniHipatternsFixme' },
+          -- Highlight hex color strings (`#rrggbb`) using that color
+          hex_color = hipatterns.gen_highlighter.hex_color(),
+        },
+      })
+    end
+  },
+  {
+    'echasnovski/mini.pairs',
+    event = "User FileOpened",
+    opts = {}
+  },
+  { 'echasnovski/mini.trailspace', version = false, opts = {}, event = "VeryLazy", },
+  -- nvim-cmp handles the completion
   {
     "hrsh7th/nvim-cmp",
     dependencies = {
@@ -743,50 +770,6 @@ return {
               node_decremental = "<M-space>",
             },
           },
-          textobjects = {
-            select = {
-              enable = true,
-              lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
-              keymaps = {
-                -- You can use the capture groups defined in textobjects.scm
-                ["aa"] = "@parameter.outer",
-                ["ia"] = "@parameter.inner",
-                ["af"] = "@function.outer",
-                ["if"] = "@function.inner",
-                ["ac"] = "@class.outer",
-                ["ic"] = "@class.inner",
-              },
-            },
-            move = {
-              enable = true,
-              set_jumps = true, -- whether to set jumps in the jumplist
-              goto_next_start = {
-                ["]m"] = "@function.outer",
-                ["]]"] = "@class.outer",
-              },
-              goto_next_end = {
-                ["]M"] = "@function.outer",
-                ["]["] = "@class.outer",
-              },
-              goto_previous_start = {
-                ["[m"] = "@function.outer",
-                ["[["] = "@class.outer",
-              },
-              goto_previous_end = {
-                ["[M"] = "@function.outer",
-                ["[]"] = "@class.outer",
-              },
-            },
-            swap = {
-              enable = true,
-              swap_next = {
-                ["<leader>a"] = "@parameter.inner",
-              },
-              swap_previous = {
-                ["<leader>A"] = "@parameter.inner",
-              },
-            },
-          },
         }
       end
       vim.defer_fn(setup_fn, 0)
@@ -1081,11 +1064,6 @@ return {
       },
     }
   },
-  {
-    "windwp/nvim-autopairs",
-    event = "InsertEnter",
-    opts = {} -- this is equalent to setup({}) function
-  },
   -- Seems that editorconfig in nvim 0.8 is not picked up, and `guess-indent.nvim`
   -- gets messed up with it,
   -- see https://github.com/NMAC427/guess-indent.nvim/issues/15#issuecomment-1586308382
@@ -1161,11 +1139,5 @@ return {
     keys = {
       { "<leader>tl", "<cmd>LazyGit<cr>", desc = "LazyGit" }
     }
-  },
-  -- shows colors
-  {
-    "norcalli/nvim-colorizer.lua",
-    event = 'User FileOpened',
-    opts = {}
   },
 }
