@@ -14,6 +14,16 @@ return {
     'echasnovski/mini.ai',
     opts = {},
   },
+  -- extend `t/T` to multiple lines
+  {
+    'echasnovski/mini.jump',
+    event = 'User FileOpened',
+    opts = {
+      mappings = {
+        repeat_jump = ','
+      }
+    }
+  },
   -- shows colors
   {
     "echasnovski/mini.hipatterns",
@@ -1070,6 +1080,7 @@ return {
   {
     "gpanders/editorconfig.nvim",
     event = "User FileOpened",
+    opt = {}
   },
   {
     "akinsho/toggleterm.nvim",

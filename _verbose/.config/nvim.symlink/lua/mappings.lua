@@ -55,15 +55,15 @@ vim.keymap.set("n", "<leader>fs", function()
   { desc = "search current buffer" })
 vim.keymap.set("n", "<leader>fF", require("telescope.builtin").git_files, { desc = "search git files" })
 vim.keymap.set("n", "<leader>ff", require("telescope.builtin").find_files, { desc = "find files" })
-vim.keymap.set("n", "<leader>fc", require("telescope.builtin").grep_string, { desc = "fearch current word" })
-vim.keymap.set("n", "<leader>fw", require("telescope.builtin").live_grep, { desc = "fearch word" })
-vim.keymap.set("n", "<leader>fh", require("telescope.builtin").oldfiles, { desc = "find in opened files" })
+vim.keymap.set("n", "<leader>fc", require("telescope.builtin").grep_string, { desc = "find current word" })
+vim.keymap.set("n", "<leader>fw", require("telescope.builtin").live_grep, { desc = "find word" })
+vim.keymap.set("n", "<leader>fh", require("telescope.builtin").oldfiles, { desc = "find in recently opened files" })
 vim.keymap.set("n", "<leader>fo", function()
     require("telescope.builtin").oldfiles({ cwd_only = true })
   end,
   { desc = "find local history" }
 )
-vim.keymap.set("n", "<leader>fw", ":livegrepgitroot<cr>", { desc = "search by grep in git" })
+vim.keymap.set("n", "<leader>fW", ":LiveGrepGitRoot<cr>", { desc = "search by grep in git" })
 vim.keymap.set("n", "<leader>ld", require("telescope.builtin").diagnostics, { desc = "seach diagnostics" })
 vim.keymap.set("n", "<leader>lr", require("telescope.builtin").lsp_references, { desc = "find references" })
 vim.keymap.set("n", ";", ":")
@@ -91,7 +91,7 @@ vim.keymap.set("v", ">", ">gv", { desc = "indent line" })
 
 
 -- Pounce: jumping to arbitrary place in the visible screen.
-vim.keymap.set({ "o", "v" }, "f",
+vim.keymap.set({ "o", "v" }, "s",
   function()
     -- Logic: in visual mode, it's often beneficial to select up to the end of word found by
     -- `pounce.nvim`.
@@ -117,7 +117,7 @@ vim.keymap.set({ "o", "v" }, "f",
   end,
   { desc = "Fuzzy hop (before) with pounce" }
 )
-vim.keymap.set({ "n" }, "f", require("pounce").pounce, { desc = "Fuzzy hop with pounce" })
+vim.keymap.set({ "n" }, "s", require("pounce").pounce, { desc = "Fuzzy hop with pounce" })
 
 -- Useful for editing
 vim.keymap.set("i", "jj", "<esc>la", { desc = "Move one symbol right" })
