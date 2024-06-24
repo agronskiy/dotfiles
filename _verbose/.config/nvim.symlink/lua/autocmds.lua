@@ -91,15 +91,15 @@ vim.api.nvim_create_autocmd("BufEnter", {
   end,
 })
 
+local q_win_group = vim.api.nvim_create_augroup("q_close_windows", { clear = true })
 vim.api.nvim_create_autocmd("BufWinEnter", {
-  desc = "Make q close help, man, quickfix, dap floats",
-  group = vim.api.nvim_create_augroup("q_close_windows", { clear = true }),
+  desc = "Make q close help, man, quickfix, dap  floats",
+  group = q_win_group,
   callback = function(args)
     local buftype = vim.api.nvim_get_option_value("buftype", { buf = args.buf })
-
-    if (vim.tbl_contains({ "help", "nofile", "quickfix" }, buftype) and vim.fn.maparg("q", "n") == "")
-        or (goto_success and goto_result == 1) then
-      vim.keymap.set("n", "q", "<cmd>close<cr>", {
+    local filetype = vim.api.nvim_get_option_value("filetype", { buf = args.buf })
+    if (vim.tbl_contains({ "help", "nofile", "quickfix" }, buftype)) then
+      vim.keymap.set("n", "q", ":close<cr>", {
         desc = "Close window",
         buffer = args.buf,
         silent = true,

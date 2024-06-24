@@ -57,8 +57,7 @@ vim.keymap.set("n", "<leader>fF", require("telescope.builtin").git_files, { desc
 vim.keymap.set("n", "<leader>ff", require("telescope.builtin").find_files, { desc = "find files" })
 vim.keymap.set("n", "<leader>fc", require("telescope.builtin").grep_string, { desc = "find current word" })
 vim.keymap.set("n", "<leader>fw", require("telescope.builtin").live_grep, { desc = "find word" })
-vim.keymap.set("n", "<leader>fh", require("telescope.builtin").oldfiles, { desc = "find in recently opened files" })
-vim.keymap.set("n", "<leader>fo", function()
+vim.keymap.set("n", "<leader>fh", function()
     require("telescope.builtin").oldfiles({ cwd_only = true })
   end,
   { desc = "find local history" }
@@ -68,12 +67,6 @@ vim.keymap.set("n", "<leader>ld", require("telescope.builtin").diagnostics, { de
 vim.keymap.set("n", "<leader>lr", require("telescope.builtin").lsp_references, { desc = "find references" })
 vim.keymap.set("n", ";", ":")
 
-
--- [[ basic keymaps ]]
-
--- keymaps for better default experience
--- see `:help vim.keymap.set()`
-vim.keymap.set({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
 
 -- Remap for dealing with word wrap
 vim.keymap.set("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
@@ -170,7 +163,7 @@ vim.keymap.set("n", "C", '"_C', { noremap = true })
 -- Line deletion without yank (quite often used)
 vim.keymap.set("n", "xx", '"_dd', { noremap = true })
 vim.keymap.set("v", "x", '"_x', { noremap = true })
-vim.keymap.set("n", "X", "x", { noremap = true })
+vim.keymap.set("n", "X", '"_x', { noremap = true })
 -- Avoid yank-on-paste
 vim.keymap.set("v", "p", '"_dP', { noremap = true })
 
@@ -183,6 +176,9 @@ vim.keymap.set("n", "<leader>yf",
   end,
   { desc = "Yank current [f]ull filepath" })
 
+-- Opening quickfix
+vim.keymap.set("n", "qq", ":copen<cr>", { desc = "Open quickfix" })
+
 -- Command to copy relative path, credit of
 -- https://www.reddit.com/r/neovim/comments/u221as/how_can_i_copy_the_current_buffers_relative_path/
 vim.keymap.set("n", "<leader>yr",
@@ -193,6 +189,3 @@ vim.keymap.set("n", "<leader>yr",
     vim.notify('Copied "' .. path .. '" to the clipboard!')
   end,
   { desc = "Yank current [r]elative filepath" })
-
--- Opening quickfix
-vim.keymap.set("n", "qq", ":copen<cr>", { desc = "Open quickfix" })

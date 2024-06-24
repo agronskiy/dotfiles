@@ -558,13 +558,13 @@ return {
           lualine_b = {
             {
               "branch",
-              color = { fg = c.vscPink, gui = "bold" }
+              color = { fg = c.vscPink }
             },
             { "diff" },
             { "diagnostics" },
           },
           lualine_c = {
-            { "ex.relative_filename", max_length = -1, color = { fg = c.vscGray } },
+            { "ex.relative_filename", max_length = -1, color = { fg = c.vscCursorLight } },
             { fileformat },
             { encoding },
           },
@@ -1151,4 +1151,47 @@ return {
       { "<leader>tl", "<cmd>LazyGit<cr>", desc = "LazyGit" }
     }
   },
+  {
+    "ThePrimeagen/harpoon",
+    branch = "harpoon2",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = function(_, opts)
+      local harpoon = require("harpoon")
+
+      -- REQUIRED
+      harpoon:setup()
+      -- REQUIRED
+
+
+      local function launch_harpoon_marks()
+        opts = {
+          preview = {
+            hide_on_startup = true, -- long paths friendly
+          },
+          layout_config = {
+            width = 0.5,
+            height = 15,
+          },
+        }
+        require("telescope").extensions.harpoon.marks(opts)
+      end
+
+
+      vim.keymap.set("n", "<leader>hf", function() harpoon:list():add() end, { desc = "Harpoon add" })
+      vim.keymap.set("n", "<leader>fo", launch_harpoon_marks, { desc = "Harpoon open telescope" })
+      vim.keymap.set("n", "<leader>hh", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end,
+        { desc = "Harpoon open UI" })
+      for i = 1, 5 do
+        vim.keymap.set("n",
+          "<leader>" .. i,
+          function()
+            require("harpoon"):list():select(i)
+          end,
+          {
+            desc = "Harpoon to File " .. i,
+          }
+        )
+      end
+    end
+  }
 }
