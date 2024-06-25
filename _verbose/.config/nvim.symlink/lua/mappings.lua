@@ -62,7 +62,8 @@ vim.keymap.set("n", "<leader>fh", function()
   end,
   { desc = "find local history" }
 )
-vim.keymap.set("n", "<leader>fW", ":LiveGrepGitRoot<cr>", { desc = "search by grep in git" })
+vim.keymap.set("n", "<leader>fo", "<cmd>Telescope grapple tags<cr>", { desc = "grapple tags" })
+vim.keymap.set("n", "<leader>fW", "<cmd>LiveGrepGitRoot<cr>", { desc = "search by grep in git" })
 vim.keymap.set("n", "<leader>ld", require("telescope.builtin").diagnostics, { desc = "seach diagnostics" })
 vim.keymap.set("n", "<leader>lr", require("telescope.builtin").lsp_references, { desc = "find references" })
 vim.keymap.set("n", ";", ":")

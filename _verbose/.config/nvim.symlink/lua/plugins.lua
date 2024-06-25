@@ -464,6 +464,7 @@ return {
       { "dokwork/lualine-ex" },
       { "nvim-lua/plenary.nvim" },
       { "WhoIsSethDaniel/lualine-lsp-progress.nvim" },
+      { "cbochs/grapple.nvim" },
     },
     event = "VeryLazy",
     config = function(_, opts)
@@ -562,9 +563,19 @@ return {
             },
             { "diff" },
             { "diagnostics" },
+
           },
           lualine_c = {
             { "ex.relative_filename", max_length = -1, color = { fg = c.vscCursorLight } },
+            {
+              function()
+                return "[G" .. require("grapple").name_or_index() .. "]"
+              end,
+              cond = function()
+                return package.loaded["grapple"] and require("grapple").exists()
+              end,
+              color = { fg = c.vscGreen },
+            },
             { fileformat },
             { encoding },
           },
@@ -642,6 +653,7 @@ return {
     dependencies = {
       "nvim-lua/plenary.nvim",
       { "nvim-telescope/telescope-fzf-native.nvim", enabled = vim.fn.executable "make" == 1, build = "make" },
+      { "cbochs/grapple.nvim" },
       { "reaz1995/telescope-vim-bookmarks.nvim" },
     },
     cmd = "Telescope",
@@ -732,7 +744,8 @@ return {
     config = function(_, opts)
       -- Enable telescope fzf native, if installed
       require("telescope").setup(opts)
-      pcall(require("telescope").load_extension, "fzf") -- might be unavailable, hence pcall
+      pcall(require("telescope").load_extension, "fzf")     -- might be unavailable, hence pcall
+      pcall(require("telescope").load_extension, "grapple") -- might be unavailable, hence pcall
     end,
   },
   {
@@ -1152,46 +1165,24 @@ return {
     }
   },
   {
-    "ThePrimeagen/harpoon",
-    branch = "harpoon2",
-    dependencies = { "nvim-lua/plenary.nvim" },
-    config = function(_, opts)
-      local harpoon = require("harpoon")
-
-      -- REQUIRED
-      harpoon:setup()
-      -- REQUIRED
-
-
-      local function launch_harpoon_marks()
-        opts = {
-          preview = {
-            hide_on_startup = true, -- long paths friendly
-          },
-          layout_config = {
-            width = 0.5,
-            height = 15,
-          },
-        }
-        require("telescope").extensions.harpoon.marks(opts)
-      end
-
-
-      vim.keymap.set("n", "<leader>hf", function() harpoon:list():add() end, { desc = "Harpoon add" })
-      vim.keymap.set("n", "<leader>fo", launch_harpoon_marks, { desc = "Harpoon open telescope" })
-      vim.keymap.set("n", "<leader>hh", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end,
-        { desc = "Harpoon open UI" })
-      for i = 1, 5 do
-        vim.keymap.set("n",
-          "<leader>" .. i,
-          function()
-            require("harpoon"):list():select(i)
-          end,
-          {
-            desc = "Harpoon to File " .. i,
-          }
-        )
-      end
-    end
+    "cbochs/grapple.nvim",
+    dependencies = {
+      { "nvim-tree/nvim-web-devicons" },
+    },
+    opts = {
+      scope = "git_branch", -- also try out "git_branch"
+      win_opts = {
+        border = "rounded",
+      },
+      statusline = {
+        icon = "󰵉"
+      }
+    },
+    event = { "BufReadPost", "BufNewFile" },
+    cmd = "Grapple",
+    keys = {
+      { "<leader>a",  "<cmd>Grapple toggle<cr>",      desc = "Grapple toggle tag" },
+      { "<leader>hh", "<cmd>Grapple toggle_tags<cr>", desc = "Grapple open tags window" },
+    },
   }
 }
