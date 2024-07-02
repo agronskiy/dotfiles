@@ -1,0 +1,37 @@
+#!/usr/bin/env python3
+
+# If toggles between non-[term] named and [term]-named window.
+import os
+import subprocess
+
+def main():
+    if "TMUX" not in os.environ:
+        # do nothing here
+        return
+        
+    windows = subprocess.check_output(
+        ["tmux", "list-windows", "-F", "#I&&#W&&#{active_window_index}"],
+        text=True,
+    )
+    windows = windows.strip().split("\n")
+    windows = [s.split("&&") for s in windows]
+
+    for i, (win_idx, win_name, curr_idx) in enumerate(windows):
+        if win_idx != curr_idx:
+            continue
+        if win_name != "[term]":
+            # try to move right
+            if i == len(windows) - 1 or windows[i + 1][1] != "[term]":
+                # We need to create new terminal window
+                subprocess.check_call(["tmux", "new-window", "-a", "-c", "#{pane_current_path}", "-n", "[term]"])
+            else:
+                subprocess.check_call(["tmux", "next-window"])
+        else:
+            # try move left
+            if i == 0 or windows[i - 1][1] == "[term]":
+                return
+            subprocess.check_call(["tmux", "previous-window"])
+        return
+        
+if __name__ == "__main__":
+    main()

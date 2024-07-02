@@ -563,19 +563,19 @@ return {
             },
             { "diff" },
             { "diagnostics" },
+          },
+          lualine_c = {
+            { "ex.relative_filename", max_length = -1, separator = '', },
             {
               -- display if the current file is tagged in `grapple`
               function()
-                return "[G]"
+                return "󰐃"
               end,
               cond = function()
                 return package.loaded["grapple"] and require("grapple").exists()
               end,
-              color = { fg = c.vscPink, gui = "bold" },
+              color = { fg = c.vscBlueGreen },
             },
-          },
-          lualine_c = {
-            { "ex.relative_filename", max_length = -1 },
             { fileformat },
             { encoding },
           },

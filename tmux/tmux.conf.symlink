@@ -121,10 +121,7 @@ bind -r \; if '[ #{pane_index} -eq 1 ]' \
 
 # I usually operate pairs of windows, 1) 'some_name' 2) '[term]', and `F8` allows to
 # switch between the two.
-bind-key -T root F8 if '[ #{window_name} = "[term]" ]' \
-     'previous-window' \
-     'next-window'
-
+bind-key -T root F8 run "toggle-dev-term-window"
 
 # Zoom pane
 unbind z
