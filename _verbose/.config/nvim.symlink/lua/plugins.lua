@@ -9,10 +9,32 @@ return {
     opts = {},
     event = "VimEnter",
   },
+  {
+    'windwp/nvim-autopairs',
+    event = "InsertEnter",
+    config = true
+    -- use opts = {} for passing setup options
+    -- this is equalent to setup({}) function
+  },
+
   -- Series of nice `mini*` plugins that enhance the experience
   {
     'echasnovski/mini.ai',
-    opts = {},
+    config = function()
+      local surround = require("mini.ai")
+      surround.setup({
+        search_method = "cover"
+      })
+    end
+
+  },
+  {
+    'echasnovski/mini.surround',
+    event = "User FileOpened",
+    config = function()
+      local surround = require("mini.surround")
+      surround.setup({})
+    end
   },
   -- extend `t/T` to multiple lines
   {
@@ -38,11 +60,6 @@ return {
         },
       })
     end
-  },
-  {
-    'echasnovski/mini.pairs',
-    event = "User FileOpened",
-    opts = {}
   },
   { 'echasnovski/mini.trailspace', version = false, opts = {}, event = "VeryLazy", },
   -- nvim-cmp handles the completion
@@ -481,7 +498,7 @@ return {
         if vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()] == nil then
           return ""
         end
-        return "⚡︎TS"
+        return "[TS]"
       end
       local function list_lsp_and_null_ls()
         local buf_clients = vim.lsp.get_active_clients { bufnr = vim.api.nvim_get_current_buf() }
@@ -566,16 +583,6 @@ return {
           },
           lualine_c = {
             { "ex.relative_filename", max_length = -1, separator = '', },
-            {
-              -- display if the current file is tagged in `grapple`
-              function()
-                return "󰐃"
-              end,
-              cond = function()
-                return package.loaded["grapple"] and require("grapple").exists()
-              end,
-              color = { fg = c.vscBlueGreen },
-            },
             { fileformat },
             { encoding },
           },
@@ -620,6 +627,16 @@ return {
 
             },
             { list_lsp_and_null_ls },
+            {
+              -- display if the current file is tagged in `grapple`
+              function()
+                return "[G]"
+              end,
+              cond = function()
+                return package.loaded["grapple"] and require("grapple").exists()
+              end,
+              color = { fg = c.vscBlueGreen, gui = "bold" },
+            },
             {
               ts_enabled,
               color = { fg = c.vscGreen, gui = "bold" },

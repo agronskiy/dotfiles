@@ -134,3 +134,5 @@ _git-stash-fuzzy() {
   cut -d: -f1
 }
 
+# lists all branhes without remote, credit of https://stackoverflow.com/questions/15661853/list-all-local-branches-without-a-remote
+alias git-list-no-remote="git branch --format \"%(refname:short) %(upstream)\" | awk '{if (!\$2) print \$1;}'"

@@ -85,7 +85,7 @@ vim.keymap.set("v", ">", ">gv", { desc = "indent line" })
 
 
 -- Pounce: jumping to arbitrary place in the visible screen.
-vim.keymap.set({ "o", "v" }, "s",
+vim.keymap.set({ "o", "v" }, "<cr>",
   function()
     -- Logic: in visual mode, it's often beneficial to select up to the end of word found by
     -- `pounce.nvim`.
@@ -111,7 +111,7 @@ vim.keymap.set({ "o", "v" }, "s",
   end,
   { desc = "Fuzzy hop (before) with pounce" }
 )
-vim.keymap.set({ "n" }, "s", require("pounce").pounce, { desc = "Fuzzy hop with pounce" })
+vim.keymap.set({ "n" }, "<cr>", require("pounce").pounce, { desc = "Fuzzy hop with pounce" })
 
 -- Useful for editing
 vim.keymap.set("i", "jj", "<esc>la", { desc = "Move one symbol right" })
