@@ -29,6 +29,19 @@ return {
 
   },
   {
+    'echasnovski/mini.animate',
+    event = "User FileOpened",
+    config = function()
+      local animate = require("mini.animate")
+      animate.setup({
+        cursor = { enable = false },
+        open = { enable = false },
+        close = { enable = false },
+        resize = { enable = false },
+      })
+    end
+  },
+  {
     'echasnovski/mini.surround',
     event = "User FileOpened",
     config = function()
@@ -77,8 +90,6 @@ return {
       { "hrsh7th/cmp-nvim-lsp-signature-help" },
       { "ray-x/cmp-treesitter" },
       { "onsails/lspkind.nvim" },
-      { "kristijanhusak/vim-dadbod-completion" },
-      { "kristijanhusak/vim-dadbod-ui" },
     },
     event = { "CmdlineEnter", "InsertEnter" },
     config = function()
@@ -271,6 +282,11 @@ return {
           { noremap = true, desc = "Open preview in a float window" })
       end)
 
+      -- We disable snippets as a bit annoying https://github.com/hrsh7th/nvim-cmp/issues/1129#issuecomment-1837594834
+      local capabilities = require('cmp_nvim_lsp').default_capabilities()
+      -- This line disables snippets. Note that disabling snippets has side-effects like not including parens on autocomplete.
+      capabilities.textDocument.completion.completionItem.snippetSupport = false
+
       require("mason").setup({})
       require("mason-lspconfig").setup({
         ensure_installed = {
@@ -301,6 +317,7 @@ return {
                   },
                 },
               },
+              capabilities = capabilities,
             })
           end,
           clangd = function()
@@ -313,6 +330,7 @@ return {
                 "--background-index",
                 "--suggest-missing-includes",
               },
+              capabilities = capabilities,
             }
           end,
           helm_ls = function()
