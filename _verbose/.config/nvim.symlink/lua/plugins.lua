@@ -29,19 +29,6 @@ return {
 
   },
   {
-    'echasnovski/mini.animate',
-    event = "User FileOpened",
-    config = function()
-      local animate = require("mini.animate")
-      animate.setup({
-        cursor = { enable = false },
-        open = { enable = false },
-        close = { enable = false },
-        resize = { enable = false },
-      })
-    end
-  },
-  {
     'echasnovski/mini.surround',
     event = "User FileOpened",
     config = function()
@@ -371,6 +358,7 @@ return {
     event = "User FileOpened",
     opts = {
       current_line_blame = true,
+      current_line_blame_formatter = '<author>, <author_time:%Y-%m-%d (%a) @ %H:%M> - <abbrev_sha> - <summary>',
       -- See `:help gitsigns.txt`
       signs = {
         add = { text = "+" },
@@ -681,6 +669,12 @@ return {
         line = "<leader>/",
       },
     }
+  },
+  -- Spectre replace
+  {
+    'nvim-pack/nvim-spectre',
+    event = "VeryLazy",
+    opts = {}
   },
   -- Fuzzy Finder (files, lsp, etc)
   {

@@ -46,7 +46,9 @@ vim.keymap.set("n", "<leader>fj", function()
     require("telescope.builtin").buffers({ sort_lastused = true, ignore_current_buffer = true })
   end,
   { desc = "find existing buffers" })
-vim.keymap.set("n", "<leader>ss", require("telescope.builtin").builtin, { desc = "[s]earch [s]elect telescope" })
+vim.keymap.set('n', '<leader>ss', '<cmd>lua require("spectre").toggle()<CR>', {
+  desc = "Toggle Spectre Search"
+})
 vim.keymap.set("n", "<leader>fs", function()
     require("telescope.builtin").current_buffer_fuzzy_find({
       layout_strategy = "horizontal",
