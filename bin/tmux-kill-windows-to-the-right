@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# Credit of https://stackoverflow.com/questions/54674503/how-to-close-all-windows-to-the-right-in-tmux
+
+tmux_kill_windows_ttr() {
+    for win_id in $(tmux list-windows -F '#{window_active} #{window_id}' | \
+                awk '/^1/ { active=1; next } active { print $2 }')
+    do
+      tmux kill-window -t "$win_id"
+    done
+}
+
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]
+then
+  tmux_kill_windows_ttr
+fi
