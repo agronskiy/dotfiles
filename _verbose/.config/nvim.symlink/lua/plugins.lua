@@ -331,7 +331,17 @@ return {
                 }
               }
             })
+          end,
+          jsonls = function()
+            -- I use more standard `prettier` for json formatting, via `conform.nvim`
+            require("lspconfig").jsonls.setup({
+              -- See https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#jsonls
+              init_options = {
+                provideFormatter = false
+              }
+            })
           end
+
         }
       })
     end
@@ -472,8 +482,7 @@ return {
       -- under ~/.local/share/nvim/mason/{bin,packages}, add `mypy` here. However, if you need to use `mypy` installed
       -- into your venv (e.g. if it uses nontrivial plugins or specific verison), make sure you
       -- remove `mypy` from here.
-      -- `fixjson`: used by json formatters (see conform.nvim)
-      ensure_installed = { "buildifier", "fixjson", },
+      ensure_installed = { "buildifier", "prettier", },
     },
     dependencies = {
       "williamboman/mason.nvim",
@@ -1162,7 +1171,7 @@ return {
         python = { "isort", "black" },
         -- bzl = { "buildifier" },
         tex = { "latexindent" },
-        json = { "fixjson" },
+        json = { "prettier" },
       },
     },
   },
