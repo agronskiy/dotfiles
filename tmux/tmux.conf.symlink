@@ -123,6 +123,10 @@ bind -r \; if '[ #{pane_index} -eq 1 ]' \
 # switch between the two.
 bind-key -T root F8 run "toggle-dev-term-window"
 
+# Deleting windows to the right to clean up the session, the script is in my `{dtofiles}/bin`
+unbind k
+bind k run "tmux-kill-windows-to-the-right"
+
 # Zoom pane
 unbind z
 bind C-f resize-pane -Z
