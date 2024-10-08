@@ -69,7 +69,7 @@ local highlights = {
   -- `grapple`, see https://github.com/cbochs/grapple.nvim?tab=readme-ov-file#window-highlights
   GrappleNormal = { bg = c.vscBack },
   GrappleBorder = { fg = c.vscLineNumber, bg = c.vscBack },
-  GrappleCurrent = { bg = c.vscCursorDarkDark }
+  GrappleCurrent = { bg = c.vscCursorDarkDark },
 }
 
 for group, spec in pairs(highlights) do

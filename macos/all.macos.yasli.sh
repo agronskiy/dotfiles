@@ -82,13 +82,13 @@ install_neovim() {
     [ -d "$HOME/.local/bin/neovim-install" ] && rm -rf "$HOME/.local/bin/neovim-install"
     mkdir -p "$HOME/.local/bin/neovim-install"
     cd "$HOME/.local/bin/neovim-install" \
-    && curl -LO https://github.com/neovim/neovim/releases/download/v0.9.5/nvim-macos.tar.gz \
+    && curl -LO https://github.com/neovim/neovim/releases/download/v0.10.2/nvim-macos.tar.gz \
     && xattr -c ./nvim-macos.tar.gz \
     && tar xzvf ./nvim-macos.tar.gz \
     && ln -sf "$(realpath ./nvim-macos/bin/nvim)" "$HOME/.local/bin/nvim"
 }
 exists_neovim() {
-  [ -x "$(command -v nvim)" ] && nvim --version | grep -q "0.9.5"
+  [ -x "$(command -v nvim)" ] && nvim --version | grep -q "0.10.2"
 }
 install_wrapper "neovim" install_neovim exists_neovim
 

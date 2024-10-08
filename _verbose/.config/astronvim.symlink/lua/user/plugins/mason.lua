@@ -11,7 +11,7 @@ return {
         "rust_analyzer",
         "lua_ls",
         "gopls",
-        "tsserver",
+        "ts_ls",
         "terraformls",
       },
     },

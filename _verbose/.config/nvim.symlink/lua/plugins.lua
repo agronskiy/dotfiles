@@ -285,7 +285,7 @@ return {
           "pyright",
           "rust_analyzer",
           "terraformls",
-          "tsserver",
+          "ts_ls",
           "yamlls"
         },
         handlers = {
@@ -349,15 +349,45 @@ return {
   {
     "max397574/better-escape.nvim",
     opts = {
-      mapping = { "jk" },
+      mappings = {
+        i = {
+          j = {
+            -- These can all also be functions
+            k = "<Esc>",
+          },
+        },
+        c = {
+          j = {
+            k = "<Esc>",
+          },
+        },
+        t = {
+          j = {
+            k = "<C-\\><C-n>",
+          },
+        },
+        v = {
+          j = {
+            k = "<Esc>",
+          },
+        },
+        s = {
+          j = {
+            k = "<Esc>",
+          },
+        },
+      },
     },
   },
   -- Useful plugin to show you pending keybinds.
   {
     "folke/which-key.nvim",
     opts = {
-      window = {
+      win = {
         border = "rounded",
+      },
+      icons = {
+        mappings = false
       }
     }
   },
@@ -371,6 +401,13 @@ return {
       current_line_blame_formatter = '<author>, <author_time:%Y-%m-%d (%a) @ %H:%M> - <abbrev_sha> - <summary>',
       -- See `:help gitsigns.txt`
       signs = {
+        add = { text = "+" },
+        change = { text = "~" },
+        delete = { text = "_" },
+        topdelete = { text = "‾" },
+        changedelete = { text = "~" },
+      },
+      signs_staged = {
         add = { text = "+" },
         change = { text = "~" },
         delete = { text = "_" },
@@ -495,7 +532,12 @@ return {
     dependencies = {
       { "dokwork/lualine-ex" },
       { "nvim-lua/plenary.nvim" },
-      { "WhoIsSethDaniel/lualine-lsp-progress.nvim" },
+      {
+        'linrongbin16/lsp-progress.nvim',
+        config = function()
+          require('lsp-progress').setup()
+        end
+      },
       { "cbochs/grapple.nvim" },
     },
     event = "VeryLazy",
@@ -603,43 +645,11 @@ return {
           },
           lualine_x = {
             {
-              "lsp_progress",
-              colors = {
-                percentage = c.vscPink,
-                title = c.vscPink,
-                message = c.vscPink,
-                spinner = c.vscPink,
-                lsp_client_name = c.vscPink,
-                use = true,
-              },
-              separators = {
-                component = " ",
-                progress = " | ",
-                message = { pre = "(", post = ")" },
-                percentage = { pre = "", post = "%% " },
-                title = { pre = "", post = ": " },
-                lsp_client_name = { pre = "[", post = "]" },
-                spinner = { pre = "", post = "" },
-              },
-              -- never show status for this list of servers;
-              -- can be useful if your LSP server does not emit
-              -- status messages
-              -- hide = { "null-ls", "pyright" },
-              -- by default this is false. If set to true will
-              -- only show the status of LSP servers attached
-              -- to the currently active buffer
-              only_show_attached = true,
-              display_components = { "spinner", { "title", "percentage", "message" } },
-              timer = {
-                progress_enddelay = 500,
-                spinner = 500,
-                lsp_client_name_enddelay = 1000,
-                attached_delay = 3000,
-              },
-              spinner_symbols = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" },
-              message = { initializing = "Initializing…", commenced = "In Progress", completed = "Completed" },
-              max_message_length = 30,
-
+              function()
+                -- invoke `progress` here.
+                return require('lsp-progress').progress()
+              end,
+              color = { fg = c.vscPink },
             },
             { list_lsp_and_null_ls },
             {
@@ -869,7 +879,7 @@ return {
   {
     "Mofiqul/vscode.nvim",
     lazy = false,
-    branch = "main",
+    commit = "44acc60e150907a327aefc676ea56ee53bdae5a6",
     config = function()
       local c = require("vscode.colors").get_colors()
       require("vscode").setup({
@@ -1070,7 +1080,7 @@ return {
   },
   {
     "nvim-neo-tree/neo-tree.nvim",
-    branch = "v3.x",
+    version = "v3.x",
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
@@ -1162,7 +1172,7 @@ return {
     opts = {
       format_on_save = {
         -- These options will be passed to conform.format()
-        timeout_ms = 500,
+        timeout_ms = 1500,
         lsp_fallback = true,
       },
       formatters_by_ft = {
@@ -1172,6 +1182,7 @@ return {
         -- bzl = { "buildifier" },
         tex = { "latexindent" },
         json = { "prettier" },
+        typescript = { "prettier" },
       },
     },
   },
