@@ -93,7 +93,7 @@ function prompt_symbol() {
 function precmd() {
     local EXIT_CODE=$(get_err_code)
     # Add $(display_err_code ${EXIT_CODE}) if needed more visual
-    __git_ps1   "${NEWLINE}$(get_virtualenv)$(middle_part)"\
+    __git_ps1   "${NEWLINE}\$(kube_ps1)$(get_virtualenv)$(middle_part)"\
                 "$(prompt_symbol ${EXIT_CODE})"
 }
 
@@ -104,3 +104,8 @@ function preexec () {
 # Avoid random percent sign.
 # See https://unix.stackexchange.com/questions/167582/why-zsh-ends-a-line-with-a-highlighted-percent-symbol
 export PROMPT_EOL_MARK=''
+
+
+# Some kube_ps1 configuration, see https://github.com/jonmosco/kube-ps1?tab=readme-ov-file#customization
+export KUBE_PS1_SYMBOL_ENABLE=false
+export KUBE_PS1_SUFFIX=") "

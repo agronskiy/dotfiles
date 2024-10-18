@@ -71,6 +71,7 @@ plugins=(
     fzf-tab
     zsh-autosuggestions
     vi-mode
+    kube-ps1
 )
 
 source $ZSH/oh-my-zsh.sh

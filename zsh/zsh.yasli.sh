@@ -116,3 +116,23 @@ install_wrapper "zsh autosuggestions" \
     install_zsh_autosuggestions \
     exists_zsh_autosuggestions \
     update_zsh_autosuggestions
+
+# zsh_kube_ps1
+install_zsh_kube_ps1() {
+    mkdir -p ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/
+    git clone \
+        https://github.com/jonmosco/kube-ps1 \
+        ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/kube-ps1
+}
+exists_zsh_kube_ps1 () {
+    [ -d ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/kube-ps1 ]
+}
+update_zsh_kube_ps1 () {
+    ( cd ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/kube-ps1 \
+        && git pull &> /dev/null )
+}
+install_wrapper "zsh kube_ps1" \
+    install_zsh_kube_ps1 \
+    exists_zsh_kube_ps1 \
+    update_zsh_kube_ps1
+
