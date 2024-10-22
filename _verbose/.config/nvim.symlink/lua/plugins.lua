@@ -959,7 +959,7 @@ return {
   { "christoomey/vim-tmux-navigator" },
   -- Markdown renderer
   -- CAVEAT: might need `yarn` to be installed. Might need to manually go to the directory
-  -- `~/.local/share/nvim/site/pack/packer/start/markdown-preview.nvim/` and run `yarn install`
+  -- `~/.local/share/nvim/lazy/markdown-preview.nvim/` and run `yarn install`
   {
     "iamcco/markdown-preview.nvim",
     build = function()
