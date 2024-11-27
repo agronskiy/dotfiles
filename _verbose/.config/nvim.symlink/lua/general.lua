@@ -12,6 +12,12 @@ vim.filetype.add({
   },
 })
 
+vim.filetype.add({
+  extension = {
+    ["jsonl"] = "json",
+  },
+})
+
 -- AVRO to json
 vim.filetype.add({
   extension = {

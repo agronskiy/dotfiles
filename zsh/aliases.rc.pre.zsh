@@ -46,8 +46,9 @@ function __ll() {
 }
 alias ll="__ll"
 alias la="ll -a"
-alias fla="la --color=always | fzf -m --ansi"
-alias fll="ll --color=always | fzf -m --ansi"
+# fuzzy-find versions:
+alias laf="la --color=always | fzf -m --ansi"
+alias llf="ll --color=always | fzf -m --ansi"
 
 alias tree="tree -C -F -L 2"
 function __tree() {
@@ -62,8 +63,8 @@ function __tree() {
 }
 alias trel="__tree"
 alias trela="trel -a"
-alias ftrela="ftrel -a"
-alias ftrel="trel --color=always | fzf -m --ansi"
+alias trelaf="ftrel -a"
+alias trelf="trel --color=always | fzf -m --ansi"
 
 alias psf="ps -ef | fzf-tmux $FZF_TMUX_OPTS -m --ansi | awk '{print \$2}' "
 
