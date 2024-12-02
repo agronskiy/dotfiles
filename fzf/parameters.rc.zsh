@@ -43,8 +43,8 @@ zstyle ':fzf-tab:complete:git-checkout:*' fzf-preview \
 $word'
 
 
-# preview directory's content with exa when completing cd
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -TF -L=2 --color=always $realpath'
+# preview directory's content with eza when completing cd
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -TF -L=2 --color=always $realpath'
 
 # preview on cat/bat/vim/nvim (remember that here cat is aliased to bat)
 zstyle ':fzf-tab:complete:(bat|cat|vim|nvim|code):*' fzf-preview 'bat --color=always --theme="Visual Studio Dark+" --plain $realpath'
@@ -78,7 +78,7 @@ _fzf_comprun() {
   shift
 
   case "$command" in
-    cd)           $(__fzfcmd) "$@" --preview 'exa -TF -L=2 --color=always {} | head -200' ;;
+    cd)           $(__fzfcmd) "$@" --preview 'eza -TF -L=2 --color=always {} | head -200' ;;
     export|unset) $(__fzfcmd) "$@" --preview "eval 'echo \$'{}" ;;
     ssh)          $(__fzfcmd) "$@" --preview 'dig {}' ;;
     cat|bat|vim|nvim|code)  $(__fzfcmd) "$@" --preview 'bat --color=always --theme="Visual Studio Dark+" --plain {}' ;;

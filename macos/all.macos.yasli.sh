@@ -52,11 +52,11 @@ install_tig() {
 }
 install_wrapper "tig" install_tig
 
-# exa
-install_exa() {
-    brew install exa
+# eza
+install_eza() {
+    brew install eza
 }
-install_wrapper "exa" install_exa
+install_wrapper "eza" install_eza
 
 # delta
 install_delta() {

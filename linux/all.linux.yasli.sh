@@ -54,12 +54,12 @@ install_tig() {
 }
 install_wrapper "tig" install_tig
 
-# exa
-install_exa() {
-    [ -d /tmp/exa-install ] && rm -rf /tmp/exa-install
-    mkdir /tmp/exa-install
+# eza
+install_eza() {
+    [ -d /tmp/eza-install ] && rm -rf /tmp/eza-install
+    mkdir /tmp/eza-install
     (
-        cd /tmp/exa-install
+        cd /tmp/eza-install
 
         if ! command -v rustc &> /dev/null
         then
@@ -68,15 +68,15 @@ install_exa() {
 
         # Install
         $SUDO_CMD apt-get install -y build-essential \
-        && $HOME/.cargo/bin/cargo install exa \
-        && cp $HOME/.cargo/bin/exa $HOME/.local/bin
+        && $HOME/.cargo/bin/cargo install eza \
+        && cp $HOME/.cargo/bin/eza $HOME/.local/bin
     ) \
-    && rm -rf /tmp/exa-install
+    && rm -rf /tmp/eza-install
 }
-exists_exa() {
-    [ -x "$HOME/.local/bin/exa" ]
+exists_eza() {
+    [ -x "$HOME/.local/bin/eza" ]
 }
-install_wrapper "exa" install_exa exists_exa
+install_wrapper "eza" install_eza exists_eza
 
 # delta
 install_delta() {
