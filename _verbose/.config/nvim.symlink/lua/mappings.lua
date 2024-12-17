@@ -23,7 +23,14 @@ local function find_git_root()
   return git_root
 end
 
--- Custom live_grep function to search in git root
+-- Vertical split
+vim.keymap.set({ "n", "v" }, "<leader>vs", function()
+    vim.cmd("vsplit")
+  end,
+  { desc = "Vertical split" }
+)
+
+-- -- Custom live_grep function to search in git root
 local function live_grep_git_root()
   local git_root = find_git_root()
   if git_root then
@@ -33,41 +40,59 @@ local function live_grep_git_root()
   end
 end
 
-vim.api.nvim_create_user_command("LiveGrepGitRoot", live_grep_git_root, {})
 
--- Vertical split
-vim.keymap.set({ "n", "v" }, "<leader>vs", function()
-    vim.cmd("vsplit")
-  end,
-  { desc = "Vertical split" }
-)
--- See `:help telescope.builtin`
-vim.keymap.set("n", "<leader>fj", function()
-    require("telescope.builtin").buffers({ sort_lastused = true, ignore_current_buffer = true })
-  end,
-  { desc = "find existing buffers" })
-vim.keymap.set('n', '<leader>ss', '<cmd>lua require("spectre").toggle()<CR>', {
-  desc = "Toggle Spectre Search"
-})
+
+
+-- vim.api.nvim_create_user_command("LiveGrepGitRoot", live_grep_git_root, {})
+--
+-- -- See `:help telescope.builtin`
+-- vim.keymap.set("n", "<leader>fj", function()
+--     require("telescope.builtin").buffers({ sort_lastused = true, ignore_current_buffer = true })
+--   end,
+--   { desc = "find existing buffers" })
+-- vim.keymap.set('n', '<leader>ss', '<cmd>lua require("spectre").toggle()<CR>', {
+--   desc = "Toggle Spectre Search"
+-- })
+-- vim.keymap.set("n", "<leader>fs", function()
+--     require("telescope.builtin").current_buffer_fuzzy_find({
+--       layout_strategy = "horizontal",
+--     })
+--   end,
+--   { desc = "search current buffer" })
 vim.keymap.set("n", "<leader>fs", function()
-    require("telescope.builtin").current_buffer_fuzzy_find({
+    require("fzf-lua").blines({
       layout_strategy = "horizontal",
     })
   end,
   { desc = "search current buffer" })
-vim.keymap.set("n", "<leader>fF", require("telescope.builtin").git_files, { desc = "search git files" })
-vim.keymap.set("n", "<leader>ff", require("telescope.builtin").find_files, { desc = "find files" })
-vim.keymap.set("n", "<leader>fc", require("telescope.builtin").grep_string, { desc = "find current word" })
-vim.keymap.set("n", "<leader>fw", require("telescope.builtin").live_grep, { desc = "find word" })
+-- vim.keymap.set("n", "<leader>fF", require("telescope.builtin").git_files, { desc = "search git files" })
+-- vim.keymap.set("n", "<leader>ff", require("telescope.builtin").find_files, { desc = "find files" })
+vim.keymap.set("n", "<leader>ff", require("fzf-lua").files, { desc = "find files" })
+-- vim.keymap.set("n", "<leader>fc", require("telescope.builtin").grep_string, { desc = "find current word" })
+vim.keymap.set("n", "<leader>fc", require("fzf-lua").grep_cword, { desc = "find current word" })
+-- vim.keymap.set("n", "<leader>fw", require("telescope.builtin").live_grep, { desc = "find word" })
+vim.keymap.set("n", "<leader>fw", require("fzf-lua").live_grep_glob, { desc = "find word" })
+vim.keymap.set("n", "<leader>fj", function()
+    require("fzf-lua").buffers({ sort_lastused = true, ignore_current_buffer = true })
+  end,
+  { desc = "find existing buffers" })
+-- vim.keymap.set("n", "<leader>fh", function()
+--     require("telescope.builtin").oldfiles({ cwd_only = true })
+--   end,
+--   { desc = "find local history" }
+-- )
 vim.keymap.set("n", "<leader>fh", function()
-    require("telescope.builtin").oldfiles({ cwd_only = true })
+    require("fzf-lua").oldfiles({ cwd_only = true })
   end,
   { desc = "find local history" }
 )
-vim.keymap.set("n", "<leader>fo", "<cmd>Telescope grapple tags<cr>", { desc = "grapple tags" })
-vim.keymap.set("n", "<leader>fW", "<cmd>LiveGrepGitRoot<cr>", { desc = "search by grep in git" })
-vim.keymap.set("n", "<leader>ld", require("telescope.builtin").diagnostics, { desc = "seach diagnostics" })
-vim.keymap.set("n", "<leader>lr", require("telescope.builtin").lsp_references, { desc = "find references" })
+-- vim.keymap.set("n", "<leader>fo", "<cmd>Telescope grapple tags<cr>", { desc = "grapple tags" })
+-- vim.keymap.set("n", "<leader>fW", "<cmd>LiveGrepGitRoot<cr>", { desc = "search by grep in git" })
+-- vim.keymap.set("n", "<leader>ld", require("telescope.builtin").diagnostics, { desc = "seach diagnostics" })
+vim.keymap.set("n", "<leader>ld", require("fzf-lua").diagnostics_document, { desc = "seach diagnostics" })
+-- vim.keymap.set("n", "<leader>lr", require("telescope.builtin").lsp_references, { desc = "find references" })
+vim.keymap.set("n", "<leader>lr", require("fzf-lua").lsp_references, { desc = "find references" })
+
 vim.keymap.set("n", ";", ":")
 
 
