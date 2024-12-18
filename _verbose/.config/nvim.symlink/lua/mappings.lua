@@ -59,12 +59,7 @@ end
 --     })
 --   end,
 --   { desc = "search current buffer" })
-vim.keymap.set("n", "<leader>fs", function()
-    require("fzf-lua").blines({
-      layout_strategy = "horizontal",
-    })
-  end,
-  { desc = "search current buffer" })
+vim.keymap.set("n", "<leader>fs", require("fzf-lua").blines, { desc = "search current buffer" })
 -- vim.keymap.set("n", "<leader>fF", require("telescope.builtin").git_files, { desc = "search git files" })
 -- vim.keymap.set("n", "<leader>ff", require("telescope.builtin").find_files, { desc = "find files" })
 vim.keymap.set("n", "<leader>ff", require("fzf-lua").files, { desc = "find files" })

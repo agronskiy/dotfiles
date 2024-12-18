@@ -701,20 +701,32 @@ return {
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
       local actions = require "fzf-lua.actions"
-      -- calling `setup` is optional for customization
+      local vert_winopts = {
+        preview = {
+          vertical = "down:50%",
+          layout = "vertical",
+        },
+      }
+
       require("fzf-lua").setup({
         winopts = {
-          height = 0.95,
-          width = 0.9,
-          row = 0.5,
+          on_create = function()
+            vim.keymap.set("t", "jk", "<Esc>", { silent = true, buffer = true })
+          end,
+          height    = 0.95,
+          width     = 0.9,
+          row       = 0.5,
+          -- treesitter = {
+          --   -- enabled    = true,
+          --   -- fzf_colors = { ["hl"] = "-1:reverse", ["hl+"] = "-1:reverse" }
+          -- },
           -- hl = { normal = "Pmenu" },
         },
         fzf_opts = {
-          -- ["--no-info"] = "",
-          -- ["--info"] = "hidden",
-          -- ["--padding"] = "13%,5%,13%,5%",
+          ["--no-info"] = "",
+          ["--info"] = "hidden",
           -- ["--header"] = " ",
-          -- ["--no-scrollbar"] = "",
+          ["--no-scrollbar"] = "",
         },
         keymap = {
           builtin = {
@@ -727,9 +739,10 @@ return {
           },
         },
         files = {
-          rg_opts = [[--color=auto --files --hidden --follow -g "!.git"]],
-          fd_opts = [[--color=auto --type f --hidden --follow --exclude .git]],
+          winopts = { preview = { hidden = "hidden" } }
         },
+        lsp = { winopts = vert_winopts },
+        blines = { winopts = vert_winopts },
         grep = {
           rg_opts =
           [[--hidden --follow -g "!.git" --column --line-number --no-heading --color=always --smart-case --max-columns=4096 -e]],
@@ -737,112 +750,11 @@ return {
             ["ctrl-f"] = { actions.grep_lgrep },
             ["ctrl-g"] = false,
           },
+          winopts = vert_winopts
         }
-
       })
     end
   },
-  -- Fuzzy Finder (files, lsp, etc)
-  -- {
-  --   "nvim-telescope/telescope.nvim",
-  --   dependencies = {
-  --     "nvim-lua/plenary.nvim",
-  --     { "nvim-telescope/telescope-fzf-native.nvim", enabled = vim.fn.executable "make" == 1, build = "make" },
-  --     { "cbochs/grapple.nvim" },
-  --     { "reaz1995/telescope-vim-bookmarks.nvim" },
-  --   },
-  --   cmd = "Telescope",
-  --   opts = function()
-  --     local actions = require "telescope.actions"
-  --     local layout_actions = require("telescope.actions.layout")
-  --     local common_settings = {
-  --       w = 0.95,
-  --       h = 0.9,
-  --       vert_lines_cutoff = 20,
-  --     }
-  --     return {
-  --       defaults = {
-  --         git_worktrees = vim.g.git_worktrees,
-  --         path_display = { "truncate" },
-  --         sorting_strategy = "ascending",
-  --         layout_strategy = "horizontal",
-  --         layout_config = {
-  --           horizontal = { prompt_position = "top", preview_width = 0.55 },
-  --           preview_cutoff = 120,
-  --           width = common_settings.h,
-  --           height = common_settings.h,
-  --           vertical = {
-  --             mirror = true,
-  --             prompt_position = "top",
-  --             preview_cutoff = common_settings.vert_lines_cutoff,
-  --             -- :h telescope.resolve
-  --             preview_height = function(_, _, max_lines)
-  --               -- Logic: keep preview dynamically changing in order to fix results
-  --               -- height fixed
-  --               if max_lines < common_settings.vert_lines_cutoff then
-  --                 return math.ceil(max_lines * common_settings.h) - 6
-  --               end
-  --               return math.ceil(max_lines * common_settings.h) - 12
-  --             end,
-  --           }
-  --         },
-  --         mappings = {
-  --           i = {
-  --             ["jk"] = actions.close,
-  --             ["<F2>"] = layout_actions.toggle_preview,
-  --             ["<C-f>"] = actions.to_fuzzy_refine,
-  --             ["jl"] = false,
-  --             ["jj"] = false,
-  --             ["<C-n>"] = actions.cycle_history_next,
-  --             ["<C-p>"] = actions.cycle_history_prev,
-  --             ["<C-j>"] = actions.move_selection_next,
-  --             ["<C-k>"] = actions.move_selection_previous,
-  --             ["<C-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
-  --           },
-  --           n = { q = actions.close },
-  --         },
-  --       },
-  --       pickers = {
-  --         find_files = {
-  --           preview = {
-  --             hide_on_startup = true, -- long paths friendly
-  --           }
-  --         },
-  --         buffers = {
-  --           preview = {
-  --             hide_on_startup = true, -- long paths friendly
-  --           },
-  --           layout_config = {
-  --             width = 0.5,
-  --             height = 15,
-  --           }
-  --         },
-  --         oldfiles = {
-  --           preview = {
-  --             hide_on_startup = true, -- long paths friendly
-  --           }
-  --         },
-  --         lsp_references = {
-  --           fname_width = 80,
-  --         },
-  --         lsp_document_symbols = {
-  --           fname_width = 80,
-  --           symbol_width = 35,
-  --         },
-  --         lsp_workspace_symbols = {
-  --           fname_width = 80,
-  --           symbol_width = 35,
-  --         },
-  --       },
-  --     }
-  --   end,
-  --   config = function(_, opts)
-  --     -- Enable telescope fzf native, if installed
-  --     require("telescope").setup(opts)
-  --     pcall(require("telescope").load_extension, "fzf")     -- might be unavailable, hence pcall
-  --     pcall(require("telescope").load_extension, "grapple") -- might be unavailable, hence pcall
-  --   end,
-  -- },
   {
     -- Highlight, edit, and navigate code
     "nvim-treesitter/nvim-treesitter",
