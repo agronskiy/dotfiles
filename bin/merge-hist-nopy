@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+# Inspired on https://david-kerwick.github.io/2017-01-04-combining-zsh-history-files/
+set -eo pipefail
+source $YASLI_DIR/logging.inc.sh
+
+history1=$1
+history2=$2
+merged=$3
+
+log_info "Merging history files: $history1 + $history2"
+
+[ -f $history1 ] || log_fail "File $history1 not found"
+[ -f $history2 ] || log_fail "File $history2 not found"
+
+(
+  cat $history1 $history2 \
+    | awk -v date="WILL_NOT_APPEAR$(date +"%s")" '{if (sub(/\\$/,date)) printf "%s", $0; else print $0}' \
+    | LC_ALL=C sort -u \
+    | awk -v date="WILL_NOT_APPEAR$(date +"%s")" '{gsub('date',"\\\n"); print $0}' > $merged
+) 2>&1 | log_cmd || log_fail "Failed merging"
+
+log_success "Merged to: $merged"
