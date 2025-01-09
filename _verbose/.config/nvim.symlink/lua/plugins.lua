@@ -727,6 +727,8 @@ return {
           ["--info"] = "hidden",
           -- ["--header"] = " ",
           ["--no-scrollbar"] = "",
+          -- for history, see https://github.com/ibhagwan/fzf-lua/wiki#how-do-i-setup-input-history-keybinds
+          ['--history'] = vim.fn.stdpath("data") .. '/fzf-lua-history',
         },
         keymap = {
           builtin = {
@@ -739,7 +741,10 @@ return {
           },
         },
         files = {
-          winopts = { preview = { hidden = "hidden" } }
+          winopts = { preview = { hidden = "hidden" } },
+          cwd_prompt = false,
+          prompt = 'Files> '
+
         },
         lsp = { winopts = vert_winopts },
         blines = { winopts = vert_winopts },
@@ -751,7 +756,12 @@ return {
             ["ctrl-g"] = false,
           },
           winopts = vert_winopts
-        }
+        },
+        oldfiles = {
+          cwd_only                = true,
+          include_current_session = true, -- include bufs from current session
+        },
+
       })
     end
   },
