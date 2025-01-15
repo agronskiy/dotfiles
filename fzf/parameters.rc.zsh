@@ -2,7 +2,7 @@
 # colors imitate vscode ones, see
 # https://github.com/tomasiser/vim-code-dark/blob/master/colors/codedark.vim
 export FZF_DEFAULT_OPTS='--height 70% --reverse '\
-'--color=bg+:235,bg:234,border:245,'\
+'--color=bg+:237,bg:234,border:245,gutter:-1,'\
 'fg:#D9D9D9,fg+:#D9D9D9,preview-bg:234,hl:117,hl+:75 '\
 '--bind=f2:toggle-preview,'\
 'page-up:preview-half-page-up,'\
