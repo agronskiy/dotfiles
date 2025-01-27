@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# For mac, this is not a standard bin location, so to make the `exists_...` (where we install 
+# For mac, this is not a standard bin location, so to make the `exists_...` (where we install
 # some binaries) commands below work we need to ensure it is in `PATH`.
 export PATH="$HOME/.local/bin:$PATH"
 
@@ -82,10 +82,10 @@ install_neovim() {
     [ -d "$HOME/.local/bin/neovim-install" ] && rm -rf "$HOME/.local/bin/neovim-install"
     mkdir -p "$HOME/.local/bin/neovim-install"
     cd "$HOME/.local/bin/neovim-install" \
-    && curl -LO https://github.com/neovim/neovim/releases/download/v0.10.2/nvim-macos.tar.gz \
-    && xattr -c ./nvim-macos.tar.gz \
-    && tar xzvf ./nvim-macos.tar.gz \
-    && ln -sf "$(realpath ./nvim-macos/bin/nvim)" "$HOME/.local/bin/nvim"
+    && curl -LO https://github.com/neovim/neovim/releases/download/v0.10.2/nvim-macos-x86_64.tar.gz \
+    && xattr -c ./nvim-macos-x86_64.tar.gz \
+    && tar xzvf ./nvim-macos-x86_64.tar.gz \
+    && ln -sf "$(realpath ./nvim-macos-x86_64/bin/nvim)" "$HOME/.local/bin/nvim"
 }
 exists_neovim() {
   [ -x "$(command -v nvim)" ] && nvim --version | grep -q "0.10.2"
@@ -139,7 +139,7 @@ install_wrapper "k9s" install_k9s exists_k9s
 # install pynvim
 install_pynvim() {
     sys_python=$(which -a python3 | head -n2 | tail -n1)
-    $SUDO_CMD $sys_python -m pip install pynvim 
+    $SUDO_CMD $sys_python -m pip install pynvim
 }
 exists_pynvim() {
     sys_python=$(which -a python3 | head -n2 | tail -n1)
