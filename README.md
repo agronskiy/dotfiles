@@ -43,8 +43,11 @@ This would 99% smoothly install everything in a "Darwin" <-> "Ubuntu" cross-plat
 
 - install nerd fonts
 - check latest neovim
+- check that iterm settings (on mac) are imported from the linked file
+
 
 ## Trivia
+
 
 ### Caveat: Git autocompletion with git homebrew
 

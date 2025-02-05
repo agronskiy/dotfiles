@@ -19,6 +19,8 @@ cd $HOME/.zsh_history_proj
 
 cp $HISTFILE $HISTFILE.bak
 
+HIST_SYNC_DEFAULT_GPG="${HIST_SYNC_DEFAULT_GPG:-unspecified}"
+
 log_info "Copied history backup to $HISTFILE.bak"
 (
     log_info "Encrypting"
