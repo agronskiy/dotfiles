@@ -33,15 +33,15 @@ alias gref="fzf --filter"
 alias ls="ls -aCGpF --color=auto"
 export LSCOLORS="ExGxBxDxCxEgEdxbxgxcxd"  # ls colors
 
-# Exa is a tool which is allegedly cooler than ls
+# Eza is a tool which is allegedly cooler than ls
 function __ll() {
     # Check if that's for terminal. If not, don't add `color=always` to prevent ansi escapes in
     # piping.
     if [ -t 1 ]
     then
-        exa -lF --color=always "$@" | less
+        eza -lF --color=always "$@" | less
     else
-        exa -lF "$@"
+        eza -lF "$@"
     fi
 }
 alias ll="__ll"
@@ -56,9 +56,9 @@ function __tree() {
     # piping.
     if [ -t 1 ]
     then
-        exa -lTF -L 2 --color=always "$@" | less
+        eza -lTF -L 2 --color=always "$@" | less
     else
-        exa -lTF -L 2 "$@"
+        eza -lTF -L 2 "$@"
     fi
 }
 alias trel="__tree"
