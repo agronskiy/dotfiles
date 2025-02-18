@@ -881,6 +881,9 @@ return {
     dependencies = { "nvim-lua/plenary.nvim", "ojroques/nvim-osc52" },
     config = function()
       require("gitlinker").setup({
+        callbacks = {
+          ["gitlab-master.nvidia.com"] = require "gitlinker.hosts".get_gitlab_type_url
+        },
         opts = {
           action_callback = function(url)
             -- yank to unnamed register
@@ -927,8 +930,10 @@ return {
   -- Allowing seamless navigation btw tmux and vim
   { "christoomey/vim-tmux-navigator" },
   -- Markdown renderer
-  -- CAVEAT: might need `yarn` to be installed. Might need to manually go to the directory
-  -- `~/.local/share/nvim/lazy/markdown-preview.nvim/` and run `yarn install`
+  -- CAVEAT: might need `yarn` to be installed.
+  -- Might need to either
+  -- 1. manually go to the directory `~/.local/share/nvim/lazy/markdown-preview.nvim/` and run `yarn install`
+  -- or 2. open any `.md` file and run `:call mkdp#util#install()`
   {
     "iamcco/markdown-preview.nvim",
     build = function()
