@@ -741,9 +741,11 @@ return {
           },
         },
         files = {
-          winopts = { preview = { hidden = "hidden" } },
+          winopts    = { preview = { hidden = "hidden" } },
+          rg_opts    = [[--color=never --hidden --files -g "!.git"]],
+          fd_opts    = [[--color=never --hidden --type f --type l --exclude .git]],
           cwd_prompt = false,
-          prompt = 'Files> '
+          prompt     = 'Files> '
 
         },
         lsp = { winopts = vert_winopts },
