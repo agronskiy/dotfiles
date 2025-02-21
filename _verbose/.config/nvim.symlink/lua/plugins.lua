@@ -956,7 +956,12 @@ return {
     end,
     config = function()
       vim.g.mkdp_filetypes = { "markdown" }
-      vim.g.mkdp_port = "8000"
+      local mkdp_port_env_var = os.getenv("MKDP_PORT")
+
+      -- Check if the environment variable is set
+      if mkdp_port_env_var then
+        vim.g.mkdp_port = "8000"
+      end
       vim.g.mkdp_browser = ""
       vim.g.mkdp_browserfunc = ""
       vim.g.mkdp_echo_preview_url = 1

@@ -41,7 +41,7 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
 # This allows grepping with colors
-export GREP_COLOR='1;35;40'
+export GREP_COLORS='mt=1;35;40'
 
 # Loading the stuff from topic folders
 # Config files are all the files with *.rc.zsh.
