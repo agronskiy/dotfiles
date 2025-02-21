@@ -44,7 +44,7 @@ This would 99% smoothly install everything in a "Darwin" <-> "Ubuntu" cross-plat
 - install nerd fonts
 - check latest neovim
 - check that iterm settings (on mac) are imported from the linked file
-
+- for linux: run `inputplug` setup related to `input-plug-set-keyboard-rate` (see comments in there)
 
 ## Trivia
 

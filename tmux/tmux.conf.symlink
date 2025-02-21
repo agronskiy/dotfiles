@@ -234,7 +234,6 @@ set-option -g focus-events
 
 # Allow clipboard with OSC-52 work, see https://github.com/tmux/tmux/wiki/Clipboard
 # https://github.com/ojroques/nvim-osc52?tab=readme-ov-file#configuration-for-tmux
-set -s set-clipboard on
 set -g allow-passthrough on
 
 # Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)

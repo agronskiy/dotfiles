@@ -340,8 +340,21 @@ return {
                 provideFormatter = false
               }
             })
+          end,
+          yamlls = function()
+            require("lspconfig").yamlls.setup {
+              settings = {
+                yaml = {
+                  format = {
+                    enable = true
+                  },
+                  schemaStore = {
+                    enable = true
+                  }
+                }
+              }
+            }
           end
-
         }
       })
     end
