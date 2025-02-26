@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# symlink-everything <from-dir> <to-dir>
+
+if [ "$#" -ne 2 ]; then
+    echo "Usage: $0 <from-dir> <to-dir>"
+    exit 1
+fi
+
+from=$1
+to=$2  # directoty to symlinc everything to
+
+mkdir -p "$to"
+
+find "$from" -mindepth 1 -maxdepth 1 | while read -r item; do
+    ln -fs "$item" "$to/$(basename "$item")"
+done
