@@ -362,6 +362,7 @@ return {
   {
     "max397574/better-escape.nvim",
     opts = {
+      default_mappings = false,
       mappings = {
         i = {
           j = {
@@ -377,11 +378,6 @@ return {
         t = {
           j = {
             k = "<C-\\><C-n>",
-          },
-        },
-        v = {
-          j = {
-            k = "<Esc>",
           },
         },
         s = {
