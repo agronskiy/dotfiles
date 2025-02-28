@@ -182,3 +182,12 @@ exists_pynvim() {
 }
 install_wrapper "pynvim" install_pynvim exists_pynvim
 
+# install xsel (needed as a clipboard provided on Linux)
+install_xsel() {
+  $SUDO_CMD apt install xsel
+}
+exists_xsel() {
+    [ -x "$(command -v xsel)" ]
+}
+install_wrapper "xsel" install_xsel exists_xsel
+

@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+source $YASLI_DIR/logging.inc.sh
+
+if [ "$(uname -s)" != "Linux" ]; then
+    log_success "Skipped (non-linux)"
+    exit 0
+fi
+
+xset r rate 175 40
+
+
