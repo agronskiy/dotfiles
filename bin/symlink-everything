@@ -1,17 +1,83 @@
 #!/usr/bin/env bash
 
+# See CONTRIBUTING.md
+
+set -eo pipefail
+
 # symlink-everything <from-dir> <to-dir>
+# will symlink all the first-level contents of the directories (non-recursively), prompting if
+# target exists
+
+# NOTE(agronskiy): if there's a destination symlink, can either skip it, overwrite it
+# or overwrite everything
+__ln_with_prompt_override()
+{
+    echo "${YELLOW}Linking...${RESTORE}"
+    echo "  from ${MAGENDA}$1${RESTORE}"
+    echo "  to ${MAGENDA}$2${RESTORE}"
+    
+    local skip_this=
+    local overwrite_this=
+    
+    if [ "$overwrite_all" != "true" ]; then
+        if [ -f "$2" ] || [ -d "$2" ]; then
+            echo -n "Destination exists, what to do? [O]verride all; [o]verride this only; [s]kip this only: ${RESTORE}"
+            read -n 1 action </dev/tty
+            echo ""
+
+            case "$action" in
+            o )
+                overwrite_this=true;;
+            O )
+                overwrite_all=true;;
+            s )
+                skip_this=true;;
+            * )
+                echo "${RED}Wrong choice, exiting" && exit 1;;
+            esac
+        fi
+    fi
+    
+    overwrite_this=${overwrite_this:-$overwrite_all}
+
+    if [ "$skip_this" == "true" ]; then
+        echo "...Skipping"
+    else
+        if [ "$overwrite_this" == "true" ]; then
+            rm -rf "$2"
+        fi
+        ln -s "$1" "$2" && echo "${GREEN}...OK${RESTORE}" || echo "${RED}...FAIL${RESTORE}"
+    fi
+}
+
+#########################
+## Main script
+#########################
+
+
+RESTORE=$(echo -en '\033[0m')
+RED=$(echo -en '\033[1;31m')
+GREEN=$(echo -en '\033[1;32m')
+YELLOW=$(echo -en '\033[1;33m')
+MAGENDA=$(echo -en '\033[38;5;5m')
+BOLD=$(echo -en '\033[1m')
 
 if [ "$#" -ne 2 ]; then
     echo "Usage: $0 <from-dir> <to-dir>"
     exit 1
 fi
 
-from=$1
-to=$2  # directoty to symlinc everything to
+from_dir=$1
+to_dir=$2  # directoty to symlink everything
+mkdir -p "$to_dir"
 
-mkdir -p "$to"
+overwrite_all=
 
-find "$from" -mindepth 1 -maxdepth 1 | while read -r item; do
-    ln -fs "$item" "$to/$(basename "$item")"
+
+find "$from_dir" -mindepth 1 -maxdepth 1 | while read -r item; do
+    ln_from="$item"
+    ln_from=$(realpath "$ln_from")
+    ln_to="$to_dir/$(basename "$item")"  # NOTE(agronskiy): no need to realpath at `to`
+    
+    __ln_with_prompt_override "${ln_from}" "${ln_to}"
 done
