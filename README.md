@@ -238,6 +238,23 @@ end,
 
 ```
 
+## Ubuntu 22.04 + Dell Camera issues
+
+Something around 
+```
+sudo add-apt-repository ppa:oem-solutions-engineers/oem-projects-meta
+sudo apt install oem-somerville-tentacool-meta
+sudo apt update
+sudo apt full-upgrade
+sudo apt install ubuntu-oem-keyring
+```
+
+And then enabling HAL in `Additional Drivers` could help. Other option is to check for hwe support
+kernel.
+
+See: https://discourse.ubuntu.com/t/intel-mipi-camera-not-found/51797
+See: https://askubuntu.com/questions/1540002/ubuntu-22-04-kernel-6-8-0-51-generic-mipi-camera-issues
+
 # Acknowledgements
 This started as a heavily adjusted version by @holman, inspiration from @AndreiBarsan and @samoshkin.
 
