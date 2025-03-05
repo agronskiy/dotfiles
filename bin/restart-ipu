@@ -6,25 +6,25 @@ YASLI_DIR=${YASLI_DIR:-$HOME/.yasli}
 source $YASLI_DIR/logging.inc.sh
 
 log_info "Stopping v4l2-relayd"
-sudo systemctl stop v4l2-relayd | 2>&1 | log_cmd || log_fail "Failed"
+sudo systemctl stop v4l2-relayd 2>&1 | log_cmd || log_fail "Failed"
 
-log_info "Unloading ipu6 kernels"
-(
-  sudo rmmod intel_ipu6_isys
-  sudo rmmod intel_ipu6_psys
-  sudo rmmod intel_ipu6
-  sudo rmmod ipu_bridge
-) 2>&1 | log_cmd || log_fail "Failed"
+log_info "Unloading ipu6 kernel modules"
+modules=("intel_ipu6_isys" "intel_ipu6_psys" "intel_ipu6" "ivsc_csi" "ipu_bridge")
+for module in "${modules[@]}"; do
+    sudo rmmod "$module" 2>&1 | log_cmd || log_error "Failed to unload $module"
+done
 
-log_info "Loading ipu6 kernels"
-(
-  sudo modprobe ipu_bridge
-  sudo modprobe intel_ipu6
-  sudo modprobe intel_ipu6_psys
-  sudo modprobe intel_ipu6_isys
-) 2>&1 | log_cmd || log_fail "Failed"
+wait_sec=5
+log_info "Applying a bit of wait for ${wait_sec}s"
+sleep ${wait_sec}
+
+log_info "Loading ipu6 kernel modules"
+modules=("intel_ipu6_isys" "intel_ipu6_psys" "intel_ipu6" "ivsc_csi" "ipu_bridge")
+for module in "${modules[@]}"; do
+    sudo modprobe "$module" 2>&1 | log_cmd || log_error "Failed to load $module"
+done
 
 log_info "Starting v4l2-relayd"
-sudo systemctl start v4l2-relayd | 2>&1 | log_cmd || log_fail "Failed"
+sudo systemctl start v4l2-relayd 2>&1 | log_cmd || log_fail "Failed"
 
 log_success "Done"
