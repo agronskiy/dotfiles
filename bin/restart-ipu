@@ -14,7 +14,7 @@ for module in "${modules[@]}"; do
     sudo rmmod "$module" 2>&1 | log_cmd || log_error "Failed to unload $module"
 done
 
-wait_sec=5
+wait_sec=1
 log_info "Applying a bit of wait for ${wait_sec}s"
 sleep ${wait_sec}
 

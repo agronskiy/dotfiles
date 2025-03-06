@@ -1223,5 +1223,50 @@ return {
       { "<leader>a",  "<cmd>Grapple toggle<cr>",      desc = "Grapple toggle tag" },
       { "<leader>hh", "<cmd>Grapple toggle_tags<cr>", desc = "Grapple open tags window" },
     },
+  },
+  {
+    "olimorris/codecompanion.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    event = "User FileOpened",
+    config = function()
+      require("codecompanion").setup({
+        strategies = {
+          chat = {
+            adapter = "openai",
+          },
+          inline = {
+            adapter = "openai",
+          },
+        },
+        adapters = {
+          openai = function()
+            return require("codecompanion.adapters").extend("openai", {
+              url = "https://integrate.api.nvidia.com/v1/chat/completions",
+              env = {
+                api_key = vim.env.NGC_API_TOKEN_NV_DEV,
+              },
+              schema = {
+                model = {
+                  -- default = "nvdev/nvidia/llama-3.1-nemotron-70b-instruct",
+                  default = "nvdev/meta/llama-3.3-70b-instruct",
+                },
+              },
+            })
+          end,
+        },
+      })
+      vim.keymap.set("n", "<leader>lcc", "<cmd>CodeCompanionChat Toggle<CR>", { desc = "CodeCompanion Chat" })
+      vim.keymap.set("n", "<leader>lca", "<cmd>CodeCompanionActions<CR>", { desc = "CodeCompanion Actions" })
+      vim.keymap.set(
+        "v",
+        "<leader>lc",
+        "<cmd>CodeCompanionChat Add<cr>",
+        { noremap = true, silent = true, desc = "Add snippet to CodeCompanion" }
+      )
+      vim.cmd([[cab cc CodeCompanion]])
+    end,
   }
 }
