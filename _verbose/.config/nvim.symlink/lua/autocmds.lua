@@ -146,3 +146,10 @@ vim.api.nvim_create_autocmd("User", {
   pattern = "LspProgressStatusUpdated",
   callback = require("lualine").refresh,
 })
+
+-- To remove extra trailing whitespaces.
+vim.api.nvim_create_autocmd("BufWritePre", {
+  desc = "Removes extra trailing whitespaces",
+  pattern = "*",
+  command = "keeppatterns %s/\\s\\+$//e",
+})

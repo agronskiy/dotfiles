@@ -27,4 +27,8 @@ done
 log_info "Starting v4l2-relayd"
 sudo systemctl start v4l2-relayd 2>&1 | log_cmd || log_fail "Failed"
 
+log_info "Re-enabling nvidia services (suspend/resume)"
+sudo systemctl reenable nvidia-suspend 2>&1 | log_cmd || log_fail "Failed"
+sudo systemctl reenable nvidia-resume 2>&1 | log_cmd || log_fail "Failed"
+
 log_success "Done"
