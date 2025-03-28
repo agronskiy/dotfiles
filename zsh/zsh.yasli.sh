@@ -136,3 +136,23 @@ install_wrapper "zsh kube_ps1" \
     exists_zsh_kube_ps1 \
     update_zsh_kube_ps1
 
+# zsh_no_ps
+install_zsh_no_ps2() {
+    mkdir -p ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/
+    git clone \
+        https://github.com/romkatv/zsh-no-ps2.git \
+        ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/zsh-no-ps2
+}
+exists_zsh_no_ps2 () {
+    [ -d ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/zsh-no-ps2 ]
+}
+update_zsh_no_ps2 () {
+    ( cd ${ZSH_CUSTOM:=${ZSH}/custom}/plugins/zsh-no-ps2 \
+        && git pull &> /dev/null )
+}
+install_wrapper "zsh no ps2" \
+    install_zsh_no_ps2 \
+    exists_zsh_no_ps2 \
+    update_zsh_no_ps2
+
+

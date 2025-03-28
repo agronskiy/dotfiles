@@ -72,6 +72,7 @@ plugins=(
     zsh-autosuggestions
     vi-mode
     kube-ps1
+    zsh-no-ps2
 )
 
 source $ZSH/oh-my-zsh.sh
