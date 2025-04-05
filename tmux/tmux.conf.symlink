@@ -80,9 +80,9 @@ bind -r C-l next-window     # select next window
 unbind o
 bind -r o select-pane -t :.+  # Just redefined o to allow cycling
 
-# Copy and mouse 
+# Copy and mouse
 
-bind-key -T prefix v copy-mode  # v for Vim mode 
+bind-key -T prefix v copy-mode  # v for Vim mode
 bind-key -T copy-mode-vi Escape send-keys -X cancel
 
 # turn on moving around with mouse
@@ -234,6 +234,7 @@ set-option -g focus-events
 
 # Allow clipboard with OSC-52 work, see https://github.com/tmux/tmux/wiki/Clipboard
 # https://github.com/ojroques/nvim-osc52?tab=readme-ov-file#configuration-for-tmux
+set -g set-clipboard on
 set -g allow-passthrough on
 
 # Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)

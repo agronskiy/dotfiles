@@ -72,3 +72,10 @@ if [[ -a ~/.localrc ]]; then
 fi
 
 export ALREADY_SOURCED_ZSHRC=1
+
+# fnm
+FNM_PATH="/home/agronskiy/.local/share/fnm"
+if [ -d "$FNM_PATH" ]; then
+  export PATH="/home/agronskiy/.local/share/fnm:$PATH"
+  eval "`fnm env`"
+fi
