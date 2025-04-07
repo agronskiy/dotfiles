@@ -91,7 +91,7 @@ alias delta="delta $DELTA_DEFAULT_OPTS "
 export GPG_TTY=$TTY
 
 # Syncs the zsh history, using scripts histpull/histpush from `./bin`
-alias histsync="histpull && builtin fc -R -I && builtin fc -W && histpush"
+alias histsync="builtin fc -R -I && builtin fc -W && histpull && histpush"
 
 # If one does not want to use `exa`
 # # Makes colors in CLI ls output
@@ -124,7 +124,7 @@ alias kc="kubectl"
 # fuzzy env
 alias fenv="env | fzf"
 
-# alias to clear the scrollback when clearing the screen, kudos to 
+# alias to clear the scrollback when clearing the screen, kudos to
 # https://apple.stackexchange.com/questions/31872/how-do-i-reset-the-scrollback-in-the-terminal-via-a-shell-command
 alias clear="clear && printf '\e[3J'"
 
