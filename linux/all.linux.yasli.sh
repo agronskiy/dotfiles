@@ -8,7 +8,7 @@ exists_fd() {
    [ -x "$(command -v fdfind)" ]
 }
 update_fd(){
-    ln -s --force "$(which fdfind)" "$HOME/.local/bin/fd"
+    ln -s --force -r "$(which fdfind)" "$HOME/.local/bin/fd"
 }
 install_wrapper "fd" install_fd exists_fd update_fd
 
@@ -26,7 +26,7 @@ exists_batcat() {
     [ -x "$(command -v batcat)" ]
 }
 update_batcat() {
-   ln -s --force "$(which batcat)" "$HOME/.local/bin/bat"
+   ln -s --force -r "$(which batcat)" "$HOME/.local/bin/bat"
 }
 install_wrapper "bat" install_batcat exists_batcat update_batcat
 
@@ -122,7 +122,7 @@ install_neovim() {
     cd $HOME/.local/bin/neovim-install \
     && curl -LO https://github.com/neovim/neovim/releases/download/v0.10.2/nvim-linux64.tar.gz \
     && tar xzvf nvim-linux64.tar.gz \
-    && ln -s --force "$(realpath ./nvim-linux64/bin/nvim)" "$HOME/.local/bin/nvim"
+    && ln -s --force -r "$(realpath ./nvim-linux64/bin/nvim)" "$HOME/.local/bin/nvim"
 }
 exists_neovim() {
   [ -x "$(command -v nvim)" ] && nvim --version | grep -q "0.10.2"
@@ -174,7 +174,7 @@ install_wrapper "k9s" install_k9s exists_k9s
 # install pynvim
 install_pynvim() {
     sys_python=$(which -a python3 | head -n2 | tail -n1)
-    $SUDO_CMD $sys_python -m pip install pynvim 
+    $SUDO_CMD $sys_python -m pip install pynvim
 }
 exists_pynvim() {
     sys_python=$(which -a python3 | head -n2 | tail -n1)

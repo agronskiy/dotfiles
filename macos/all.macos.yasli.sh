@@ -85,7 +85,7 @@ install_neovim() {
     && curl -LO https://github.com/neovim/neovim/releases/download/v0.10.2/nvim-macos-x86_64.tar.gz \
     && xattr -c ./nvim-macos-x86_64.tar.gz \
     && tar xzvf ./nvim-macos-x86_64.tar.gz \
-    && ln -sf "$(realpath ./nvim-macos-x86_64/bin/nvim)" "$HOME/.local/bin/nvim"
+    && ln -sf -r "$(realpath ./nvim-macos-x86_64/bin/nvim)" "$HOME/.local/bin/nvim"
 }
 exists_neovim() {
   [ -x "$(command -v nvim)" ] && nvim --version | grep -q "0.10.2"
