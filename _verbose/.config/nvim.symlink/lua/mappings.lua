@@ -212,3 +212,6 @@ vim.keymap.set("n", "<leader>yr",
     vim.notify('Copied "' .. path .. '" to the clipboard!')
   end,
   { desc = "Yank current [r]elative filepath" })
+
+-- Opening todo
+vim.keymap.set("n", "<leader>td", ":e ~/.todo.md<cr>", { desc = "Open todo" })

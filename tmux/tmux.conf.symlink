@@ -73,9 +73,6 @@ setw -g pane-base-index 1
 unbind n
 unbind p
 
-bind -r C-h previous-window # select previous window
-bind -r C-l next-window     # select next window
-
 # Pane navigation
 unbind o
 bind -r o select-pane -t :.+  # Just redefined o to allow cycling
@@ -236,6 +233,9 @@ set-option -g focus-events
 # https://github.com/ojroques/nvim-osc52?tab=readme-ov-file#configuration-for-tmux
 set -g set-clipboard on
 set -g allow-passthrough on
+
+bind -r C-h previous-window # select previous window
+bind -r C-l next-window     # select next window
 
 # Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
 run -b '~/.tmux/plugins/tpm/tpm'
