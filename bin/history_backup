@@ -1,0 +1,38 @@
+#!/usr/bin/env python3
+import os
+import sys
+from shutil import copy2
+
+# Example of a crontab
+# 0 * * * * history_backup
+
+# Configuration
+history_file = sys.argv[1]
+backup_dir = sys.argv[2]
+state_file = os.path.join(backup_dir, ".last_slot")
+max_backups = 24
+
+# Ensure backup directory exists
+os.makedirs(backup_dir, exist_ok=True)
+
+# Determine next slot number
+if os.path.exists(state_file):
+    with open(state_file, "r") as f:
+        try:
+            last_slot = int(f.read().strip())
+            next_slot = (last_slot + 1) % max_backups
+        except ValueError:
+            next_slot = 0
+else:
+    next_slot = 0
+
+# Backup filename
+backup_filename = f".zsh_history.cron.{next_slot}.bak"
+backup_path = os.path.join(backup_dir, backup_filename)
+
+# Copy the history file
+copy2(history_file, backup_path)
+
+# Update the state file
+with open(state_file, "w") as f:
+    f.write(str(next_slot))
