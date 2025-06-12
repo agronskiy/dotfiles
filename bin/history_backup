@@ -1,38 +1,70 @@
 #!/usr/bin/env python3
 import os
 import sys
+from datetime import datetime, timedelta
 from shutil import copy2
-
-# Example of a crontab
-# 0 * * * * history_backup
 
 # Configuration
 history_file = sys.argv[1]
 backup_dir = sys.argv[2]
-state_file = os.path.join(backup_dir, ".last_slot")
-max_backups = 24
+max_backups = 4  # Always keep this many most recent backups
+days_to_keep = 4  # Also keep at least one per day for this many days
+weeks_to_keep = 4  # Also keep at least one per week for this many weeks
 
 # Ensure backup directory exists
 os.makedirs(backup_dir, exist_ok=True)
 
-# Determine next slot number
-if os.path.exists(state_file):
-    with open(state_file, "r") as f:
-        try:
-            last_slot = int(f.read().strip())
-            next_slot = (last_slot + 1) % max_backups
-        except ValueError:
-            next_slot = 0
-else:
-    next_slot = 0
-
-# Backup filename
-backup_filename = f".zsh_history.cron.{next_slot}.bak"
+# Create timestamp for backup filename
+timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+backup_filename = f".zsh_history.cron.{timestamp}.bak"
 backup_path = os.path.join(backup_dir, backup_filename)
 
 # Copy the history file
 copy2(history_file, backup_path)
 
-# Update the state file
-with open(state_file, "w") as f:
-    f.write(str(next_slot))
+# Gather all backup files
+backups = [
+    f
+    for f in os.listdir(backup_dir)
+    if f.startswith(".zsh_history.cron.") and f.endswith(".bak")
+]
+
+# Sort backups by modification time (newest first)
+backups.sort(key=lambda x: os.path.getmtime(os.path.join(backup_dir, x)), reverse=True)
+
+# Always keep the newest 'max_backups' files
+to_keep = set(backups[:max_backups])
+
+now = datetime.now()
+
+# Keep one per day for last 'days_to_keep' days
+day_backup = {}
+for fname in backups:
+    path = os.path.join(backup_dir, fname)
+    mtime = datetime.fromtimestamp(os.path.getmtime(path))
+    delta_days = (now.date() - mtime.date()).days
+    if 0 <= delta_days < days_to_keep:
+        key = mtime.date()
+        if key not in day_backup or mtime > day_backup[key][1]:
+            day_backup[key] = (fname, mtime)
+
+to_keep.update(fname for fname, _ in day_backup.values())
+
+# Keep one per week for last 'weeks_to_keep' weeks
+week_backup = {}
+for fname in backups:
+    path = os.path.join(backup_dir, fname)
+    mtime = datetime.fromtimestamp(os.path.getmtime(path))
+    year, week, _ = mtime.isocalendar()
+    delta_weeks = (now.isocalendar()[1] - week) + 52 * (now.isocalendar()[0] - year)
+    if 0 <= delta_weeks < weeks_to_keep:
+        key = (year, week)
+        if key not in week_backup or mtime > week_backup[key][1]:
+            week_backup[key] = (fname, mtime)
+
+to_keep.update(fname for fname, _ in week_backup.values())
+
+# Remove files not in the keep set
+for fname in backups:
+    if fname not in to_keep:
+        os.remove(os.path.join(backup_dir, fname))
