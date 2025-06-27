@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+# Script to control internal display (eDP-1) while keeping external display as primary
+# Usage: internal-display [on|off]
+
+# Check if argument is provided
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 [on|off]"
+    echo "  on  - Turn on internal display (eDP-1) to the left of external display"
+    echo "  off - Turn off internal display (eDP-1)"
+    exit 1
+fi
+
+ACTION="$1"
+
+# Validate argument
+if [ "$ACTION" != "on" ] && [ "$ACTION" != "off" ]; then
+    echo "Error: Argument must be 'on' or 'off'"
+    echo "Usage: $0 [on|off]"
+    exit 1
+fi
+
+# Get external display ID (excludes eDP-1 and disconnected outputs)
+external_display=$(xrandr --query | grep " connected" | grep -v "eDP-1" | awk '{print $1}' | head -n1)
+
+# Check if external display is found
+if [ -z "$external_display" ]; then
+    echo "Error: No external display detected"
+    exit 1
+fi
+
+echo "External display detected: $external_display"
+
+# Always ensure external display is primary and enabled
+xrandr --output "$external_display" --primary --auto
+
+if [ "$ACTION" = "on" ]; then
+    echo "Turning on internal display (eDP-1) to the left of external display..."
+    # Position internal display to the left of external display
+    xrandr --output eDP-1 --auto --left-of "$external_display"
+elif [ "$ACTION" = "off" ]; then
+    echo "Turning off internal display (eDP-1)..."
+    xrandr --output eDP-1 --off
+fi
+
+echo "Done!" 
