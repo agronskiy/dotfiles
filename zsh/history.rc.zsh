@@ -1,10 +1,11 @@
 
-export HISTSIZE=2000000            #  How many lines of history to keep in memo
-export HISTFILE=~/.zsh_history     # Where to save history to disk
-export SAVEHIST=2000000               # Number of history entries to save to disk
+HISTSIZE=2000000            #  How many lines of history to keep in memo
+HISTFILE=~/.zsh_history     # Where to save history to disk
+SAVEHIST=2000000               # Number of history entries to save to disk
 setopt EXTENDED_HISTORY          # Write the history file in the ":start:elapsed;command" format.
 setopt SHARE_HISTORY             # Share history between all sessions.
 setopt HIST_EXPIRE_DUPS_FIRST    # Expire duplicate entries first when trimming history.
+setopt INC_APPEND_HISTORY
 setopt HIST_IGNORE_DUPS          # Don't record an entry that was just recorded again.
 setopt HIST_IGNORE_ALL_DUPS      # Delete old recorded entry if new entry is a duplicate.
 setopt HIST_FIND_NO_DUPS         # Do not display a line previously found.
