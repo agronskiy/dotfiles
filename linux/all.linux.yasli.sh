@@ -48,12 +48,6 @@ install_tree() {
 }
 install_wrapper "tree" install_tree
 
-# tig
-install_tig() {
-   $SUDO_CMD apt-get -y install tig
-}
-install_wrapper "tig" install_tig
-
 # eza
 install_eza() {
     [ -d /tmp/eza-install ] && rm -rf /tmp/eza-install

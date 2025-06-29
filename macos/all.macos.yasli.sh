@@ -46,12 +46,6 @@ install_tree() {
 }
 install_wrapper "tree" install_tree
 
-# tig
-install_tig() {
-    brew install tig
-}
-install_wrapper "tig" install_tig
-
 # eza
 install_eza() {
     brew install eza
