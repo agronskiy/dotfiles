@@ -5,6 +5,7 @@
 set -eo pipefail
 
 source $YASLI_DIR/logging.inc.sh
+histfile=${HISTFILE:-$HOME/.zsh_history}
 
 log_info "Fetching results"
 
@@ -25,7 +26,7 @@ HIST_SYNC_DEFAULT_GPG="${HIST_SYNC_DEFAULT_GPG:-unspecified}"
 
 log_info "Merging..."
 (
-    merge-hist "./zsh_history_decrypted" "$HISTFILE" "$HISTFILE"
+    merge-hist "./zsh_history_decrypted" "$histfile" "$histfile"
     rm ./zsh_history_decrypted
 ) 2>&1 | log_cmd || log_fail "Failed"
 
