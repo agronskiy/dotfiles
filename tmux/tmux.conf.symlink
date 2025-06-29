@@ -234,7 +234,11 @@ set-option -g focus-events
 set -g set-clipboard on
 set -g allow-passthrough on
 
+unbind C-h
+unbind C-l
 bind -r C-h previous-window # select previous window
+# below: it defaults to `C-l` and interferes. See https://github.com/christoomey/vim-tmux-navigator/blob/master/vim-tmux-navigator.tmux#L53
+set -g @vim_navigator_prefix_mapping_clear_screen ""
 bind -r C-l next-window     # select next window
 
 # Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
