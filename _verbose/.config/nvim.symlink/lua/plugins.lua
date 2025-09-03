@@ -523,7 +523,7 @@ return {
       -- under ~/.local/share/nvim/mason/{bin,packages}, add `mypy` here. However, if you need to use `mypy` installed
       -- into your venv (e.g. if it uses nontrivial plugins or specific verison), make sure you
       -- remove `mypy` from here.
-      ensure_installed = { "buildifier", "prettier", },
+      ensure_installed = { "buildifier", "prettier", "taplo" },
     },
     dependencies = {
       "williamboman/mason.nvim",
@@ -1168,6 +1168,7 @@ return {
         tex = { "latexindent" },
         json = { "prettier" },
         typescript = { "prettier" },
+        toml = { "taplo" },
       },
     },
   },
@@ -1263,5 +1264,10 @@ return {
       )
       vim.cmd([[cab cc CodeCompanion]])
     end,
+  },
+  {
+    "sindrets/diffview.nvim",
+    event = "VeryLazy",
+    opts = {}
   }
 }
