@@ -752,6 +752,12 @@ return {
           prompt     = 'Files> '
 
         },
+        oldfiles = {
+          winopts                 = { preview = { hidden = "hidden" } },
+          cwd_only                = true,
+          include_current_session = true, -- include bufs from current session
+          prompt                  = 'History> '
+        },
         lsp = { winopts = vert_winopts },
         blines = { winopts = vert_winopts },
         grep = {
@@ -763,11 +769,6 @@ return {
           },
           winopts = vert_winopts
         },
-        oldfiles = {
-          cwd_only                = true,
-          include_current_session = true, -- include bufs from current session
-        },
-
       })
     end
   },
@@ -1163,7 +1164,7 @@ return {
       formatters_by_ft = {
         lua = { "stylua" },
         -- Conform will run multiple formatters sequentially
-        python = { "isort", "black" },
+        python = { "ruff_organize_imports", "ruff_format" },
         -- bzl = { "buildifier" },
         tex = { "latexindent" },
         json = { "prettier" },
