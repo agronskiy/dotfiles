@@ -1,4 +1,17 @@
 #!/usr/bin/env bash
+# Read input preserving all bytes including ANSI codes
+# Read all input into a variable without creating a temporary file
 input=$(cat)
-printf "\033]52;c;%s\a" "$(printf "%s" "$input" | base64 -w0)"
+
+# Strip ANSI escape sequences for clipboard (remove color codes)
+# Remove all ANSI escape sequences:
+# - CSI sequences: \x1b[ followed by parameters and a command letter
+# - OSC sequences: \x1b] followed by parameters and BEL or ST
+# - Other escape sequences: \x1b followed by various characters
+stripped=$(printf "%s" "$input" | sed -E 's/\x1b\[[0-9;]*[a-zA-Z]//g; s/\x1b\][^[:cntrl:]]*(\x07|\x1b\\)//g; s/\x1b[()\[][0-9;]*//g')
+
+# Send escape sequence with base64 encoded STRIPPED input (no colors in clipboard)
+printf "\033]52;c;%s\a" "$(printf "%s" "$stripped" | base64 -w0)"
+
+# Output original input with colors preserved
 printf "%s" "$input"
