@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+# Script to enable/disable keyd service
+# Usage: keyd [on|off]
+
+# Check if argument is provided
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 [on|off]"
+    echo "  on  - Enable and start keyd service"
+    echo "  off - Disable and stop keyd service"
+    exit 1
+fi
+
+ACTION="$1"
+
+# Validate argument
+if [ "$ACTION" != "on" ] && [ "$ACTION" != "off" ]; then
+    echo "Error: Argument must be 'on' or 'off'"
+    echo "Usage: $0 [on|off]"
+    exit 1
+fi
+
+if [ "$ACTION" = "on" ]; then
+    echo "Enabling and starting keyd service..."
+    sudo systemctl enable keyd --now
+elif [ "$ACTION" = "off" ]; then
+    echo "Disabling and stopping keyd service..."
+    sudo systemctl disable keyd --now
+fi
+
+echo "Done!"
