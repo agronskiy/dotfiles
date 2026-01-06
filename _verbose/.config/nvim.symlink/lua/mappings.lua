@@ -214,4 +214,4 @@ vim.keymap.set("n", "<leader>yr",
   { desc = "Yank current [r]elative filepath" })
 
 -- Opening todo
-vim.keymap.set("n", "<leader>td", ":e ~/.todo.md<cr>", { desc = "Open todo" })
+vim.keymap.set("n", "<leader>tD", ":e ~/.todo.md<cr>", { desc = "Open todo" })

@@ -157,12 +157,18 @@ return {
       })
       -- `:` cmdline setup
       cmp.setup.cmdline(":", {
+        preselect = cmp.PreselectMode.Item,
+        completion = {
+          -- Ensure the top item is actually selected/highlighted (i.e. no `noselect`),
+          -- but don't insert text until confirmed.
+          completeopt = "menu,menuone,noinsert",
+        },
         mapping = cmp.mapping.preset.cmdline({
           ["<C-k>"] = cmp.mapping { c = cmp.mapping.select_prev_item() },
           ["<C-j>"] = cmp.mapping { c = cmp.mapping.select_next_item() },
           ["<Tab>"] = cmp.mapping { c = function(fallback)
             if cmp.visible() then
-              cmp.select_next_item()
+              cmp.confirm({ select = true })
             elseif has_words_before() then
               cmp.complete()
             else
@@ -720,6 +726,8 @@ return {
           height    = 0.95,
           width     = 0.9,
           row       = 0.5,
+          -- Default preview below the results (affects fzf_exec-based pickers, incl. Obsidian).
+          preview   = vert_winopts.preview,
           -- treesitter = {
           --   -- enabled    = true,
           --   -- fzf_colors = { ["hl"] = "-1:reverse", ["hl+"] = "-1:reverse" }
@@ -985,6 +993,224 @@ return {
     end,
     ft = { "markdown" },
   },
+  -- Obsidian plugins
+  {
+    -- Actively maintained fork.
+    "obsidian-nvim/obsidian.nvim",
+    version = "*",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    event = "VeryLazy",
+    config = function()
+      require("obsidian").setup({
+        legacy_commands = false,
+        workspaces = {
+          { name = "main", path = "/home/agronskiy/obsidian/Main" },
+        },
+        daily_notes = {
+          folder = "_Daily",
+          date_format = "%Y-%m-%d",
+          template = "daily",
+        },
+        templates = {
+          folder = "_Templates",
+          substitutions = {
+            ["date:YYYY-MM-DD"] = function() return os.date("%Y-%m-%d") end,
+            ["date:dddd"] = function() return os.date("%A") end,
+            ["date:-1d:YYYY-MM-DD"] = function() return os.date("%Y-%m-%d", os.time() - 86400) end,
+            ["date:+1d:YYYY-MM-DD"] = function() return os.date("%Y-%m-%d", os.time() + 86400) end,
+          },
+        },
+        ui = {
+          enable = false,
+        },
+        completion = {
+          nvim_cmp = true,
+          min_chars = 2,
+        },
+      })
+
+      -- Obsidian keymaps (keep close to obsidian.nvim config).
+      do
+        local map = vim.keymap.set
+        map("n", "<leader>td", "<cmd>Obsidian today<cr>", { desc = "Today (daily note)" })
+        map("n", "<leader>ty", "<cmd>Obsidian yesterday<cr>", { desc = "Yesterday (daily note)" })
+        map("n", "<leader>tt", "<cmd>Obsidian tomorrow<cr>", { desc = "Tomorrow (daily note)" })
+        map("n", "<leader>tw", "<cmd>Obsidian search<cr>", { desc = "Search in vault" })
+        map("n", "<leader>tf", "<cmd>Obsidian quick_switch<cr>", { desc = "Quick switch note" })
+        map("n", "<leader>ts", "<cmd>Obsidian dailies<cr>", { desc = "Pick daily note (newest first)" })
+        map("n", "<leader>tn", "<cmd>Obsidian new<cr>", { desc = "New note" })
+        map("n", "<leader>tr", "<cmd>Obsidian rename<cr>", { desc = "Rename note" })
+        map("n", "<leader>tl", "<cmd>Obsidian follow_link<cr>", { desc = "Follow link under cursor" })
+        map("n", "<leader>to", "<cmd>Obsidian open<cr>", { desc = "Open in Obsidian app" })
+
+        map("n", "<leader>ta", function()
+          local line = "- [ ] #inbox "
+          local row = vim.api.nvim_win_get_cursor(0)[1]
+          vim.api.nvim_buf_set_lines(0, row, row, true, { line })
+          vim.api.nvim_win_set_cursor(0, { row + 1, 0 })
+          vim.cmd("normal! $")
+        end, { desc = "Insert task below cursor" })
+
+        -- Tasks plugin priorities (append at end of line).
+        map("n", "<leader>t1", "A 🔺<Esc>", { desc = "Task: highest priority" })
+        map("n", "<leader>t2", "A ⏫<Esc>", { desc = "Task: high priority" })
+        map("n", "<leader>t3", "A 🔼<Esc>", { desc = "Task: medium priority" })
+        map("n", "<leader>t4", "A 🔽<Esc>", { desc = "Task: low priority" })
+        map("n", "<leader>t5", "A ⏬<Esc>", { desc = "Task: lowest priority" })
+      end
+
+      -- Make `:Obsidian dailies` show newest first (reverse order).
+      do
+        local daily = require("obsidian.daily")
+        local Path = require("obsidian.path")
+
+        -- Allow renaming daily notes to `YYYY-MM-DD*.md`.
+        -- Resolve the "daily note path" by prefix match if an existing file is found.
+        do
+          local orig_daily_note_path = daily.daily_note_path
+
+          ---@param dir string
+          ---@param base_id string
+          ---@return string|nil
+          local function best_daily_match(dir, base_id)
+            local exact = dir .. "/" .. base_id .. ".md"
+            local matches = vim.fn.globpath(dir, base_id .. "*.md", false, true)
+            if not matches or #matches == 0 then
+              return nil
+            end
+
+            -- Prefer renamed variants over the exact base filename if any exist.
+            local renamed = {}
+            for _, f in ipairs(matches) do
+              if f ~= exact then
+                renamed[#renamed + 1] = f
+              end
+            end
+            if #renamed > 0 then
+              matches = renamed
+            elseif vim.loop.fs_stat(exact) then
+              return exact
+            end
+
+            local best = matches[1]
+            local best_mtime = -1
+            for _, f in ipairs(matches) do
+              local st = vim.loop.fs_stat(f)
+              local mtime = st and st.mtime and st.mtime.sec or -1
+              if mtime > best_mtime then
+                best = f
+                best_mtime = mtime
+              end
+            end
+            return best
+          end
+
+          daily.daily_note_path = function(datetime)
+            local path, _ = orig_daily_note_path(datetime)
+            local dir = tostring(path:parent())
+            local base_id = path.stem -- the `YYYY-MM-DD` part from `date_format`
+
+            local match = best_daily_match(dir, base_id)
+            if match then
+              local p = Path.new(match)
+              return p, p.stem
+            end
+
+            return path, base_id
+          end
+        end
+
+        daily.pick = function(offset_start, offset_end, callback)
+          ---@type obsidian.PickerEntry[]
+          local dailies = {}
+          for offset = offset_end, offset_start, -1 do
+            local datetime = os.time() + (offset * 3600 * 24)
+            local date = os.date("%Y-%m-%d", datetime)
+            local daily_note_path = daily.daily_note_path(datetime)
+            local daily_note_alias = date
+            if daily_note_path:is_file() then
+              local stem = daily_note_path.stem
+              if vim.startswith(stem, date) then
+                local suffix = string.sub(stem, #date + 1)
+                suffix = suffix:gsub("^%s*[-_ ]+%s*", "")
+                if string.len(suffix) > 0 then
+                  daily_note_alias = string.format("%s -- %s", date, suffix)
+                end
+              end
+            end
+            if offset == 0 then
+              daily_note_alias = daily_note_alias .. " @today"
+            elseif offset == -1 then
+              daily_note_alias = daily_note_alias .. " @yesterday"
+            elseif offset == 1 then
+              daily_note_alias = daily_note_alias .. " @tomorrow"
+            end
+            if not daily_note_path:is_file() then
+              daily_note_alias = daily_note_alias .. " [create]"
+            end
+            dailies[#dailies + 1] = {
+              user_data = offset,
+              text = daily_note_alias,
+              filename = tostring(daily_note_path),
+            }
+          end
+
+          Obsidian.picker.pick(dailies, {
+            prompt_title = "Dailies",
+            callback = function(entry)
+              local note = daily.daily(entry.user_data, {})
+              callback(note)
+            end,
+          })
+        end
+      end
+
+      -- Default `:Obsidian dailies` range: last 30 days (incl. today).
+      do
+        local commands = require("obsidian.commands")
+        local daily = require("obsidian.daily")
+
+        ---@param arg string
+        ---@return number
+        local function parse_offset(arg)
+          if vim.startswith(arg, "+") then
+            return assert(tonumber(string.sub(arg, 2)), string.format("invalid offset '%s'", arg))
+          elseif vim.startswith(arg, "-") then
+            return -assert(tonumber(string.sub(arg, 2)), string.format("invalid offset '%s'", arg))
+          else
+            return assert(tonumber(arg), string.format("invalid offset '%s'", arg))
+          end
+        end
+
+        commands.commands["dailies"].func = function(data)
+          local offset_start = -29
+          local offset_end = 0
+
+          if data.fargs and #data.fargs > 0 then
+            if #data.fargs == 1 then
+              local offset = parse_offset(data.fargs[1])
+              if offset >= 0 then
+                offset_end = offset
+              else
+                offset_start = offset
+              end
+            elseif #data.fargs == 2 then
+              local offsets = vim.tbl_map(parse_offset, data.fargs)
+              table.sort(offsets)
+              offset_start = offsets[1]
+              offset_end = offsets[2]
+            else
+              error ":Obsidian dailies expected at most 2 arguments"
+            end
+          end
+
+          daily.pick(offset_start, offset_end, function(note)
+            note:open()
+          end)
+        end
+      end
+    end,
+  },
   -- Allows to preview in floating window, loaded in `zero_lsp.on_attach`
   {
     "lervag/vimtex",
@@ -1146,7 +1372,6 @@ return {
     },
     config = function(_, opts)
       require("toggleterm").setup(opts)
-      vim.keymap.set("n", "<leader>tf", "<cmd>ToggleTerm direction=float<cr>", { desc = "ToggleTerm float" })
       vim.keymap.set("n", "<leader>tv", "<cmd>ToggleTerm size=80 direction=vertical<cr>",
         { desc = "ToggleTerm vert" })
       vim.keymap.set({ "n", "t" }, "<F7>", "<cmd>ToggleTerm<cr>", { desc = "ToggleTerm" })
