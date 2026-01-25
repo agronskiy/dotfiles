@@ -1,0 +1,34 @@
+#!/bin/bash
+
+set -euo pipefail
+
+SESSION_NAME="${TMUX_POPUP_SCRATCH_SESSION:-popup}"
+POPUP_WIDTH="${TMUX_POPUP_SCRATCH_WIDTH:-90%}"
+POPUP_HEIGHT="${TMUX_POPUP_SCRATCH_HEIGHT:-80%}"
+
+if [ -z "${TMUX:-}" ]; then
+  echo "tmux-toggle-term: must be run inside tmux" >&2
+  exit 1
+fi
+
+CURRENT_SESSION="$(tmux display-message -p -F "#{session_name}")"
+
+# Toggle: when invoked from inside the popup (i.e. inside the scratch session),
+# detaching closes the popup reliably across tmux versions.
+if [ "${CURRENT_SESSION}" = "${SESSION_NAME}" ]; then
+  tmux detach-client
+  exit 0
+fi
+
+PANE_CWD="$(tmux display-message -p -F "#{pane_current_path}")"
+
+if ! tmux has-session -t "${SESSION_NAME}" 2>/dev/null; then
+  tmux new-session -d -s "${SESSION_NAME}" -n scratch -c "${PANE_CWD}"
+fi
+
+tmux display-popup \
+  -d "${PANE_CWD}" \
+  -xC -yC \
+  -w "${POPUP_WIDTH}" -h "${POPUP_HEIGHT}" \
+  -E \
+  "tmux attach -t ${SESSION_NAME}"

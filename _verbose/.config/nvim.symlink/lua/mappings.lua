@@ -215,3 +215,49 @@ vim.keymap.set("n", "<leader>yr",
 
 -- Opening todo
 vim.keymap.set("n", "<leader>tD", ":e ~/.todo.md<cr>", { desc = "Open todo" })
+
+-- Cycle Obsidian-style task markers:
+-- - [ ] -> - [<] -> - [/] -> - [x] -> - [ ]
+-- If missing, create "- [ ]" (or convert "- item" into "- [ ] item").
+local function cycle_task_marker()
+  local row, col = unpack(vim.api.nvim_win_get_cursor(0)) -- row is 1-based, col is 0-based
+  local line = vim.api.nvim_get_current_line()
+
+  -- Already a task checkbox?
+  local indent, state, rest = line:match("^(%s*)%-%s*%[([ x/<])%]%s*(.*)$")
+  if indent then
+    local next_state = (state == " " and "<") or (state == "<" and "/") or (state == "/" and "x") or " "
+    vim.api.nvim_set_current_line(("%s- [%s] %s"):format(indent, next_state, rest))
+    return
+  end
+
+  -- Bullet without checkbox -> convert.
+  local b_indent, b_rest = line:match("^(%s*)%-%s+(.*)$")
+  if b_indent then
+    vim.api.nvim_set_current_line(("%s- [ ] %s"):format(b_indent, b_rest))
+    local indent_len = #b_indent
+    local new_col
+    if col < indent_len + 2 then
+      new_col = indent_len + 6
+    else
+      new_col = col + 4
+    end
+    vim.api.nvim_win_set_cursor(0, { row, math.max(0, new_col) })
+    return
+  end
+
+  -- No bullet -> prepend.
+  local i = line:match("^(%s*)") or ""
+  local content = line:sub(#i + 1)
+  vim.api.nvim_set_current_line(("%s- [ ] %s"):format(i, content))
+  local indent_len = #i
+  local new_col
+  if col < indent_len then
+    new_col = col
+  else
+    new_col = col + 6
+  end
+  vim.api.nvim_win_set_cursor(0, { row, math.max(0, new_col) })
+end
+
+vim.keymap.set({ "n", "i" }, "<C-CR>", cycle_task_marker, { desc = "Cycle task marker" })

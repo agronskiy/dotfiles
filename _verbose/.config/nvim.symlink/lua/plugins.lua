@@ -131,6 +131,20 @@ return {
         mapping = cmp.mapping.preset.insert({
           ["<C-k>"] = cmp.mapping.select_prev_item { behavior = cmp.SelectBehavior.Insert },
           ["<C-j>"] = cmp.mapping.select_next_item { behavior = cmp.SelectBehavior.Insert },
+          ["<Up>"] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_prev_item { behavior = cmp.SelectBehavior.Insert }
+            else
+              fallback()
+            end
+          end, { "i", "s" }),
+          ["<Down>"] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_next_item { behavior = cmp.SelectBehavior.Insert }
+            else
+              fallback()
+            end
+          end, { "i", "s" }),
           ["<C-u>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
           ["<C-d>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
           ["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
@@ -155,17 +169,31 @@ return {
           end, { "i", "s" }),
         }),
       })
+
       -- `:` cmdline setup
       cmp.setup.cmdline(":", {
-        preselect = cmp.PreselectMode.Item,
         completion = {
-          -- Ensure the top item is actually selected/highlighted (i.e. no `noselect`),
-          -- but don't insert text until confirmed.
-          completeopt = "menu,menuone,noinsert",
+          -- Don't preselect/highlight anything by default.
+          completeopt = "menu,menuone,noselect",
         },
         mapping = cmp.mapping.preset.cmdline({
           ["<C-k>"] = cmp.mapping { c = cmp.mapping.select_prev_item() },
           ["<C-j>"] = cmp.mapping { c = cmp.mapping.select_next_item() },
+          ["<Up>"] = cmp.mapping { c = cmp.mapping.select_prev_item() },
+          ["<Down>"] = cmp.mapping { c = cmp.mapping.select_next_item() },
+          ["<CR>"] = cmp.mapping { c = function(fallback)
+            if cmp.visible() then
+              -- If nothing is selected (completeopt=noselect), let <CR> execute the command.
+              -- If you explicitly selected an entry (arrows/C-j/C-k), confirm it.
+              if cmp.get_selected_entry() ~= nil then
+                cmp.confirm({ select = false })
+              else
+                fallback()
+              end
+            else
+              fallback()
+            end
+          end },
           ["<Tab>"] = cmp.mapping { c = function(fallback)
             if cmp.visible() then
               cmp.confirm({ select = true })
@@ -1014,10 +1042,103 @@ return {
         templates = {
           folder = "_Templates",
           substitutions = {
-            ["date:YYYY-MM-DD"] = function() return os.date("%Y-%m-%d") end,
-            ["date:dddd"] = function() return os.date("%A") end,
-            ["date:-1d:YYYY-MM-DD"] = function() return os.date("%Y-%m-%d", os.time() - 86400) end,
-            ["date:+1d:YYYY-MM-DD"] = function() return os.date("%Y-%m-%d", os.time() + 86400) end,
+            -- NOTE: For daily notes (e.g. `:Obsidian tomorrow`) the note filename/id can be
+            -- tomorrow but `os.date()` would still render *today*. Derive dates from the
+            -- template context's target note instead.
+            ["date:YYYY-MM-DD"] = function(ctx)
+              local function parse_ymd(s)
+                if not s then
+                  return nil
+                end
+                local y, m, d = tostring(s):match("^(%d%d%d%d)%-(%d%d)%-(%d%d)")
+                if not y then
+                  return nil
+                end
+                return { year = tonumber(y), month = tonumber(m), day = tonumber(d), hour = 12 }
+              end
+
+              local t = ctx and ctx.partial_note and parse_ymd(ctx.partial_note.id) or nil
+              if not t and ctx and ctx.partial_note and ctx.partial_note.path then
+                local stem = ctx.partial_note.path.stem
+                t = parse_ymd(stem)
+              end
+
+              if not t then
+                return os.date("%Y-%m-%d")
+              end
+              return os.date("%Y-%m-%d", os.time(t))
+            end,
+            ["date:dddd"] = function(ctx)
+              local function parse_ymd(s)
+                if not s then
+                  return nil
+                end
+                local y, m, d = tostring(s):match("^(%d%d%d%d)%-(%d%d)%-(%d%d)")
+                if not y then
+                  return nil
+                end
+                return { year = tonumber(y), month = tonumber(m), day = tonumber(d), hour = 12 }
+              end
+
+              local t = ctx and ctx.partial_note and parse_ymd(ctx.partial_note.id) or nil
+              if not t and ctx and ctx.partial_note and ctx.partial_note.path then
+                local stem = ctx.partial_note.path.stem
+                t = parse_ymd(stem)
+              end
+
+              if not t then
+                return os.date("%A")
+              end
+              return os.date("%A", os.time(t))
+            end,
+            ["date:-1d:YYYY-MM-DD"] = function(ctx)
+              local function parse_ymd(s)
+                if not s then
+                  return nil
+                end
+                local y, m, d = tostring(s):match("^(%d%d%d%d)%-(%d%d)%-(%d%d)")
+                if not y then
+                  return nil
+                end
+                return { year = tonumber(y), month = tonumber(m), day = tonumber(d), hour = 12 }
+              end
+
+              local t = ctx and ctx.partial_note and parse_ymd(ctx.partial_note.id) or nil
+              if not t and ctx and ctx.partial_note and ctx.partial_note.path then
+                local stem = ctx.partial_note.path.stem
+                t = parse_ymd(stem)
+              end
+
+              if not t then
+                return os.date("%Y-%m-%d", os.time() - 86400)
+              end
+              t.day = t.day - 1
+              return os.date("%Y-%m-%d", os.time(t))
+            end,
+            ["date:+1d:YYYY-MM-DD"] = function(ctx)
+              local function parse_ymd(s)
+                if not s then
+                  return nil
+                end
+                local y, m, d = tostring(s):match("^(%d%d%d%d)%-(%d%d)%-(%d%d)")
+                if not y then
+                  return nil
+                end
+                return { year = tonumber(y), month = tonumber(m), day = tonumber(d), hour = 12 }
+              end
+
+              local t = ctx and ctx.partial_note and parse_ymd(ctx.partial_note.id) or nil
+              if not t and ctx and ctx.partial_note and ctx.partial_note.path then
+                local stem = ctx.partial_note.path.stem
+                t = parse_ymd(stem)
+              end
+
+              if not t then
+                return os.date("%Y-%m-%d", os.time() + 86400)
+              end
+              t.day = t.day + 1
+              return os.date("%Y-%m-%d", os.time(t))
+            end,
           },
         },
         ui = {
@@ -1043,13 +1164,82 @@ return {
         map("n", "<leader>tl", "<cmd>Obsidian follow_link<cr>", { desc = "Follow link under cursor" })
         map("n", "<leader>to", "<cmd>Obsidian open<cr>", { desc = "Open in Obsidian app" })
 
+        -- Writes into: - [<marker>] ...
+        -- If "- [ ]" is absent, creates it (or converts "- item" -> "- [ ] item").
+        local function set_task_marker(marker)
+          local line = vim.api.nvim_get_current_line()
+          local indent, _state, rest = line:match("^(%s*)%-%s*%[([ x/<f])%]%s*(.*)$")
+          if indent then
+            vim.api.nvim_set_current_line(("%s- [%s] %s"):format(indent, marker, rest))
+            return
+          end
+
+          local b_indent, b_rest = line:match("^(%s*)%-%s+(.*)$")
+          if b_indent then
+            vim.api.nvim_set_current_line(("%s- [%s] %s"):format(b_indent, marker, b_rest))
+            return
+          end
+
+          local i = line:match("^(%s*)") or ""
+          local content = line:sub(#i + 1)
+          vim.api.nvim_set_current_line(("%s- [%s] %s"):format(i, marker, content))
+        end
+
+        -- Nicer picker with fuzzy search (no cmp/cmdline tweaks).
         map("n", "<leader>ta", function()
-          local line = "- [ ] #inbox "
-          local row = vim.api.nvim_win_get_cursor(0)[1]
-          vim.api.nvim_buf_set_lines(0, row, row, true, { line })
-          vim.api.nvim_win_set_cursor(0, { row + 1, 0 })
-          vim.cmd("normal! $")
-        end, { desc = "Insert task below cursor" })
+          local items = {
+            { key = "space", label = "space (empty)  -> - [ ]", marker = " " },
+            { key = "<",     label = "< (in progress) -> - [<]", marker = "<" },
+            { key = "/",     label = "/ (partial)    -> - [/]", marker = "/" },
+            { key = "x",     label = "x (done)       -> - [x]", marker = "x" },
+            { key = "f",     label = "f (flagged)    -> - [f]", marker = "f" },
+          }
+
+          local function apply(choice)
+            if not choice then
+              return
+            end
+            local marker = choice.marker
+            if not marker:match("^[ x/<f]$") then
+              vim.notify(("Invalid task marker: %q"):format(tostring(marker)), vim.log.levels.WARN)
+              return
+            end
+            set_task_marker(marker)
+          end
+
+          local ok_fzf, fzf = pcall(require, "fzf-lua")
+          if ok_fzf then
+            local lines = {}
+            local line_to_choice = {}
+            for _, it in ipairs(items) do
+              -- Include key + label to make fuzzy matching easy.
+              local l = ("%s  %s"):format(it.key, it.label)
+              table.insert(lines, l)
+              line_to_choice[l] = it
+            end
+
+            fzf.fzf_exec(lines, {
+              prompt = "Task marker> ",
+              -- Fixed size popup (rows/cols) to keep it compact.
+              winopts = { height = 8, width = 45 },
+              actions = {
+                ["default"] = function(selected)
+                  local picked = selected and selected[1]
+                  apply(line_to_choice[picked])
+                end,
+              },
+            })
+            return
+          end
+
+          -- Fallback: builtin UI select (no fuzzy search unless you have a UI plugin).
+          vim.ui.select(items, {
+            prompt = "Task marker",
+            format_item = function(it)
+              return it.label
+            end,
+          }, apply)
+        end, { desc = "Task: set marker in checkbox" })
 
         -- Tasks plugin priorities (append at end of line).
         map("n", "<leader>t1", "A 🔺<Esc>", { desc = "Task: highest priority" })
@@ -1058,6 +1248,21 @@ return {
         map("n", "<leader>t4", "A 🔽<Esc>", { desc = "Task: low priority" })
         map("n", "<leader>t5", "A ⏬<Esc>", { desc = "Task: lowest priority" })
       end
+
+      -- Obsidian.nvim sets a buffer-local <CR> mapping (smart_action) for markdown notes,
+      -- which overrides the global pounce <CR> mapping. Restore pounce on <CR> inside
+      -- Obsidian notes so "jump on Enter" keeps working.
+      vim.api.nvim_create_autocmd("User", {
+        group = vim.api.nvim_create_augroup("obsidian_restore_enter", { clear = true }),
+        pattern = "ObsidianNoteEnter",
+        callback = function(ev)
+          local ok, pounce = pcall(require, "pounce")
+          if not ok then
+            return
+          end
+          vim.keymap.set("n", "<CR>", pounce.pounce, { buffer = ev.buf, desc = "Fuzzy hop with pounce" })
+        end,
+      })
 
       -- Make `:Obsidian dailies` show newest first (reverse order).
       do

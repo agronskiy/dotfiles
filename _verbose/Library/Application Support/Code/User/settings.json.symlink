@@ -362,6 +362,7 @@
     "workbench.editor.enablePreviewFromQuickOpen": true,
     "workbench.editor.enablePreviewFromCodeNavigation": true,
     "python.languageServer": "Pylance",
+    "python.analysis.strictDictionaryInference": true,
     "[cpp]": {
         "editor.defaultFormatter": "xaver.clang-format"
     },
