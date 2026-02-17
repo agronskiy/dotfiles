@@ -1027,6 +1027,10 @@ return {
     "obsidian-nvim/obsidian.nvim",
     version = "*",
     dependencies = { "nvim-lua/plenary.nvim" },
+    -- Only load when the workspace directory actually exists on this machine.
+    cond = function()
+      return vim.fn.isdirectory("/home/agronskiy/obsidian/Main") == 1
+    end,
     event = "VeryLazy",
     config = function()
       require("obsidian").setup({
@@ -1188,11 +1192,11 @@ return {
         -- Nicer picker with fuzzy search (no cmp/cmdline tweaks).
         map("n", "<leader>ta", function()
           local items = {
-            { key = "space", label = "space (empty)  -> - [ ]", marker = " " },
+            { key = "space", label = "space (empty)  -> - [ ]",  marker = " " },
             { key = "<",     label = "< (in progress) -> - [<]", marker = "<" },
-            { key = "/",     label = "/ (partial)    -> - [/]", marker = "/" },
-            { key = "x",     label = "x (done)       -> - [x]", marker = "x" },
-            { key = "f",     label = "f (flagged)    -> - [f]", marker = "f" },
+            { key = "/",     label = "/ (partial)    -> - [/]",  marker = "/" },
+            { key = "x",     label = "x (done)       -> - [x]",  marker = "x" },
+            { key = "f",     label = "f (flagged)    -> - [f]",  marker = "f" },
           }
 
           local function apply(choice)
@@ -1699,6 +1703,19 @@ return {
   {
     "sindrets/diffview.nvim",
     event = "VeryLazy",
-    opts = {}
+    opts = {},
+    keys = {
+      {
+        "<leader>dvo",
+        function()
+          local main = vim.fn.system("git rev-parse --verify main 2>/dev/null"):find("%S") and "origin/main" or
+              "origin/master"
+          vim.cmd("DiffviewOpen " .. main .. "..HEAD")
+        end,
+        desc = "Diffview Open (vs main/master)",
+      },
+      { "<leader>dvv", "<cmd>DiffviewOpen<CR>",  desc = "Diffview Open (working tree)" },
+      { "<leader>dvc", "<cmd>DiffviewClose<CR>", desc = "Diffview Close" },
+    },
   }
 }

@@ -58,7 +58,7 @@
   "playground": { "branch": "master", "commit": "ba48c6a62a280eefb7c85725b0915e021a1a0749" },
   "plenary.nvim": { "branch": "master", "commit": "3707cdb1e43f5cea73afb6037e6494e7ce847a66" },
   "pounce.nvim": { "branch": "master", "commit": "2e36399ac09b517770c459f1a123e6b4b4c1c171" },
-  "smart-splits.nvim": { "branch": "master", "commit": "bfb5e63bd4639439b48815f46636dbd52b19b1bd" },
+  "smart-splits.nvim": { "branch": "master", "commit": "b9d563ea52c4926a4d91e5e795c68bb8f89f8ba0" },
   "telescope-vim-bookmarks.nvim": { "branch": "main", "commit": "774b1d951f5450825d6fa86ed89f9dc33b1a4bdb" },
   "toggleterm.nvim": { "branch": "main", "commit": "e76134e682c1a866e3dfcdaeb691eb7b01068668" },
   "vim-bookmarks": { "branch": "master", "commit": "9cc5fa7ecc23b052bd524d07c85356c64b92aeef" },
