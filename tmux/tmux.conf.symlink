@@ -16,8 +16,8 @@ set-option -g prefix C-Space
 bind-key C-Space send-prefix
 
 # Get the colors work
-set -g default-terminal "screen-256color"
-set -ga terminal-overrides ",xterm-256color:Tc"
+set -g default-terminal "xterm-256color"
+set -ga terminal-overrides ",xterm*:Tc"
 
 # List of plugins
 set -g @plugin 'tmux-plugins/tpm'
@@ -134,10 +134,8 @@ bind C-f resize-pane -Z
 # For better visibility of the active pane
 # NOTE: https://github.com/tmux/tmux/wiki/FAQ#how-do-i-use-rgb-colour
 set -as terminal-features ",gnome*:RGB"
-set -g window-style 'bg=#282828' # closest to 236
-set -g window-active-style 'bg=colour234'
-set-window-option -g pane-border-style 'fg=colour240,bg=#282828'
-set-window-option -g pane-active-border-style 'fg=colour248,bg=colour234'
+set-window-option -g pane-border-style 'fg=colour240'
+set-window-option -g pane-active-border-style 'fg=colour248'
 
 # Quick switch to window using fzf:
 unbind f
