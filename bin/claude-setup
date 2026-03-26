@@ -1,0 +1,154 @@
+#!/usr/bin/env python3
+"""claude-setup: wire Claude Code config from dotfiles into ~/.claude/
+
+Usage: claude-setup [--status]
+"""
+
+import json
+import os
+import sys
+from pathlib import Path
+
+# ---------------------------------------------------------------------------
+# Colors
+# ---------------------------------------------------------------------------
+RESET  = "\033[0m"
+BOLD   = "\033[1m"
+RED    = "\033[1;31m"
+GREEN  = "\033[1;32m"
+YELLOW = "\033[1;33m"
+CYAN   = "\033[1;36m"
+
+def ok(msg):   print(f"{GREEN}✓{RESET} {msg}")
+def warn(msg): print(f"{YELLOW}⚠{RESET} {msg}")
+def err(msg):  print(f"{RED}✗{RESET} {msg}", file=sys.stderr)
+def bold(s):   return f"{BOLD}{s}{RESET}"
+
+# ---------------------------------------------------------------------------
+# Paths
+# ---------------------------------------------------------------------------
+HOME           = Path.home()
+DOTFILES       = Path(os.environ.get("DOTFILES", HOME / ".dotfiles"))
+DOTFILES_LOCAL = HOME / ".dotfiles-local"
+CLAUDE_DIR     = HOME / ".claude"
+SKILLS_DIR     = CLAUDE_DIR / "skills"
+
+# ---------------------------------------------------------------------------
+# --status
+# ---------------------------------------------------------------------------
+def cmd_status():
+    print(bold("Global CLAUDE.md:"))
+    claude_md = CLAUDE_DIR / "CLAUDE.md"
+    expected  = DOTFILES / ".claude" / "CLAUDE.md"
+    if claude_md.is_symlink():
+        target = Path(os.readlink(claude_md))
+        if target == expected:
+            print(f"  {claude_md} → {target}  {GREEN}[public]{RESET}")
+        else:
+            print(f"  {claude_md} → {target}  {YELLOW}[other symlink]{RESET}")
+    elif claude_md.exists():
+        print(f"  {claude_md}  {YELLOW}[direct file, not symlinked]{RESET}")
+    else:
+        print(f"  {YELLOW}(not set){RESET}")
+
+    print()
+    print(bold("Skills:"))
+    SKILLS_DIR.mkdir(parents=True, exist_ok=True)
+    pub_prefix   = DOTFILES / ".claude" / "skills"
+    local_prefix = DOTFILES_LOCAL / ".claude" / "skills"
+
+    for skill in sorted(SKILLS_DIR.iterdir()):
+        if not skill.is_dir():
+            continue
+        name = skill.name
+        if skill.is_symlink():
+            target = Path(os.readlink(skill))
+            if str(target).startswith(str(pub_prefix)):
+                tag = f"{GREEN}[public]{RESET}"
+            elif str(target).startswith(str(local_prefix)):
+                tag = f"{CYAN}[local]{RESET}"
+            else:
+                tag = f"{YELLOW}[other]{RESET}"
+            print(f"  {bold(name)}  →  {target}  {tag}")
+        else:
+            print(f"  {bold(name)}  {YELLOW}[direct — not tracked in dotfiles]{RESET}")
+
+# ---------------------------------------------------------------------------
+# Idempotent symlink helper
+# ---------------------------------------------------------------------------
+def ensure_symlink(src: Path, dst: Path, label: str):
+    """Create dst → src symlink if not already correct."""
+    if dst.is_symlink() and Path(os.readlink(dst)) == src:
+        ok(f"{label} already linked")
+        return
+    dst.unlink(missing_ok=True)
+    dst.symlink_to(src)
+    ok(f"Linked {label} → {src}")
+
+# ---------------------------------------------------------------------------
+# Setup
+# ---------------------------------------------------------------------------
+def cmd_setup():
+    print(bold("Setting up Claude config..."))
+    CLAUDE_DIR.mkdir(parents=True, exist_ok=True)
+    SKILLS_DIR.mkdir(parents=True, exist_ok=True)
+
+    # 1. CLAUDE.md
+    src = DOTFILES / ".claude" / "CLAUDE.md"
+    if src.exists():
+        ensure_symlink(src, CLAUDE_DIR / "CLAUDE.md", "CLAUDE.md")
+
+    # 2. Skills from public dotfiles
+    _link_skills(DOTFILES / ".claude" / "skills", "public")
+
+    # 3. Skills from local dotfiles
+    _link_skills(DOTFILES_LOCAL / ".claude" / "skills", "local")
+
+    # 4. Merge settings.json from local dotfiles
+    local_settings = DOTFILES_LOCAL / ".claude" / "settings.json"
+    if local_settings.exists():
+        _merge_settings(local_settings)
+
+    print(f"{GREEN}Done.{RESET} Run 'claude-setup --status' to verify.")
+
+
+def _link_skills(skills_src: Path, label: str):
+    if not skills_src.is_dir():
+        return
+    for skill_dir in sorted(skills_src.iterdir()):
+        if not skill_dir.is_dir():
+            continue
+        src = skill_dir.resolve()
+        dst = SKILLS_DIR / skill_dir.name
+        ensure_symlink(src, dst, f"Skill '{skill_dir.name}' [{label}]")
+
+
+def _merge_settings(local_settings: Path):
+    global_settings = CLAUDE_DIR / "settings.json"
+    try:
+        base = json.loads(global_settings.read_text()) if global_settings.exists() else {}
+        patch = json.loads(local_settings.read_text())
+        merged = _deep_merge(base, patch)
+        global_settings.write_text(json.dumps(merged, indent=2) + "\n")
+        ok(f"Merged local settings.json into {global_settings}")
+    except json.JSONDecodeError as e:
+        warn(f"settings.json merge skipped — JSON error: {e}")
+
+
+def _deep_merge(base: dict, patch: dict) -> dict:
+    result = dict(base)
+    for key, value in patch.items():
+        if key in result and isinstance(result[key], dict) and isinstance(value, dict):
+            result[key] = _deep_merge(result[key], value)
+        else:
+            result[key] = value
+    return result
+
+# ---------------------------------------------------------------------------
+# Entry point
+# ---------------------------------------------------------------------------
+if __name__ == "__main__":
+    if len(sys.argv) > 1 and sys.argv[1] == "--status":
+        cmd_status()
+    else:
+        cmd_setup()
