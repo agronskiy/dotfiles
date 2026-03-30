@@ -64,21 +64,26 @@ function hh()
 # New version - widget bound to Ctrl-R
 # NOTE(agronskiy): this is taken and enhanced from
 # https://github.com/junegunn/fzf/blob/master/shell/key-bindings.zsh
+# Uses __fzf_defaults (from fzf --zsh) for proper FZF_DEFAULT_OPTS construction,
+# and passes --preview as a direct CLI argument to avoid complex quoting in
+# FZF_DEFAULT_OPTS (which is parsed by go-shellwords and serialized through
+# fzf-tmux's printf %q pipeline).
 __fzf-history-widget() {
   local selected num
   setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2> /dev/null
   # Sed's below strip history ordinal information such as `12345* ` and then replace `\n` with
   # newlines, and then `\t` with two spaces
-  sed_preview='s#^[[:space:]]\{0,\}\([^[:space:]]\{1,\}[[:space:]]\{1,\}\)\{1\}#  #;s#\\n#\
+  local sed_preview='s#^[[:space:]]\{0,\}\([^[:space:]]\{1,\}[[:space:]]\{1,\}\)\{1\}#  #;s#\\n#\
     #g;s#\\t#  #g'
 
   # Bat below highlights the command with bash syntax.
   selected=( $(fc -rl 1 | awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, "", cmd); if (!seen[cmd]++) print $0 }' |
-    FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --scheme=history
-    --preview-window down:15:wrap --preview='printf '\''%s'\'' {} |
-    sed '\''$sed_preview'\'' |
-    bat --color=always --theme='\''Visual Studio Dark+'\'' --plain -l '\''Bourne Again Shell (bash)'\'' '
-    ${FZF_CTRL_R_OPTS-} --query=${(qqq)LBUFFER} +m" $(__fzfcmd)) )
+    FZF_DEFAULT_OPTS=$(__fzf_defaults "" "-n2..,.. --scheme=history --bind=ctrl-r:toggle-sort ${FZF_CTRL_R_OPTS-} --query=${(qqq)LBUFFER} +m") \
+    FZF_DEFAULT_OPTS_FILE='' \
+    $(__fzfcmd) \
+      --preview-window down:15:wrap \
+      --preview "printf '%s' {} | sed '$sed_preview' | bat --color=always --theme='Visual Studio Dark+' --plain -l 'Bourne Again Shell (bash)'" \
+  ) )
   local ret=$?
   if [ -n "$selected" ]; then
     num=$selected[1]
@@ -89,6 +94,8 @@ __fzf-history-widget() {
   zle reset-prompt
   return $ret
 }
-zle     -N   __fzf-history-widget
-bindkey '^R' __fzf-history-widget
+zle     -N            __fzf-history-widget
+bindkey -M emacs '^R' __fzf-history-widget
+bindkey -M vicmd '^R' __fzf-history-widget
+bindkey -M viins '^R' __fzf-history-widget
 
