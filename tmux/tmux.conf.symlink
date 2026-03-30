@@ -134,8 +134,10 @@ bind C-f resize-pane -Z
 # For better visibility of the active pane
 # NOTE: https://github.com/tmux/tmux/wiki/FAQ#how-do-i-use-rgb-colour
 set -as terminal-features ",gnome*:RGB"
-set-window-option -g pane-border-style 'fg=colour240'
-set-window-option -g pane-active-border-style 'fg=colour248'
+set -g window-style 'bg=#282828'
+set -g window-active-style 'bg=colour234'
+set-window-option -g pane-border-style 'fg=colour240,bg=#282828'
+set-window-option -g pane-active-border-style 'fg=colour248,bg=colour234'
 
 # Quick switch to window using fzf:
 unbind f
