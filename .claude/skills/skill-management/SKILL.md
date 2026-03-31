@@ -1,6 +1,6 @@
 ---
 name: skill-management
-description: Use this skill when the user asks to create a new skill, add a Claude capability, scaffold a new Claude tool, or wants to add a new agentic workflow. Trigger phrases include "create a skill", "add a skill", "new skill", "add a capability", "make a skill".
+description: Use this skill when the user asks to create or update a skill, add a Claude capability, scaffold a new Claude tool, or wants to add a new agentic workflow. Trigger phrases include "create a skill", "add a skill", "new skill", "add a capability", "make a skill", "update a skill", "update the skill", "modify a skill", "edit a skill".
 version: 1.0.0
 ---
 
