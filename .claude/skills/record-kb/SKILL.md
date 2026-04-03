@@ -10,4 +10,4 @@ Routes knowledge snippets into the right skill's `references/` files.
 
 ## Instructions
 
-See `references/workflow.md` for the full workflow.
+Follow the workflow in `references/workflow.md`.

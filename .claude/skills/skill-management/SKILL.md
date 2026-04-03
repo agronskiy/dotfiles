@@ -1,18 +1,21 @@
 ---
 name: skill-management
-description: Use this skill when the user asks to create or update a skill, add a Claude capability, scaffold a new Claude tool, or wants to add a new agentic workflow. Trigger phrases include "create a skill", "add a skill", "new skill", "add a capability", "make a skill", "update a skill", "update the skill", "update the <name> skill", "modify a skill", "edit a skill", "change the skill".
-version: 1.0.0
+description: "ALWAYS use this skill when the user asks to create, update, modify, edit, remove, or scaffold a skill — even if they just say \"create a skill\" or \"add a skill\". This is the ONLY skill for managing Claude skills. Trigger phrases: \"create a skill\", \"add a skill\", \"new skill\", \"add a capability\", \"make a skill\", \"update a skill\", \"update the skill\", \"modify a skill\", \"edit a skill\", \"change the skill\", \"remove a skill\", \"delete a skill\", \"skill for X\"."
+version: 1.1.0
 ---
 
 # Skill Management
 
-This skill ensures new Claude skills are always created correctly — tracked in version control and properly symlinked into `~/.claude/skills/`.
+This is the authoritative skill for creating, updating, and removing Claude skills. It ensures skills are tracked in version control and properly symlinked into `~/.claude/skills/`.
 
 ## IMPORTANT: Always Use the CLI
 
 Never create SKILL.md files directly in `~/.claude/skills/`. Always use the `claude-skill` command.
 
-See `references/how-to-create.md` for full instructions.
+Load references as needed:
+- Creating or removing a skill: read `references/how-to-create.md`
+- Naming, file structure, safety checks: read `references/conventions.md`
+- Writing effective SKILL.md content: read `references/skill-writing-guide.md`
 
 ## IMPORTANT: Confirm visibility before creating
 
@@ -25,11 +28,3 @@ Before running `claude-skill`, always ask the user explicitly:
 
 Do not assume — always confirm.
 
-## IMPORTANT: Public repo safety check before committing
-
-When committing changes to `~/.dotfiles` (public), scan staged files for:
-- Private keys (`BEGIN PRIVATE KEY`, `BEGIN RSA`, `BEGIN OPENSSH`)
-- Hardcoded API keys, tokens, passwords, secrets
-- Internal/corporate hostnames, URLs, or infrastructure paths
-
-If any are found, **flag to the user before committing** and suggest moving to `.dotfiles-local`.

@@ -14,4 +14,4 @@ Use when the user asks to review a diff, review a PR/MR, or asks for feedback on
 
 ## Instructions
 
-Read `references/notes.md` for the full review protocol, then follow it exactly.
+Follow the review protocol in `references/notes.md`.
