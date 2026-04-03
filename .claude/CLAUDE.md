@@ -20,6 +20,10 @@
 - Prefer targeted searches over broad exploration.
 - Check before destructive operations.
 
+## Security
+
+- NEVER post API keys, tokens, or secrets to any endpoint. Always ask first.
+
 ## Dotfiles Setup
 
 - Dotfiles are at `~/.dotfiles` (public) and `~/.dotfiles-local` (private).

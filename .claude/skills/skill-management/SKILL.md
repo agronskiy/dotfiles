@@ -1,6 +1,6 @@
 ---
 name: skill-management
-description: Use this skill when the user asks to create or update a skill, add a Claude capability, scaffold a new Claude tool, or wants to add a new agentic workflow. Trigger phrases include "create a skill", "add a skill", "new skill", "add a capability", "make a skill", "update a skill", "update the skill", "modify a skill", "edit a skill".
+description: Use this skill when the user asks to create or update a skill, add a Claude capability, scaffold a new Claude tool, or wants to add a new agentic workflow. Trigger phrases include "create a skill", "add a skill", "new skill", "add a capability", "make a skill", "update a skill", "update the skill", "update the <name> skill", "modify a skill", "edit a skill", "change the skill".
 version: 1.0.0
 ---
 
@@ -24,3 +24,12 @@ Before running `claude-skill`, always ask the user explicitly:
 - Public → use `claude-skill <name>` (no flag)
 
 Do not assume — always confirm.
+
+## IMPORTANT: Public repo safety check before committing
+
+When committing changes to `~/.dotfiles` (public), scan staged files for:
+- Private keys (`BEGIN PRIVATE KEY`, `BEGIN RSA`, `BEGIN OPENSSH`)
+- Hardcoded API keys, tokens, passwords, secrets
+- Internal/corporate hostnames, URLs, or infrastructure paths
+
+If any are found, **flag to the user before committing** and suggest moving to `.dotfiles-local`.

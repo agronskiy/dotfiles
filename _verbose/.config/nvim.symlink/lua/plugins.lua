@@ -1663,32 +1663,7 @@ return {
     },
     event = "User FileOpened",
     config = function()
-      require("codecompanion").setup({
-        strategies = {
-          chat = {
-            adapter = "openai",
-          },
-          inline = {
-            adapter = "openai",
-          },
-        },
-        adapters = {
-          openai = function()
-            return require("codecompanion.adapters").extend("openai", {
-              url = "https://integrate.api.nvidia.com/v1/chat/completions",
-              env = {
-                api_key = vim.env.NGC_API_TOKEN_NV_DEV,
-              },
-              schema = {
-                model = {
-                  -- default = "nvdev/nvidia/llama-3.1-nemotron-70b-instruct",
-                  default = "nvdev/meta/llama-3.3-70b-instruct",
-                },
-              },
-            })
-          end,
-        },
-      })
+      require("codecompanion").setup({})
       vim.keymap.set("n", "<leader>lcc", "<cmd>CodeCompanionChat Toggle<CR>", { desc = "CodeCompanion Chat" })
       vim.keymap.set("n", "<leader>lca", "<cmd>CodeCompanionActions<CR>", { desc = "CodeCompanion Actions" })
       vim.keymap.set(

@@ -1,6 +1,6 @@
 ---
 name: record-kb
-description: Use when the user asks to record, save, note, or store knowledge about a topic for future reference. Trigger phrases include "record this", "save this knowledge", "note this", "add this to kb", "remember this for later", "store this info", "record knowledge about".
+description: Use when the user asks to record, save, note, or store knowledge about a topic for future reference. Trigger phrases include "record this", "save this knowledge", "note this", "add this to kb", "create kb skill", "remember this for later", "store this info", "record knowledge about".
 version: 1.0.0
 ---
 
