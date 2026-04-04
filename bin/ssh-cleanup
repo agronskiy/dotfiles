@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+YASLI_DIR=${YASLI_DIR:-$HOME/.yasli}
+source $YASLI_DIR/logging.inc.sh
+
+SOCKET_DIR="$HOME/.ssh/sockets"
+
+if [ ! -d "$SOCKET_DIR" ]; then
+    log_info "No socket directory at $SOCKET_DIR"
+    exit 0
+fi
+
+cleaned=0
+for sock in "$SOCKET_DIR"/*; do
+    [ -S "$sock" ] || continue
+    if ssh -o ControlPath="$sock" -O check "" 2>/dev/null; then
+        log_info "Alive: $(basename "$sock")"
+    else
+        log_info "Removing stale: $(basename "$sock")"
+        rm -f "$sock"
+        ((cleaned++))
+    fi
+done
+
+if [ "$cleaned" -eq 0 ]; then
+    log_success "No stale sockets found"
+else
+    log_success "Cleaned $cleaned stale socket(s)"
+fi
