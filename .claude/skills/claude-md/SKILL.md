@@ -1,6 +1,6 @@
 ---
 name: claude-md
-description: Use when the user asks to edit, update, or manage their global CLAUDE.md preferences, or asks how CLAUDE.md is structured. Trigger phrases include "update CLAUDE.md", "edit my preferences", "change my global claude config", "add to CLAUDE.md".
+description: ALWAYS use when the user asks to edit, update, or manage their global CLAUDE.md preferences, or asks how CLAUDE.md is structured. Triggering when asking to add, update, show the `claude.md` or system preferences
 version: 1.0.0
 ---
 

@@ -16,6 +16,7 @@
 
 ## Tool Usage
 
+- **Always invoke a matching skill first.** If any available skill matches the task, use the Skill tool before resorting to manual tool calls or exploration. Skills encode tested workflows — prefer them over ad-hoc approaches.
 - Use dedicated tools (Read, Grep, Glob, Edit) over Bash equivalents.
 - Prefer targeted searches over broad exploration.
 - Check before destructive operations.
