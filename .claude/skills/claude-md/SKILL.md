@@ -17,4 +17,8 @@ Always ask: "Should this go in **public** or **local** CLAUDE.md?"
 - **Public** (fine in a public repo): edit `~/.dotfiles/.claude/CLAUDE.md`
 - **Local** (internal tools, private context): edit `~/.dotfiles-local/.claude/CLAUDE.md`
 
-If the user needs details on the merge process, read `references/structure.md`.
+# Always regenerate merged output
+claude-setup
+
+# Verify
+claude-setup --status

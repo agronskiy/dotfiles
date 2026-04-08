@@ -19,6 +19,7 @@
 - Use dedicated tools (Read, Grep, Glob, Edit) over Bash equivalents.
 - Prefer targeted searches over broad exploration.
 - Check before destructive operations.
+- When asked to copy output to clipboard, pipe it through the `yy` tool (e.g. `echo "content" | yy > /dev/null`).
 
 ## Security
 

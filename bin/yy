@@ -14,7 +14,42 @@ rm "$tmpfile"
 # - OSC sequences: \x1b] followed by parameters and BEL or ST
 # - Other escape sequences: \x1b followed by various characters
 cat >&3
-printf "\033]52;c;%s\a" "$(cat <&4 | sed -E 's/\x1b\[[0-9;]*[a-zA-Z]//g; s/\x1b\][^[:cntrl:]]*(\x07|\x1b\\)//g; s/\x1b[()\[][0-9;]*//g' | base64 -w0)"
+osc52=$(printf "\033]52;c;%s\a" "$(cat <&4 | sed -E 's/\x1b\[[0-9;]*[a-zA-Z]//g; s/\x1b\][^[:cntrl:]]*(\x07|\x1b\\)//g; s/\x1b[()\[][0-9;]*//g' | base64 -w0)")
+
+# When inside a tmux popup (nested client spawned by the tmux server), OSC52
+# written to the popup PTY never reaches the real terminal. Detect this by
+# checking whether the tmux server PID is in our client's process ancestry,
+# then write directly to an outer client's TTY instead.
+if [ -n "${TMUX:-}" ]; then
+  # Always write to the real terminal TTY, not stdout — this works from panes,
+  # popups, run-shell, hooks, etc. In a popup (client spawned by the tmux
+  # server), find an outer client's TTY instead.
+  _tty=$(tmux display-message -p '#{client_tty}')
+  _server_pid=$(tmux display-message -p '#{pid}')
+  _client_pid=$(tmux display-message -p '#{client_pid}')
+  _pid=$_client_pid
+  for _ in 1 2 3 4 5; do
+    _pid=$(ps -o ppid= -p "$_pid" 2>/dev/null | tr -d ' ')
+    [ -z "$_pid" ] || [ "$_pid" -le 1 ] 2>/dev/null && break
+    if [ "$_pid" = "$_server_pid" ]; then
+      # Current client is spawned by tmux (popup) — find a real terminal client
+      while IFS=' ' read -r _t _cpid; do
+        _p=$_cpid
+        _nested=false
+        for _ in 1 2 3 4 5; do
+          _p=$(ps -o ppid= -p "$_p" 2>/dev/null | tr -d ' ')
+          [ -z "$_p" ] || [ "$_p" -le 1 ] 2>/dev/null && break
+          if [ "$_p" = "$_server_pid" ]; then _nested=true; break; fi
+        done
+        if ! $_nested; then _tty=$_t; break; fi
+      done < <(tmux list-clients -F '#{client_tty} #{client_pid}')
+      break
+    fi
+  done
+  printf '%s' "$osc52" > "$_tty"
+else
+  printf '%s' "$osc52" > /dev/tty
+fi
 
 # Output original input with colors preserved
 cat <&5

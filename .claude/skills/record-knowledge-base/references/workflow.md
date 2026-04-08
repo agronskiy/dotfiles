@@ -1,4 +1,4 @@
-# record-kb — Workflow
+# record-knowledge-base — Workflow
 
 Store a knowledge snippet into the right skill's `references/` files.
 
