@@ -1,6 +1,6 @@
 ---
 name: claude-md
-description: ALWAYS use when the user asks to edit, update, or manage their global CLAUDE.md preferences, or asks how CLAUDE.md is structured. Triggering when asking to add, update, show the `claude.md` or system preferences
+description: ALWAYS use when the user asks to edit, update, modify, change, or manage their CLAUDE.md (global, local, public, or private), or asks how CLAUDE.md is structured. Triggering when asking to add, update, modify, append to, show the `claude.md` or system preferences
 version: 1.0.0
 ---
 
