@@ -15,12 +15,21 @@ fi
 cleaned=0
 for sock in "$SOCKET_DIR"/*; do
     [ -S "$sock" ] || continue
-    if ssh -o ControlPath="$sock" -O check "" 2>/dev/null; then
-        log_info "Alive: $(basename "$sock")"
+    name=$(basename "$sock")
+    # ControlPath is ~/.ssh/sockets/%r@%h-%p → "user@host-port"
+    port="${name##*-}"
+    userhost="${name%-*}"
+    # Real liveness probe: after a VPN gateway switch the TCP is half-dead
+    # but `-O check` still reports alive, so a new session hangs until
+    # ServerAliveInterval finally kills it (~3min). A short-timeout probe
+    # catches that case immediately.
+    if timeout 3 ssh -o BatchMode=yes -o ControlPath="$sock" -p "$port" "$userhost" true 2>/dev/null; then
+        log_info "Alive: $name"
     else
-        log_info "Removing stale: $(basename "$sock")"
+        log_info "Removing stale: $name"
+        ssh -o ControlPath="$sock" -O exit "$userhost" 2>/dev/null || true
         rm -f "$sock"
-        ((cleaned++))
+        cleaned=$((cleaned + 1))
     fi
 done
 
