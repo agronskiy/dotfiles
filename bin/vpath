@@ -22,7 +22,7 @@ if [[ "$python_cmd" =~ /bin/python[0-9]*$ ]]; then
 
     # Verify it's actually a venv by checking for activate script, and copy to osc
     if [[ -f "$venv_path/bin/activate" ]]; then
-        echo "$venv_path" | osc
+        echo "$venv_path" | yy
         exit 0
     fi
 fi
