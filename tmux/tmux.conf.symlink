@@ -171,14 +171,16 @@ bind Q confirm-before -p "kill-session #S? (y/n)" kill-session
 
 # Visual stuff
 # Status lines
-set -g status-left ' [#S]  '
+# Persistent per-host color for the session name (hashed from hostname).
+run-shell 'tmux set-option -gq "@host-color" "$($DOTFILES/tmux/host-color.sh)"'
+set -g status-left ' #{?#{E:SSH_CONNECTION},#[fg=colour231#{l:,}bg=colour88] ⇄ #[default] ,}#[fg=colour#{@host-color},bold] [#S]#[default]  '
 set -g status-left-style 'fg=colour25'
 # Sometimes I want a special name of the host, which is accomplished by exporting it from `~/.localrc`
 optional_host="#{?THIS_HOST_PROMPT_NAME,$THIS_HOST_PROMPT_NAME,#H}"
 is_zoomed="#{?window_zoomed_flag, #[bg=colour25#{l:,}fg=colour231] [Z] #[default] , }"
 set -g status-right "#{prefix_highlight}$is_zoomed| #[fg=colour25]$optional_host#[default]#{?TMUX_SSH_SIGN, | [SSH], | %a %Y-%m-%d %H:%M} "
 
-set -g status-left-length 25
+set -g status-left-length 40
 set -g status-right-length 100
 set -g status-style 'bg=colour248 fg=black'
 
@@ -216,6 +218,7 @@ bind-key -T root F12  \
     set key-table off \;\
     set status-style "bg=colour238,fg=colour248" \;\
     set status-left-style "fg=colour248" \;\
+    set status-left " #{?#{E:SSH_CONNECTION},#[fg=colour248#{l:,}bg=colour241] ⇄ #[default] ,}#[fg=colour248] [#S]#[default]  " \;\
     set status-right "#[bg=colour52] [OFF] #[default] | #[fg=colour248]$optional_host#[default]#{?SSH_CONNECTION, | [SSH], | #[fg=colour231]%a %Y-%m-%d %H:%M}#[default] " \;\
     set window-status-current-style "fg=colour248 bg=colour241" \;\
     refresh-client -S
@@ -225,6 +228,7 @@ bind-key -T off F12  \
     set -u key-table \;\
     set -u status-style \;\
     set -u status-left-style \;\
+    set -u status-left \;\
     set -u status-right \;\
     set -u window-status-current-style \;\
     refresh-client -S
