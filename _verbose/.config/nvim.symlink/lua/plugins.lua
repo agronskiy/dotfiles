@@ -1021,6 +1021,47 @@ return {
     end,
     ft = { "markdown" },
   },
+  -- Automatic markdown list continuation (Enter -> new bullet, auto-renumber).
+  -- Loaded lazily on the markdown filetype so it costs nothing at startup.
+  {
+    "gaoDean/autolist.nvim",
+    ft = { "markdown" },
+    config = function()
+      require("autolist").setup()
+
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "markdown",
+        group = vim.api.nvim_create_augroup("autolist_markdown_keys", { clear = true }),
+        callback = function(ev)
+          local opts = { buffer = ev.buf, silent = true }
+
+          -- Insert <CR>: defer to nvim-cmp when an entry is selected (matches the
+          -- global `confirm { select = false }`), otherwise start a new list item.
+          vim.keymap.set("i", "<CR>", function()
+            local ok, cmp = pcall(require, "cmp")
+            if ok and cmp.visible() and cmp.get_selected_entry() then
+              cmp.confirm({ select = false })
+              return
+            end
+            vim.api.nvim_feedkeys(
+              vim.api.nvim_replace_termcodes("<CR><cmd>AutolistNewBullet<CR>", true, false, true),
+              "n",
+              false
+            )
+          end, vim.tbl_extend("force", opts, { desc = "New list item / cmp confirm" }))
+
+          -- Normal-mode o / O also continue the list.
+          vim.keymap.set("n", "o", "o<cmd>AutolistNewBullet<cr>", opts)
+          vim.keymap.set("n", "O", "O<cmd>AutolistNewBulletBefore<cr>", opts)
+
+          -- Renumber after indent / dedent / delete (Tab is left to nvim-cmp).
+          vim.keymap.set("n", ">>", ">><cmd>AutolistRecalculate<cr>", opts)
+          vim.keymap.set("n", "<<", "<<<cmd>AutolistRecalculate<cr>", opts)
+          vim.keymap.set("n", "dd", "dd<cmd>AutolistRecalculate<cr>", opts)
+        end,
+      })
+    end,
+  },
   -- Obsidian plugins
   {
     -- Actively maintained fork.
