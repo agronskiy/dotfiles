@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Map Wacom stylus to a given output, preserving tablet aspect ratio.
+# Usage: wacom-map.sh [OUTPUT]   (default: HDMI-1)
+set -euo pipefail
+
+OUT="${1:-HDMI-1}"
+DEV="Wacom Intuos BT M Pen stylus"
+TABLET_W=21600
+TABLET_H=13500
+
+xsetwacom --list devices | grep -q "$DEV" || { echo "tablet not connected" >&2; exit 0; }
+
+geom=$(xrandr | awk -v o="$OUT" '$1==o && $2=="connected" {for(i=3;i<=NF;i++) if($i ~ /^[0-9]+x[0-9]+\+/) {print $i; exit}}')
+[ -n "$geom" ] || { echo "output $OUT not connected" >&2; exit 1; }
+sw=${geom%%x*}; sh=${geom#*x}; sh=${sh%%+*}
+
+# Crop the tablet so its area matches the screen aspect; avoids stretched strokes.
+h=$(( TABLET_W * sh / sw ))
+if [ "$h" -le "$TABLET_H" ]; then
+  w=$TABLET_W
+else
+  h=$TABLET_H
+  w=$(( TABLET_H * sw / sh ))
+fi
+
+xsetwacom set "$DEV" Area 0 0 "$w" "$h"
+xsetwacom set "$DEV" MapToOutput "$OUT"
+echo "mapped $DEV -> $OUT (${sw}x${sh}), area ${w}x${h}"
