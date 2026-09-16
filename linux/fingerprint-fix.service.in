@@ -1,0 +1,18 @@
+# Template. `fingerprint-fix --install` substitutes @FINGERPRINT_FIX@ with the
+# absolute path of bin/fingerprint-fix and copies this to
+# /etc/systemd/system/fingerprint-fix.service.
+#
+# Two triggers:
+#  - resume from suspend/hibernate (the WantedBy/After pair below)
+#  - USB re-add of the reader (see 99-fingerprint-fix.rules)
+
+[Unit]
+Description=Reset the fingerprint reader if fprintd cannot see it
+After=suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
+
+[Service]
+Type=oneshot
+ExecStart=@FINGERPRINT_FIX@
+
+[Install]
+WantedBy=suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target

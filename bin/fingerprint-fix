@@ -1,0 +1,219 @@
+#!/usr/bin/env bash
+
+# Resets a wedged fingerprint reader.
+#
+# Symptom: the reader is still enumerated on USB (lsusb sees it, descriptors are
+# fine) but its firmware stops answering libfprint's vendor probe, so fprintd
+# reports zero devices and the login screen offers no fingerprint prompt.
+# Typically triggered by a bus power glitch on dock/charger attach/detach, which
+# makes the reader re-enumerate into a bad state.
+#
+# Fix: USBDEVFS_RESET on the device node, then let fprintd re-enumerate.
+#
+# Usage: fingerprint-fix [--force|--status|--install|--uninstall]
+#   (no args)   reset only if fprintd sees no devices while the reader is present
+#   --force     reset unconditionally
+#   --status    report what is seen, change nothing
+#   --install   install the udev rule + resume hook that call this automatically
+#   --uninstall remove them
+#
+# See linux/README.md for the full story.
+
+set -eo pipefail
+
+# The reader is found by vendor id + a vendor-specific (0xff) USB interface,
+# rather than by a single hardcoded vid:pid, so this works on other machines.
+# Vendors that ship laptop fingerprint sensors:
+#   06cb Synaptics   27c6 Goodix    138a Validity   04f3 Elan
+#   147e Upek        08ff AuthenTec 1c7a LighTuning 298d Next Biometrics
+#   10a5 FPC         1491 Futronic  2808 Focal
+FPRINT_USB_VENDORS=${FPRINT_USB_VENDORS:-"06cb 27c6 138a 04f3 147e 08ff 1c7a 298d 10a5 1491 2808"}
+
+# Escape hatch: set to a space-separated "vid:pid" list to pin exact devices and
+# bypass the vendor heuristic entirely.
+FPRINT_USB_IDS=${FPRINT_USB_IDS:-}
+
+# Optional per-machine overrides for either of the two variables above.
+FPRINT_CONF=${FPRINT_CONF:-/etc/fingerprint-fix.conf}
+# shellcheck source=/dev/null
+[ -r "$FPRINT_CONF" ] && . "$FPRINT_CONF"
+
+SELF=$(realpath "${BASH_SOURCE[0]}")
+DOTFILES_LINUX=$(dirname "$(dirname "$SELF")")/linux
+UNIT_NAME=fingerprint-fix.service
+UNIT_PATH=/etc/systemd/system/$UNIT_NAME
+RULE_PATH=/etc/udev/rules.d/99-fingerprint-fix.rules
+STAMP=/run/fingerprint-fix.stamp
+MIN_INTERVAL=30  # seconds; guards against a reset -> re-add -> reset udev loop
+
+log() { echo "fingerprint-fix: $*"; }
+
+# True if the USB device at $1 exposes a vendor-specific interface. Keeps the
+# vendor-id heuristic from matching e.g. a Synaptics HID touchpad.
+has_vendor_interface() {
+    local c
+    for c in "$1"/*:*/bInterfaceClass; do
+        [ -r "$c" ] || continue
+        [ "$(cat "$c")" = "ff" ] && return 0
+    done
+    return 1
+}
+
+device_matches() {
+    local dir=$1 vid=$2 pid=$3
+    if [ -n "$FPRINT_USB_IDS" ]; then
+        case " $FPRINT_USB_IDS " in
+            *" $vid:$pid "*) return 0 ;;
+            *) return 1 ;;
+        esac
+    fi
+    case " $FPRINT_USB_VENDORS " in
+        *" $vid "*) has_vendor_interface "$dir" && return 0 ;;
+    esac
+    return 1
+}
+
+# Echoes "<node> <vid>:<pid>" for the first matching reader, or nothing.
+find_device() {
+    local d vid pid busnum devnum
+    for d in /sys/bus/usb/devices/*; do
+        [ -r "$d/idVendor" ] || continue
+        vid=$(cat "$d/idVendor")
+        pid=$(cat "$d/idProduct")
+        device_matches "$d" "$vid" "$pid" || continue
+        busnum=$(cat "$d/busnum")
+        devnum=$(cat "$d/devnum")
+        printf "/dev/bus/usb/%03d/%03d %s:%s\n" "$busnum" "$devnum" "$vid" "$pid"
+        return 0
+    done
+    return 1
+}
+
+# Number of devices fprintd currently exposes. Prints "unknown" if fprintd or
+# the system bus is not reachable (e.g. very early boot) so callers can bail out.
+fprintd_device_count() {
+    local out
+    out=$(dbus-send --system --print-reply --reply-timeout=10000 \
+            --dest=net.reactivated.Fprint \
+            /net/reactivated/Fprint/Manager \
+            net.reactivated.Fprint.Manager.GetDevices 2>/dev/null) || {
+        echo unknown
+        return
+    }
+    grep -c 'object path' <<<"$out" || true
+}
+
+usb_reset() {
+    python3 - "$1" <<'PY'
+import fcntl, os, sys
+USBDEVFS_RESET = ord('U') << 8 | 20
+fd = os.open(sys.argv[1], os.O_WRONLY)
+try:
+    fcntl.ioctl(fd, USBDEVFS_RESET, 0)
+finally:
+    os.close(fd)
+PY
+}
+
+rate_limited() {
+    # Only enforced where /run is writable, i.e. the root-run automatic paths.
+    local now last
+    now=$(date +%s)
+    if [ -r "$STAMP" ]; then
+        last=$(cat "$STAMP")
+        [ $((now - last)) -lt $MIN_INTERVAL ] && return 0
+    fi
+    echo "$now" > "$STAMP" 2>/dev/null || true
+    return 1
+}
+
+do_reset() {
+    log "resetting reader at $1"
+    usb_reset "$1"
+    sleep 2
+    # fprintd is D-Bus activated and idle-exits; stopping it forces a fresh
+    # libfprint enumeration on the next request.
+    if [ "$(id -u)" = 0 ]; then
+        systemctl stop fprintd.service 2>/dev/null || true
+    else
+        sudo -n systemctl stop fprintd.service 2>/dev/null || true
+    fi
+    log "reader now reports $(fprintd_device_count) fprintd device(s)"
+}
+
+cmd_status() {
+    local found
+    if found=$(find_device); then
+        log "reader present on USB: ${found% *} (${found#* })"
+    else
+        log "no reader found (vendors: $FPRINT_USB_VENDORS${FPRINT_USB_IDS:+, pinned ids: $FPRINT_USB_IDS})"
+    fi
+    log "fprintd reports $(fprintd_device_count) device(s)"
+}
+
+cmd_run() {
+    local force=$1 found count
+    if ! found=$(find_device); then
+        log "reader not on USB, nothing to do"
+        return 0
+    fi
+
+    if [ "$force" != "force" ]; then
+        count=$(fprintd_device_count)
+        if [ "$count" = unknown ]; then
+            log "cannot reach fprintd, skipping"
+            return 0
+        fi
+        if [ "$count" -gt 0 ]; then
+            log "fprintd already sees $count device(s), nothing to do"
+            return 0
+        fi
+        if rate_limited; then
+            log "reset attempted less than ${MIN_INTERVAL}s ago, skipping"
+            return 0
+        fi
+    fi
+
+    do_reset "${found% *}"
+}
+
+cmd_install() {
+    local rule=$DOTFILES_LINUX/99-fingerprint-fix.rules
+    local unit=$DOTFILES_LINUX/fingerprint-fix.service.in
+    [ -r "$rule" ] || { log "missing $rule"; exit 1; }
+    [ -r "$unit" ] || { log "missing $unit"; exit 1; }
+
+    log "installing $UNIT_PATH"
+    sed "s|@FINGERPRINT_FIX@|$SELF|" "$unit" | sudo install -m 0644 /dev/stdin "$UNIT_PATH"
+    log "installing $RULE_PATH"
+    sudo install -m 0644 "$rule" "$RULE_PATH"
+
+    sudo systemctl daemon-reload
+    sudo systemctl enable "$UNIT_NAME"
+    sudo udevadm control --reload-rules
+    # Apply the new rule to the already-plugged reader, so the udev database
+    # picks up SYSTEMD_WANTS without waiting for a physical replug.
+    sudo udevadm trigger --subsystem-match=usb --action=add
+    log "done"
+    cmd_status
+}
+
+cmd_uninstall() {
+    sudo systemctl disable "$UNIT_NAME" 2>/dev/null || true
+    sudo rm -f "$UNIT_PATH" "$RULE_PATH"
+    sudo systemctl daemon-reload
+    sudo udevadm control --reload-rules
+    log "removed"
+}
+
+case "${1:-}" in
+    "")          cmd_run ;;
+    --force)     cmd_run force ;;
+    --status)    cmd_status ;;
+    --install)   cmd_install ;;
+    --uninstall) cmd_uninstall ;;
+    *)
+        sed -n '3,20p' "$SELF" | sed 's/^# \?//'
+        exit 1
+        ;;
+esac

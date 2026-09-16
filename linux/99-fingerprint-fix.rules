@@ -1,0 +1,32 @@
+# Run fingerprint-fix whenever a fingerprint reader (re-)appears on USB, which
+# is what a dock/charger power glitch causes. Matching is by vendor id only --
+# the script does the finer check (vendor-specific interface + fprintd actually
+# being blind) and is a no-op otherwise, so a loose match here is harmless and
+# keeps this portable to a machine with a different reader.
+#
+# Vendors that ship laptop fingerprint sensors. Keep in sync with
+# FPRINT_USB_VENDORS in bin/fingerprint-fix.
+#
+# Installed to /etc/udev/rules.d/ by `fingerprint-fix --install`.
+
+ACTION!="add", GOTO="fingerprint_fix_end"
+SUBSYSTEM!="usb", GOTO="fingerprint_fix_end"
+ENV{DEVTYPE}!="usb_device", GOTO="fingerprint_fix_end"
+
+ATTR{idVendor}=="06cb", GOTO="fingerprint_fix_run"
+ATTR{idVendor}=="27c6", GOTO="fingerprint_fix_run"
+ATTR{idVendor}=="138a", GOTO="fingerprint_fix_run"
+ATTR{idVendor}=="04f3", GOTO="fingerprint_fix_run"
+ATTR{idVendor}=="147e", GOTO="fingerprint_fix_run"
+ATTR{idVendor}=="08ff", GOTO="fingerprint_fix_run"
+ATTR{idVendor}=="1c7a", GOTO="fingerprint_fix_run"
+ATTR{idVendor}=="298d", GOTO="fingerprint_fix_run"
+ATTR{idVendor}=="10a5", GOTO="fingerprint_fix_run"
+ATTR{idVendor}=="1491", GOTO="fingerprint_fix_run"
+ATTR{idVendor}=="2808", GOTO="fingerprint_fix_run"
+GOTO="fingerprint_fix_end"
+
+LABEL="fingerprint_fix_run"
+TAG+="systemd", ENV{SYSTEMD_WANTS}+="fingerprint-fix.service"
+
+LABEL="fingerprint_fix_end"

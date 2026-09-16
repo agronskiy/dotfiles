@@ -45,6 +45,7 @@ This would 99% smoothly install everything in a "Darwin" <-> "Ubuntu" cross-plat
 - check latest neovim
 - check that iterm settings (on mac) are imported from the linked file
 - for linux: run `inputplug` setup related to `input-plug-set-keyboard-rate` (see comments in there)
+- for linux: run `fingerprint-fix --install` to install the fingerprint reader reset hooks (root-owned udev rule + systemd unit, not covered by `symlink-everything`) — see [linux/README.md](linux/README.md)
 
 ## Trivia
 
