@@ -14,6 +14,11 @@
 - Don't add error handling for scenarios that can't happen.
 - Don't create abstractions for one-time operations.
 
+## Commits
+
+- Write commit messages as Conventional Commits with a scope: `<type>(<scope>): <summary>`, e.g. `feat(reader): ...`, `fix(intake): ...`, `docs(deploy): ...`, `refactor(infra): ...`, `test(e2e): ...`, `chore(kg): ...`.
+- Never a bare project prefix such as `myproject: <summary>`.
+
 ## Tool Usage
 
 - **Always invoke a matching skill first.** If any available skill matches the task, use the Skill tool before resorting to manual tool calls or exploration. Skills encode tested workflows — prefer them over ad-hoc approaches.
