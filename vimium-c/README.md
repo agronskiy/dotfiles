@@ -108,6 +108,24 @@ Inside: `<c-j>`/`<c-k>` (or `<c-n>`/`<c-p>`) move, `Enter` open, `Shift+Enter` n
 Selecting between two words: `/start` `Enter`, `v`, extend with motions (or Shift+click the end), `y`.
 `/` inside visual mode does not extend the selection.
 
+## Pounce (fuzzy jump to visible text)
+
+Companion extension in `pounce/`. Load it via `chrome://extensions` → Developer mode → "Load
+unpacked". The fixed `key` in its manifest pins the ID to `jbjllgdmphchokkcjjefbjkcebfnpcme`, which
+the `s` mapping targets. `Alt+.` triggers it without Vimium C.
+
+| Keys | Action |
+|---|---|
+| `s` + query | dim page, highlight fuzzy matches in the viewport (smartcase, ≤2-char gaps) |
+| label | select that match (green label = best) |
+| `Enter` | select best match |
+| `Esc` | cancel, restore previous selection |
+
+Searches all frames, including cross-origin iframes, clipped to what's actually visible (needs the
+`webNavigation` permission to enumerate frames). Jumping into an iframe focuses it, so Vimium C's
+`v`/`y` act there. With a selection already active in that frame, the jump extends it instead. Selecting between two words:
+`/start` `Enter`, `s` + end word + label, then `v` to adjust or `y`.
+
 ## Marks
 
 | Keys | Action |

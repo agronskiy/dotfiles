@@ -39,6 +39,7 @@
         "map <space>vs moveTabToNewWindow",
         "map <space>yf copyCurrentUrl",
         "map <space>yr copyCurrentTitle",
+        "map s sendToExtension id=jbjllgdmphchokkcjjefbjkcebfnpcme data=pounce",
         "mapKey <c-j:i> <esc>",
         "mapKey <c-j:o> <down>",
         "mapKey <c-k:o> <up>",
