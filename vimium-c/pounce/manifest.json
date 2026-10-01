@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "Pounce",
     "version": "0.1.0",
-    "description": "Fuzzy jump to visible text and select it, pounce.nvim style",
+    "description": "Fuzzy jump to visible text and select it. Inspired by pounce.nvim (github.com/rlane/pounce.nvim), independent implementation.",
     "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzTiNKoy7AEGKhPJeBE/CSJ9P98/kp7C01rNrN1AeV0qqA3fHIzSHpKv9fhPZMrflmM/RMYwy01r0+bU7mYvkTvrPHZx8G0Ssxhze4GDX1xEmwz1RldvKS1rfk1NT27mrLmWRl5o7DnE4B5S73jyCmtJmTtPuN6F7Lts8FU0vL20UURnSYsYut79Ph14kJ3byV4HGn2wGvoNXUHKbFOcqcdZJ/EMuyloOkZEin/IdZAILx8Fau2cki1/bwVFBox4UzvZqfmKarKXryGMCfQkNObmxxgRbFIz0+d+hHXDykKOWTQeAe6HMvZaskh7aBqGPxYAZbFamsOtd59H5vHx3GQIDAQAB",
     "background": {
         "service_worker": "background.js"

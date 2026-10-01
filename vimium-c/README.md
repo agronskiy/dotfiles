@@ -1,5 +1,8 @@
 # Vimium C
 
+> `pounce/` is inspired by [pounce.nvim](https://github.com/rlane/pounce.nvim) by Rich Lane;
+> independent implementation, no code from it.
+
 Vim-style key mappings for [Vimium C](https://github.com/gdh1995/vimium-c), aligned with my nvim
 (`<space>` leader, `S-h`/`S-l` buffers, fzf-lua `<leader>f*`) and tmux (`C-h`/`C-l` windows).
 
